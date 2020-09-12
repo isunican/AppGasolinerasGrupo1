@@ -1,0 +1,14 @@
+<resources>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+
+    <!-- Dimension logo gasolinera -->
+    <dimen name="logo">60dp</dimen>
+    <dimen name="marginLogo">10dp</dimen>
+    <dimen name="marginTextView">10dp</dimen>
+    <dimen name="marginTopLayoutPrecios">2dp</dimen>
+    <dimen name="marginLeftPrecios">20dp</dimen>
+    <dimen name="marginLabelsPrecio">5dp</dimen>
+
+</resources>

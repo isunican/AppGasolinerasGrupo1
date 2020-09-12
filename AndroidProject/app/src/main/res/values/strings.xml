@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Gasolineras</string>
+    <string name="obteniendo">Obteniendo los datos...</string>
+    <string name="datos_exito">Datos obtenidos con éxito</string>
+    <string name="datos_no_accesibles">Los datos están siendo actualizados en el servidor, inténtelo más tarde</string>
+    <string name="datos_no_obtenidos">No se han podido obtener los datos</string>
+    <string name="gasoleoa">Gasóleo:</string>
+    <string name="gasolina95">Gasolina:</string>
+    <string name="pordefecto">por_defecto</string>
+    <string name="moneda">€</string>
+    <string name="infoTexto">App desarrollada por los magníficos docentes de Ingeniería del Software de la UC</string>
+    <string name="menuActualizar">Actualizar</string>
+    <string name="menuInfo">Info</string>
+    <string name="pasoDatosInfo">DatosInfo</string>
+    <string name="pasoDatosGasolinera">DatosGasolinera</string>
+</resources>

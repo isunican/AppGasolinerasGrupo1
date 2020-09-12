@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AndroidProject.iml" filepath="$PROJECT_DIR$/AndroidProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/AndroidProject-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/AndroidProject-app.iml" group="AndroidProject/app" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AppGasolinerasProyectoBase-AndroidProject.iml" filepath="$PROJECT_DIR$/.idea/modules/AppGasolinerasProyectoBase-AndroidProject.iml" group="AndroidProject" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/AppGasolinerasProyectoBase2020-AndroidProject.iml" filepath="$PROJECT_DIR$/.idea/modules/AppGasolinerasProyectoBase2020-AndroidProject.iml" group="AndroidProject" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/AppGasolinerasProyectoBase2020-AndroidProject-app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/AppGasolinerasProyectoBase2020-AndroidProject-app.iml" group="AndroidProject/app" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+    </modules>
+  </component>
+</project>

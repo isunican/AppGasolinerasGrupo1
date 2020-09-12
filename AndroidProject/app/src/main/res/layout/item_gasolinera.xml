@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayoutGasolinera"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/imageViewLogo"
+        android:layout_width="@dimen/logo"
+        android:layout_height="@dimen/logo"
+        android:layout_marginBottom="@dimen/marginLogo"
+        android:layout_marginLeft="@dimen/marginLogo"
+        android:layout_marginRight="@dimen/marginLogo"
+        android:layout_marginTop="@dimen/marginLogo" />
+
+    <TextView
+        android:id="@+id/textViewRotulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/marginTextView"
+        android:layout_marginTop="@dimen/marginTextView"
+        android:layout_toRightOf="@+id/imageViewLogo"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textViewDireccion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewRotulo"
+        android:layout_marginLeft="@dimen/marginTextView"
+        android:layout_marginTop="@dimen/marginTopLayoutPrecios"
+        android:layout_toRightOf="@+id/imageViewLogo" />
+
+    <RelativeLayout
+        android:id="@+id/relativeLayoutPrecios"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textViewDireccion"
+        android:layout_marginTop="@dimen/marginTopLayoutPrecios"
+        android:layout_toRightOf="@id/imageViewLogo">
+
+        <TextView
+            android:id="@+id/textViewGasoleoALabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/marginLeftPrecios"
+            android:text="@string/gasoleoa"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewGasoleoA"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/marginLabelsPrecio"
+            android:layout_toRightOf="@+id/textViewGasoleoALabel" />
+
+        <TextView
+            android:id="@+id/textViewGasolina95Label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/marginTextView"
+            android:layout_toRightOf="@+id/textViewGasoleoA"
+            android:text="@string/gasolina95"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textViewGasolina95"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/marginLabelsPrecio"
+            android:layout_toRightOf="@+id/textViewGasolina95Label" />
+
+    </RelativeLayout>
+</RelativeLayout>
