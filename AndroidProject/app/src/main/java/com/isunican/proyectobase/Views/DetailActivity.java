@@ -58,6 +58,7 @@ public class DetailActivity extends AppCompatActivity {
         precioGasoleo95 = findViewById(R.id.precioGasoleo95Text);
         g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
 
+        // cajas de texto
         nombreGasolinera.setText(g.getRotulo());
         direccion.setText("Dirección:\n"+g.getDireccion());
         precioGasoleoA.setText("Gasoleo A: "+g.getGasoleoA()+"€");
