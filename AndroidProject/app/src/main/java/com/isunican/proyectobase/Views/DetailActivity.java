@@ -5,7 +5,14 @@ import com.isunican.proyectobase.Model.*;
 
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.text.TextUtils;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 
 /*
@@ -20,7 +27,10 @@ import android.widget.TextView;
 */
 public class DetailActivity extends AppCompatActivity {
 
-    TextView textView;
+    TextView nombreGasolinera;
+    TextView direccion;
+    TextView precioGasoleoA;
+    TextView precioGasoleo95;
     Gasolinera g;
 
     /**
@@ -42,9 +52,16 @@ public class DetailActivity extends AppCompatActivity {
         // captura el TextView
         // obtiene el objeto Gasolinera a mostrar
         // y lo introduce en el TextView convertido a cadena de texto
-        textView = findViewById(R.id.textView);
+        nombreGasolinera = findViewById(R.id.nombreGasolineraText);
+        direccion = findViewById(R.id.direccionText);
+        precioGasoleoA = findViewById(R.id.precioGasoleoAText);
+        precioGasoleo95 = findViewById(R.id.precioGasoleo95Text);
         g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
-        textView.setText(g.toString());
+
+        nombreGasolinera.setText(g.getRotulo());
+        direccion.setText("Dirección:\n"+g.getDireccion());
+        precioGasoleoA.setText("Gasoleo A: "+g.getGasoleoA()+"€");
+        precioGasoleo95.setText("Gasoleo 95: "+g.getGasolina95()+"€");
 
     }
 }
