@@ -1,7 +1,5 @@
 package com.isunican.proyectobase;
 
-
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
@@ -25,7 +23,7 @@ import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
 @RunWith(AndroidJUnit4.class)
-public class VistaDetalladaTest {
+public class DetailActivityUITest {
 
     private Gasolinera g;
 
