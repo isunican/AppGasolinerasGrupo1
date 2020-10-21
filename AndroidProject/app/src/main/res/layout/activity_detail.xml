@@ -25,8 +25,7 @@
                 android:id="@+id/gasolineraIcon"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="10"
-                app:srcCompat="@drawable/por_defecto" />
+                android:layout_weight="10" />
 
             <TextView
                 android:id="@+id/nombreGasolineraText"

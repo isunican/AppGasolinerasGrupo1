@@ -3,6 +3,7 @@ package com.isunican.proyectobase.Views;
 import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.Model.*;
 
+import android.content.Context;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,11 +28,13 @@ import org.w3c.dom.Text;
 */
 public class DetailActivity extends AppCompatActivity {
 
-    TextView nombreGasolinera;
-    TextView direccion;
-    TextView precioGasoleoA;
-    TextView precioGasoleo95;
-    Gasolinera g;
+    private TextView nombreGasolinera;
+    private TextView direccion;
+    private TextView precioGasoleoA;
+    private TextView precioGasoleo95;
+    private ImageView logo;
+    private Gasolinera g;
+    private Context context;
 
     /**
      * onCreate
@@ -56,7 +59,22 @@ public class DetailActivity extends AppCompatActivity {
         direccion = findViewById(R.id.direccionText);
         precioGasoleoA = findViewById(R.id.precioGasoleoAText);
         precioGasoleo95 = findViewById(R.id.precioGasoleo95Text);
+        logo = findViewById(R.id.gasolineraIcon);
         g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
+
+        String rotuleImageID = g.getRotulo().toLowerCase();
+
+        // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
+        // En ese caso getIdentifier devuelve esos digitos en vez de 0.
+        context = getApplicationContext();
+        int imageID = context.getResources().getIdentifier(rotuleImageID,
+                "drawable", context.getPackageName());
+
+        if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
+            imageID = context.getResources().getIdentifier(getResources().getString(R.string.pordefecto),
+                    "drawable", context.getPackageName());
+        }
+        logo.setImageResource(imageID);
 
         // cajas de texto
         nombreGasolinera.setText(g.getRotulo());
