@@ -39,7 +39,8 @@ public class DetailActivityUITest {
 
     @Test
     public void vistaDetalladaGasolinera(){
-        onData(allOf(is(instanceOf(Gasolinera.class)), is(g))).perform(click());
+        //onData(allOf(is(instanceOf(Gasolinera.class)), is(g))).perform(click());
+        onData(is(g)).inAdapterView(withId(R.id.listViewGasolineras)).perform(click());
         onView(withId(R.id.nombreGasolineraText)).check(matches(withText("REPSOL")));
         onView(withId(R.id.direccionText)).check(matches(withText("Direccion:\nCR N-629 79,7")));
         onView(withId(R.id.precioGasoleoAText)).check(matches(withText("Gasoleo A: 1.129€")));
