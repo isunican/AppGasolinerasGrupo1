@@ -61,7 +61,6 @@ public class DetailActivity extends AppCompatActivity {
         precioGasoleo95 = findViewById(R.id.precioGasoleo95Text);
         logo = findViewById(R.id.gasolineraIcon);
         g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
-
         String rotuleImageID = g.getRotulo().toLowerCase();
 
         // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
