@@ -3,9 +3,17 @@ package com.isunican.proyectobase.Views;
 import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.Model.*;
 
+import android.content.Context;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.text.TextUtils;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 
 /*
@@ -20,8 +28,13 @@ import android.widget.TextView;
 */
 public class DetailActivity extends AppCompatActivity {
 
-    TextView textView;
-    Gasolinera g;
+    private TextView nombreGasolinera;
+    private TextView direccion;
+    private TextView precioGasoleoA;
+    private TextView precioGasoleo95;
+    private ImageView logo;
+    private Gasolinera g;
+    private Context context;
 
     /**
      * onCreate
@@ -42,9 +55,31 @@ public class DetailActivity extends AppCompatActivity {
         // captura el TextView
         // obtiene el objeto Gasolinera a mostrar
         // y lo introduce en el TextView convertido a cadena de texto
-        textView = findViewById(R.id.textView);
+        nombreGasolinera = findViewById(R.id.nombreGasolineraText);
+        direccion = findViewById(R.id.direccionText);
+        precioGasoleoA = findViewById(R.id.precioGasoleoAText);
+        precioGasoleo95 = findViewById(R.id.precioGasoleo95Text);
+        logo = findViewById(R.id.gasolineraIcon);
         g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
-        textView.setText(g.toString());
+        String rotuleImageID = g.getRotulo().toLowerCase();
+
+        // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
+        // En ese caso getIdentifier devuelve esos digitos en vez de 0.
+        context = getApplicationContext();
+        int imageID = context.getResources().getIdentifier(rotuleImageID,
+                "drawable", context.getPackageName());
+
+        if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
+            imageID = context.getResources().getIdentifier(getResources().getString(R.string.pordefecto),
+                    "drawable", context.getPackageName());
+        }
+        logo.setImageResource(imageID);
+
+        // cajas de texto
+        nombreGasolinera.setText(g.getRotulo());
+        direccion.setText("Dirección:\n"+g.getDireccion());
+        precioGasoleoA.setText("Gasoleo A: "+g.getGasoleoA()+"€");
+        precioGasoleo95.setText("Gasoleo 95: "+g.getGasolina95()+"€");
 
     }
 }
