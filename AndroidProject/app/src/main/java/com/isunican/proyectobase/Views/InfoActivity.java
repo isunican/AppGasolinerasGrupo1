@@ -36,7 +36,7 @@ public class InfoActivity extends AppCompatActivity {
 
         // captura el TextView
         // y muestra en él un texto de información predefinido
-        textView = findViewById(R.id.textView);
+        textView = findViewById(R.id.nombreGasolineraText);
         textView.setText(getResources().getString(R.string.infoTexto));
     }
 }
