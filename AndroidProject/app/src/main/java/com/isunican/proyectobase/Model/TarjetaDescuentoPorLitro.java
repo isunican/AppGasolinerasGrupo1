@@ -3,6 +3,15 @@ package com.isunican.proyectobase.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/**
+ * Clase almacenadora de la informacion de una tarjeta de descuento
+ * cuyo descuento se de a traves de cada litro comprado.
+ * Hereda de la clase TarjetaDescuento e implementa los elementos unicos del tipo de tarjeta.
+ * Implementa la interfaz Parceable para que despues se puedan pasar objetos
+ * de este tipo entre interfaces a traves de intent.
+ * Author: Adrian Celis Fernandez.
+ * Date: 27/10/2020.
+ */
 public class TarjetaDescuentoPorLitro extends TarjetaDescuento implements Parcelable{
 
     private double descuentoPorLitro;
@@ -16,7 +25,7 @@ public class TarjetaDescuentoPorLitro extends TarjetaDescuento implements Parcel
     public void setDescuentoPorLitro(double descuentoPorLitro) { this.descuentoPorLitro = descuentoPorLitro; }
 
     /**
-     * Definicion del metodo toString para la clase TarjetaDescuento
+     * Definicion del metodo toString para la clase TarjetaDescuentoPorLitro
      * para poder obtener los datos en texto
      * @return String
      */
@@ -30,6 +39,18 @@ public class TarjetaDescuentoPorLitro extends TarjetaDescuento implements Parcel
 
         return textoTarjetaDescuento;
     }
+
+    /**
+     * interfaz Parcelable
+     *
+     * Métodos necesarios para implementar la interfaz Parcelable
+     * que nos permitirá pasar objetos del tipo TarjetaDescuentoPorLitro
+     * directamente entre actividades utilizando intents
+     * Se enviarían utilizando putExtra
+     * myIntent.putExtra("id", objeto TarjetaDescuentoPorLitro);
+     * y recibiéndolos con
+     * TarjetaDescuentoPorLitro tdp = getIntent().getExtras().getParcelable("id")
+     */
 
     protected TarjetaDescuentoPorLitro(Parcel in) {
         setNombre(in.readString());

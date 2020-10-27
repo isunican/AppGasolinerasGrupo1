@@ -5,10 +5,8 @@ import android.os.Parcelable;
 
 /**
  * Clase almacenadora de la informacion de una tarjeta de descuento.
- * Implementa la interfaz Parceable para que despues se puedan pasar objetos
- * de este tipo entre interfaces a traves de intent
- * Author: Adrian Celis Fernandez
- * Date: 27/10/2020
+ * Author: Adrian Celis Fernandez.
+ * Date: 27/10/2020.
  */
 public class TarjetaDescuento{
     private String nombre;
@@ -22,6 +20,10 @@ public class TarjetaDescuento{
         this.descripcion = descripcion;
     }
 
+    /**
+     * Constructor vacio. Necesario para la implementacion de la
+     * interfaz Parcelable en las clases hijas
+     */
     public TarjetaDescuento() {
     }
 
