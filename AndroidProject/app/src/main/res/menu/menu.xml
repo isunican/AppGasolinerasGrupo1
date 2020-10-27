@@ -12,5 +12,8 @@
     <item
         android:id="@+id/itemInfo"
         android:title="@string/menuInfo" />
+    <item
+        android:id="@+id/itemFiltros"
+        android:title="Abrir filtros" />
 
 </menu>

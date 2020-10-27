@@ -1,5 +1,6 @@
 package com.isunican.proyectobase.Views;
 
+import com.google.android.material.navigation.NavigationView;
 import com.isunican.proyectobase.Presenter.*;
 import com.isunican.proyectobase.Model.*;
 import com.isunican.proyectobase.R;
@@ -9,6 +10,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -55,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
     // Swipe and refresh (para recargar la lista con un swipe)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
+    // Sidebar
+    DrawerLayout layout;
+    NavigationView navigationView;
     /**
      * onCreate
      *
@@ -74,8 +82,9 @@ public class MainActivity extends AppCompatActivity {
         progressBar = new ProgressBar(MainActivity.this,null,android.R.attr.progressBarStyleLarge);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100,100);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        RelativeLayout layout = findViewById(R.id.activity_precio_gasolina);
+        layout = findViewById(R.id.activity_precio_gasolina);
         layout.addView(progressBar,params);
+
 
         // Muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -95,9 +104,31 @@ public class MainActivity extends AppCompatActivity {
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
+
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                switch (menuItem.getItemId()){
+                    case R.id.filtroTipoGasolina:
+                        Intent myIntent = new Intent(MainActivity.this, FiltrosActivity.class);
+                        MainActivity.this.startActivity(myIntent);
+                        break;
+                }
+                return false;
+            }
+        });
+
     }
 
-
+    @Override
+    public void onBackPressed() {
+        if (layout.isDrawerOpen(GravityCompat.START)) {
+            layout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
     /**
      * Menú action bar
      *
@@ -123,7 +154,11 @@ public class MainActivity extends AppCompatActivity {
         else if(item.getItemId()==R.id.itemInfo){
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
             MainActivity.this.startActivity(myIntent);
-            }
+        }
+        else if(item.getItemId()==R.id.itemFiltros){
+            Intent myIntent = new Intent(MainActivity.this, FiltrosActivity.class);
+            MainActivity.this.startActivity(myIntent);
+        }
         return true;
     }
 
