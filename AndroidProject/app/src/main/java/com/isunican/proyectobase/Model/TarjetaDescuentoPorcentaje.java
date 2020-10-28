@@ -68,6 +68,7 @@ public class TarjetaDescuentoPorcentaje extends TarjetaDescuento implements Parc
     protected TarjetaDescuentoPorcentaje(Parcel in) {
         setNombre(in.readString());
         setDescripcion(in.readString());
+        setMarca(in.readString());
         setDescuentoPorcentaje(in.readDouble());
     }
 
@@ -80,7 +81,8 @@ public class TarjetaDescuentoPorcentaje extends TarjetaDescuento implements Parc
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(getNombre());
         dest.writeString(getDescripcion());
-        dest.writeDouble(descuentoPorcentaje);
+        dest.writeString(getMarca());
+        dest.writeDouble(getDescuentoPorcentaje());
 
     }
 

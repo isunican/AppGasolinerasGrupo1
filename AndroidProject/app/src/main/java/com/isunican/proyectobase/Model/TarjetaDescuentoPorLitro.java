@@ -55,6 +55,7 @@ public class TarjetaDescuentoPorLitro extends TarjetaDescuento implements Parcel
     protected TarjetaDescuentoPorLitro(Parcel in) {
         setNombre(in.readString());
         setDescripcion(in.readString());
+        setMarca(in.readString());
         setDescuentoPorLitro(in.readDouble());
     }
 
@@ -67,7 +68,8 @@ public class TarjetaDescuentoPorLitro extends TarjetaDescuento implements Parcel
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(getNombre());
         dest.writeString(getDescripcion());
-        dest.writeDouble(descuentoPorLitro);
+        dest.writeString(getMarca());
+        dest.writeDouble(getDescuentoPorLitro());
 
     }
 
