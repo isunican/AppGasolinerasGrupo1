@@ -38,15 +38,15 @@ public class SidebarUITest {
     @Test
     public void sidebarHasAllItems() throws InterruptedException    {
         // Open Drawer to click on navigation.
-        /*
         onView(withId(R.id.activity_precio_gasolina_drawer))
                 //.check(matches(isClosed(Gravity.START))) // Left Drawer should be closed.
-                //.perform(DrawerActions.open())
+                .perform(DrawerActions.open())
                 ; // Open Drawer
 
-         */
+        /* Patricia
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
-        //onView(withText("Filtrar por tipo de gasolina")).perform(click());
+        onView(withText("Filtrar por tipo de gasolina")).perform(click());
+         */
 
         //onView(withId(R.id.filtroTipoGasolina)).check(matches(withText("Filtrar por tipo de gasolina")));
 
