@@ -61,7 +61,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     // Sidebar
-    DrawerLayout layout;
+    RelativeLayout layout;
+    DrawerLayout drawerLayout;
 
     /**
      * onCreate
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setNavigationViewListener();
+        drawerLayout = findViewById(R.id.activity_precio_gasolina_drawer);
 
         this.presenterGasolineras = new PresenterGasolineras();
 
@@ -85,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
         layout = findViewById(R.id.activity_precio_gasolina);
         layout.addView(progressBar,params);
-
 
         // Muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -106,14 +107,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
 
-
-
     }
 
     @Override
     public void onBackPressed() {
-        if (layout.isDrawerOpen(GravityCompat.START)) {
-            layout.closeDrawer(GravityCompat.START);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -161,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             default:
                 Log.d("MIGUEL", "Default en switch");
         }
-        layout.closeDrawer(GravityCompat.START);
+        drawerLayout.closeDrawer(GravityCompat.START);
         return false;
     }
 
