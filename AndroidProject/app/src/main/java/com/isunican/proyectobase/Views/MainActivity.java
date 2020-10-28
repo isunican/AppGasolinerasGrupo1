@@ -154,8 +154,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.filtroTipoGasolina:
-                Intent myIntent = new Intent(MainActivity.this, FiltrosActivity.class);
-                MainActivity.this.startActivity(myIntent);
+                FiltrosActivity filtro = new FiltrosActivity();
+                filtro.show(getSupportFragmentManager(), "Dialog");
                 break;
             default:
                 Log.d("MIGUEL", "Default en switch");
