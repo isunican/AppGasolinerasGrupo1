@@ -29,7 +29,7 @@ public class BrandSearch {
         ArrayList<String> searchResults = new ArrayList<>(); //Lista de resultados
 
         for( String s: list){
-            if(s.toLowerCase().startsWith(search))searchResults.add(s);
+            if(s.toLowerCase().startsWith(search.toLowerCase()))searchResults.add(s);
         }
 
         return searchResults;
