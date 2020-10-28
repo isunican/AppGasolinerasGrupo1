@@ -143,10 +143,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
             MainActivity.this.startActivity(myIntent);
         }
-        else if(item.getItemId()==R.id.itemFiltros){
-            Intent myIntent = new Intent(MainActivity.this, FiltrosActivity.class);
-            MainActivity.this.startActivity(myIntent);
-        }
         return true;
     }
 
