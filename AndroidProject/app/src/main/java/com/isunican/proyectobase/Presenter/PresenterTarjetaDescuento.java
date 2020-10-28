@@ -26,13 +26,13 @@ public class PresenterTarjetaDescuento {
         return listaDeTarjetasDelUsuario;
     }
 
-    public boolean anhadirNuevaTarjeta(String nombre, String descripcion, String tipoTarjeta, String descuento)
+    public boolean anhadirNuevaTarjeta(String nombre, String descripcion, String marca, String tipoTarjeta, String descuento)
     {
         TarjetaDescuento tarjetaNueva;
         if (tipoTarjeta.equals("Porcentual")){
-            tarjetaNueva = new TarjetaDescuentoPorcentaje(nombre, descripcion, Double.parseDouble(descuento));
+            tarjetaNueva = new TarjetaDescuentoPorcentaje(nombre, descripcion, marca, Double.parseDouble(descuento));
         } else {
-            tarjetaNueva = new TarjetaDescuentoPorLitro(nombre, descripcion, Double.parseDouble(descuento));
+            tarjetaNueva = new TarjetaDescuentoPorLitro(nombre, descripcion, marca, Double.parseDouble(descuento));
         }
         listaDeTarjetasDelUsuario.add(tarjetaNueva);
         return listaDeTarjetasDelUsuario.contains(tarjetaNueva);
@@ -72,7 +72,7 @@ public class PresenterTarjetaDescuento {
     public boolean cargarListaDeTarjetasGuardadas(){
         try {
             listaDeTarjetasDelUsuario = new ArrayList<>();
-            listaDeTarjetasDelUsuario.add(new TarjetaDescuentoPorcentaje("TarjetaDescuento Repsol", "descripcion basica", 0.1));
+            listaDeTarjetasDelUsuario.add(new TarjetaDescuentoPorcentaje("TarjetaDescuento Repsol", "descripcion basica", "Repsol",0.1));
             System.out.println("Carga correcta");
             return true;
         } catch (Exception e)

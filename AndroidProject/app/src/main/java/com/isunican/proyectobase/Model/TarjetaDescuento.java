@@ -16,7 +16,7 @@ public class TarjetaDescuento implements Parcelable{
     /**
      * Constructor de la clase
      */
-    public TarjetaDescuento (String nombre, String descripcion){
+    public TarjetaDescuento (String nombre, String descripcion, String marca){
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.marca = marca;

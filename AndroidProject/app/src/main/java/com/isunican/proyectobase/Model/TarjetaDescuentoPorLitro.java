@@ -16,8 +16,8 @@ public class TarjetaDescuentoPorLitro extends TarjetaDescuento implements Parcel
 
     private double descuentoPorLitro;
 
-    public TarjetaDescuentoPorLitro(String nombre, String descripcion, double descuentoPorLitro) {
-        super(nombre, descripcion);
+    public TarjetaDescuentoPorLitro(String nombre, String descripcion, String marca, double descuentoPorLitro) {
+        super(nombre, descripcion, marca);
         this.descuentoPorLitro = descuentoPorLitro;
     }
 

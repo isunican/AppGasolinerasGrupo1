@@ -16,20 +16,20 @@ public class TarjetaDescuentoPorcentaje extends TarjetaDescuento implements Parc
 
     private double descuentoPorcentaje;
 
-    public TarjetaDescuentoPorcentaje(String nombre, String descripcion, double descuentoPorcentaje) {
-        super(nombre, descripcion);
-        this.descuentoPorcentaje = descuentoPorcentaje;
-    }
-
     /**
      * Constructor de la clase
      *
      * @param nombre
      * @param descripcion
+     * @param marca
+     * @param descuentoPorcentaje
      */
-    public TarjetaDescuentoPorcentaje(String nombre, String descripcion) {
-        super(nombre, descripcion);
+    public TarjetaDescuentoPorcentaje(String nombre, String descripcion, String marca, double descuentoPorcentaje) {
+        super(nombre, descripcion, marca);
+        this.descuentoPorcentaje = descuentoPorcentaje;
     }
+
+
 
     /**
      * Getter y Setter de descuentoPorcentaje
