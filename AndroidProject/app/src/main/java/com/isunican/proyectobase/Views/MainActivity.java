@@ -46,7 +46,7 @@ import android.widget.Toast;
 
 ------------------------------------------------------------------
 */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     PresenterGasolineras presenterGasolineras;
 
@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Sidebar
     DrawerLayout layout;
-    NavigationView navigationView;
+
     /**
      * onCreate
      *
@@ -74,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setNavigationViewListener();
 
         this.presenterGasolineras = new PresenterGasolineras();
 
@@ -105,19 +106,7 @@ public class MainActivity extends AppCompatActivity {
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
 
-        navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
-                    case R.id.filtroTipoGasolina:
-                        Intent myIntent = new Intent(MainActivity.this, FiltrosActivity.class);
-                        MainActivity.this.startActivity(myIntent);
-                        break;
-                }
-                return false;
-            }
-        });
+
 
     }
 
@@ -160,6 +149,25 @@ public class MainActivity extends AppCompatActivity {
             MainActivity.this.startActivity(myIntent);
         }
         return true;
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case R.id.filtroTipoGasolina:
+                Intent myIntent = new Intent(MainActivity.this, FiltrosActivity.class);
+                MainActivity.this.startActivity(myIntent);
+                break;
+            default:
+                Log.d("MIGUEL", "Default en switch");
+        }
+        layout.closeDrawer(GravityCompat.START);
+        return false;
+    }
+
+    private void setNavigationViewListener() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
     }
 
 
