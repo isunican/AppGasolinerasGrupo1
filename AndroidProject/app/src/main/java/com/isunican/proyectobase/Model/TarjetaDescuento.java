@@ -8,7 +8,7 @@ import android.os.Parcelable;
  * Author: Adrian Celis Fernandez.
  * Date: 27/10/2020.
  */
-public class TarjetaDescuento{
+public class TarjetaDescuento implements Parcelable{
     private String nombre;
     private String descripcion;
     private String marca;
@@ -40,4 +40,32 @@ public class TarjetaDescuento{
 
     public String getMarca() { return marca; }
     public void setMarca(String marca) { this.marca = marca; }
+
+    protected TarjetaDescuento(Parcel in) {
+        setNombre(in.readString());
+        setDescripcion(in.readString());
+        setMarca(in.readString());
+    }
+
+    @Override
+    public int describeContents() { return 0; }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(getNombre());
+        dest.writeString(getDescripcion());
+        dest.writeString(getMarca());
+    }
+
+    public static final Parcelable.Creator<TarjetaDescuento> CREATOR = new Parcelable.Creator<TarjetaDescuento>() {
+        @Override
+        public TarjetaDescuento createFromParcel(Parcel in) {
+            return new TarjetaDescuento(in);
+        }
+
+        @Override
+        public TarjetaDescuento[] newArray(int size) {
+            return new TarjetaDescuento[size];
+        }
+    };
 }
