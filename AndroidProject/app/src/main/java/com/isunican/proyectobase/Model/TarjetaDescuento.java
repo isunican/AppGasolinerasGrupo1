@@ -11,6 +11,7 @@ import android.os.Parcelable;
 public class TarjetaDescuento{
     private String nombre;
     private String descripcion;
+    private String marca;
 
     /**
      * Constructor de la clase
@@ -18,6 +19,7 @@ public class TarjetaDescuento{
     public TarjetaDescuento (String nombre, String descripcion){
         this.nombre = nombre;
         this.descripcion = descripcion;
+        this.marca = marca;
     }
 
     /**
@@ -36,5 +38,6 @@ public class TarjetaDescuento{
     public String getDescripcion() { return descripcion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
 
-
+    public String getMarca() { return marca; }
+    public void setMarca(String marca) { this.marca = marca; }
 }
