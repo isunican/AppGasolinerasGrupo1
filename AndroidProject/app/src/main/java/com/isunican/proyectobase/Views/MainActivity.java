@@ -123,7 +123,11 @@ public class MainActivity extends AppCompatActivity {
         else if(item.getItemId()==R.id.itemInfo){
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
             MainActivity.this.startActivity(myIntent);
-            }
+        }
+        else if(item.getItemId()==R.id.itemNuevaTarjetaDescuento){
+            Intent myIntent = new Intent(MainActivity.this, NuevaTarjetaDescuentoActivity.class);
+            MainActivity.this.startActivity(myIntent);
+        }
         return true;
     }
 
