@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Sidebar
     RelativeLayout layout;
     DrawerLayout drawerLayout;
+    NavigationView navigationView;
 
     /**
      * onCreate
@@ -75,7 +76,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setNavigationViewListener();
+        navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
         drawerLayout = findViewById(R.id.activity_precio_gasolina_drawer);
 
         this.presenterGasolineras = new PresenterGasolineras();
@@ -85,8 +87,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         progressBar = new ProgressBar(MainActivity.this,null,android.R.attr.progressBarStyleLarge);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100,100);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        layout = findViewById(R.id.activity_precio_gasolina);
+        layout = findViewById(R.id.main_layout);
         layout.addView(progressBar,params);
+
 
         // Muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -150,21 +153,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.filtroTipoGasolina:
-                FiltrosActivity filtro = new FiltrosActivity();
-                filtro.show(getSupportFragmentManager(), "Dialog");
+                Intent myIntent = new Intent(MainActivity.this, FiltrosActivity.class);
+                MainActivity.this.startActivity(myIntent);
                 break;
             default:
-                Log.d("MIGUEL", "Default en switch");
+                Log.d("MIGUEL", "Ningun item del panel ha sido seleccionado");
+                break;
         }
+        menuItem.setChecked(true);
         drawerLayout.closeDrawer(GravityCompat.START);
-        return false;
+        return true;
     }
-
-    private void setNavigationViewListener() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-    }
-
 
     /**
      * CargaDatosGasolinerasTask
