@@ -42,8 +42,10 @@ import android.widget.Toast;
 ------------------------------------------------------------------
 */
 public class MainActivity extends AppCompatActivity {
+    private static final int REQUEST_CODE_NEW_DISCOUNT_CARD = 0x1;
 
     PresenterGasolineras presenterGasolineras;
+    PresenterTarjetaDescuento presenterTarjetaDescuento;
 
     // Vista de lista y adaptador para cargar datos en ella
     ListView listViewGasolineras;
@@ -68,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.presenterGasolineras = new PresenterGasolineras();
+        this.presenterTarjetaDescuento = new PresenterTarjetaDescuento();
 
         // Barra de progreso
         // https://materialdoc.com/components/progress/
@@ -126,11 +129,30 @@ public class MainActivity extends AppCompatActivity {
         }
         else if(item.getItemId()==R.id.itemNuevaTarjetaDescuento){
             Intent myIntent = new Intent(MainActivity.this, NuevaTarjetaDescuentoActivity.class);
-            MainActivity.this.startActivity(myIntent);
+            MainActivity.this.startActivityForResult(myIntent, REQUEST_CODE_NEW_DISCOUNT_CARD);
         }
         return true;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        if(requestCode == REQUEST_CODE_NEW_DISCOUNT_CARD){
+            if(resultCode == Activity.RESULT_OK) {
+                final String nombre = data.getStringExtra("nombre");
+                final String marca = data.getStringExtra("marca");
+                final String tipo = data.getStringExtra("tipo");
+                final String descuento = data.getStringExtra("descuento");
+                final String descripcion = data.getStringExtra("descripcion");
+                presenterTarjetaDescuento.anhadirNuevaTarjeta(nombre, descripcion, marca, tipo, descuento);
+                Toast.makeText(this, "Result: " + nombre, Toast.LENGTH_LONG).show();
+            }
+            else
+            {
+                Toast.makeText(this, "No se ha podido guardar la tarjeta. Revise sus datos", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
 
     /**
      * CargaDatosGasolinerasTask
