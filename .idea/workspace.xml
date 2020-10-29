@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8a6d69d8-cb2c-46da-8b36-1de89a06f335" name="Default" comment="" />
+    <list default="true" id="8a6d69d8-cb2c-46da-8b36-1de89a06f335" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/AndroidProject/app/src/main/java/com/isunican/proyectobase/Views/NuevaTarjetaDescuentoActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/AndroidProject/app/src/main/java/com/isunican/proyectobase/Views/NuevaTarjetaDescuentoActivity.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
