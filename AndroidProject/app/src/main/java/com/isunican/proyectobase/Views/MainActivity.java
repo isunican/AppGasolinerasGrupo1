@@ -103,16 +103,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-
-        Button btn = findViewById(R.id.button);
-        final Intent intent = new Intent(MainActivity.this, FiltroMarcaAcivity.class);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(intent);
-            }
-        });
         // Al terminar de inicializar todas las variables
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
@@ -164,6 +154,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 FiltrosActivity filtro = new FiltrosActivity();
                 filtro.show(getSupportFragmentManager(), "Dialog");
                 break;
+
+            case R.id.filtroMarcaGasolinera:
+                final Intent intent = new Intent(MainActivity.this, FiltroMarcaAcivity.class);
+                startActivity(intent);
+                break;
+
             default:
                 Log.d("MIGUEL", "Default en switch");
         }

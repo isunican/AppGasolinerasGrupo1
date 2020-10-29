@@ -6,6 +6,9 @@
         <item  android:id="@+id/filtroTipoGasolina"
             android:icon="@drawable/por_defecto"
             android:title="@string/filtrar_tipoGasolina" />
+        <item  android:id="@+id/filtroMarcaGasolinera"
+            android:icon="@drawable/por_defecto"
+            android:title="@string/filtrar_marcaGasolinera" />
     </group>
 
 </menu>
