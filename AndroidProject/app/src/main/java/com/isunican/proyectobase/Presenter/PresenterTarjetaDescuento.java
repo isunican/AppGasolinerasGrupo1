@@ -74,7 +74,7 @@ public class PresenterTarjetaDescuento {
     }
 
 
-    public boolean cargarListaDeTarjetasGuardadas(){
+    private boolean cargarListaDeTarjetasGuardadas(){
         try {
             listaTarjetasDescuento = new ArrayList<>();
             listaTarjetasDescuento.add(new TarjetaDescuentoPorcentaje("TarjetaDescuentoRepsol", "descripcion basica", "Repsol",0.1));
