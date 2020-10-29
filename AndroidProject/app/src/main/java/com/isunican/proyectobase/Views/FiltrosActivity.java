@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatDialogFragment;
 
@@ -14,6 +15,7 @@ import com.isunican.proyectobase.R;
 
 public class FiltrosActivity extends AppCompatDialogFragment {
 
+    private Button btn_aplicar;
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
         //super.onCreate(savedInstanceState);
@@ -21,7 +23,6 @@ public class FiltrosActivity extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.filtros_gasolinera, null);
         builder.setView(view).setTitle("Filtro");
-
         /*
         setContentView((R.layout.filtros_gasolinera));
         DisplayMetrics dm = new DisplayMetrics();

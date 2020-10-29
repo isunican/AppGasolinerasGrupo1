@@ -126,6 +126,7 @@ public class PresenterGasolineras {
 
 
     /**
+     * Author: Jaime López-Agudo Higuera
      * Filtro de gasolineras por tipo de combustible, filtra las gasolineras mostradas en funcion de @param.
      * Hace uso de hasTipoGasolina() para determinar los tipos de gasolina de la gasolinera
      *
