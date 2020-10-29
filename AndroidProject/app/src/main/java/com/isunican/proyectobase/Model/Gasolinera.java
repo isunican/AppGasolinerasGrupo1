@@ -142,7 +142,7 @@ public class Gasolinera implements Parcelable {
     public String hasTipoGasolina(){
         String tiposGasolina="";
         if(gasoleoA!=0.0){
-            tiposGasolina+="Gasoleo ";
+            tiposGasolina+="Diesel ";
         }if(gasolina95!=0.0) {
             tiposGasolina += "Gasolina95 ";
         }

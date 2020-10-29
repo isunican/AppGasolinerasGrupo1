@@ -65,6 +65,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     NavigationView navigationView;
 
+    //Filtro
+    String tipoGasolina;
+
     /**
      * onCreate
      *
@@ -154,7 +157,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         switch (menuItem.getItemId()){
             case R.id.filtroTipoGasolina:
                 Intent myIntent = new Intent(MainActivity.this, FiltrosActivity.class);
-                MainActivity.this.startActivity(myIntent);
+                myIntent.putExtra("tipo",tipoGasolina);
+                startActivityForResult(myIntent,1999);
                 break;
             default:
                 Log.d("MIGUEL", "Ningun item del panel ha sido seleccionado");
@@ -163,6 +167,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         menuItem.setChecked(true);
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
+    }
+    @Override
+    public void onActivityResult(int requestCode,int resultCode,Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode){
+            //Al acabar la actividad FiltrosActivity correctamente salta aqui
+            case 1999:
+                if(resultCode==Activity.RESULT_OK){
+                    String tipoGasolina=data.getStringExtra("tipo");
+                    Log.d("Funciona y mando: ",tipoGasolina);
+                    presenterGasolineras.filtraGasolinerasTipoCombustible(tipoGasolina);
+                    adapter.clear();
+                    adapter.addAll(presenterGasolineras.getGasolinerasFiltradas());
+                    Log.d("Filtro","algo");
+                }
+                break;
+        }
     }
 
     /**
@@ -241,6 +263,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Si se ha obtenido resultado en la tarea en segundo plano
             if (res) {
                 // Definimos el array adapter
+                presenterGasolineras.getGasolineras().add(new Gasolinera(9999,"localidad1","provincia1","direccion1",0.0,100.0,"La gasolinera de prueba de Jaime"));
                 adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
 
                 // Obtenemos la vista de la lista
