@@ -22,6 +22,8 @@ import java.util.List;
 public class PresenterGasolineras {
 
     private List<Gasolinera> gasolineras;
+    //Lista de gasolineras filtradas
+    private List<Gasolinera> gasolinerasFiltradas;
 
     //URLs para obtener datos de las gasolineras
     //https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/help
@@ -40,6 +42,8 @@ public class PresenterGasolineras {
     public List<Gasolinera> getGasolineras(){
         return gasolineras;
     }
+
+    public List<Gasolinera> getGasolinerasFiltradas(){return gasolinerasFiltradas; }
 
     public void setGasolineras(List<Gasolinera> l) {
         this.gasolineras = l;
@@ -108,7 +112,7 @@ public class PresenterGasolineras {
      * @param String Dirección URL del JSON con los datos
      * @return boolean Devuelve true si se han podido cargar los datos
      */
-    public boolean cargaDatosRemotos(String direccion){
+    public boolean cargaDatosRemotos(String direccion) {
         try {
             BufferedInputStream buffer = RemoteFetch.cargaBufferDesdeURL(direccion);
             gasolineras = ParserJSONGasolineras.parseaArrayGasolineras(buffer);
@@ -119,4 +123,25 @@ public class PresenterGasolineras {
             return false;
         }
     }
+
+
+    /**
+     * Filtro de gasolineras por tipo de combustible, filtra las gasolineras mostradas en funcion de @param.
+     * Hace uso de hasTipoGasolina() para determinar los tipos de gasolina de la gasolinera
+     *
+     * @param tipo Tipo de gasolina buscada
+     * @return boolean
+     */
+    public boolean filtraGasolinerasTipoCombustible(String tipo){
+        this.gasolinerasFiltradas=new ArrayList<Gasolinera>();
+        for(Gasolinera g : gasolineras){
+            if(g.hasTipoGasolina().contains(tipo)){
+                gasolinerasFiltradas.add(g);
+            }
+        }
+        return true;
+    }
+
+
+
 }

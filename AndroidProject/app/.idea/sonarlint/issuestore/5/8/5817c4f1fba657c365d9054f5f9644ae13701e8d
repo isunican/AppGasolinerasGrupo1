@@ -1,0 +1,22 @@
+
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(“„Ú
+H
+java:S1128"-Remove this unused import 'org.w3c.dom.Text'.(¶Äè‹şÿÿÿÿ
+J
+java:S1128"4Remove this unused import 'android.widget.ListView'.(Œ‰Ö×
+N
+java:S1128"3Remove this unused import 'android.widget.Spinner'.(¸£ÃØüÿÿÿÿ
+k
+java:S1450%"VRemove the "context" field and declare it as a local variable in the relevant methods.(êİç
+m
+java:S1450 "XRemove the "direccion" field and declare it as a local variable in the relevant methods.(í¬¸T
+k
+java:S1450$"PRemove the "g" field and declare it as a local variable in the relevant methods.(Á§ßãùÿÿÿÿ
+i
+java:S1450#"SRemove the "logo" field and declare it as a local variable in the relevant methods.(Ü¬€¤
+u
+java:S1450"_Remove the "nombreGasolinera" field and declare it as a local variable in the relevant methods.(ØÉ
+y
+java:S1450""^Remove the "precioGasoleo95" field and declare it as a local variable in the relevant methods.(åõùÒıÿÿÿÿ
+x
+java:S1450!"]Remove the "precioGasoleoA" field and declare it as a local variable in the relevant methods.(¦—Ûäúÿÿÿÿ
