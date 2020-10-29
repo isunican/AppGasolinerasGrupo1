@@ -1,5 +1,6 @@
 package com.isunican.proyectobase.Views;
 
+import com.google.android.material.navigation.NavigationView;
 import com.isunican.proyectobase.Presenter.*;
 import com.isunican.proyectobase.Model.*;
 import com.isunican.proyectobase.R;
@@ -9,6 +10,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -41,7 +46,7 @@ import android.widget.Toast;
 
 ------------------------------------------------------------------
 */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     private static final int REQUEST_CODE_NEW_DISCOUNT_CARD = 0x1;
 
     PresenterGasolineras presenterGasolineras;
@@ -57,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
     // Swipe and refresh (para recargar la lista con un swipe)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
+    // Sidebar
+    RelativeLayout layout;
+    DrawerLayout drawerLayout;
+
     /**
      * onCreate
      *
@@ -68,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setNavigationViewListener();
+        drawerLayout = findViewById(R.id.activity_precio_gasolina_drawer);
 
         this.presenterGasolineras = new PresenterGasolineras();
         this.presenterTarjetaDescuento = new PresenterTarjetaDescuento();
@@ -77,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         progressBar = new ProgressBar(MainActivity.this,null,android.R.attr.progressBarStyleLarge);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100,100);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        RelativeLayout layout = findViewById(R.id.activity_precio_gasolina);
+        layout = findViewById(R.id.activity_precio_gasolina);
         layout.addView(progressBar,params);
 
         // Muestra el logo en el actionBar
@@ -98,9 +109,17 @@ public class MainActivity extends AppCompatActivity {
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
+
     }
 
-
+    @Override
+    public void onBackPressed() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
     /**
      * Menú action bar
      *
@@ -153,6 +172,25 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case R.id.filtroTipoGasolina:
+                FiltrosActivity filtro = new FiltrosActivity();
+                filtro.show(getSupportFragmentManager(), "Dialog");
+                break;
+            default:
+                Log.d("MIGUEL", "Default en switch");
+        }
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return false;
+    }
+
+    private void setNavigationViewListener() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
 
     /**
      * CargaDatosGasolinerasTask
