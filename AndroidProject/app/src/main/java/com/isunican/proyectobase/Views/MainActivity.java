@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -91,6 +92,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+        Button btn = findViewById(R.id.button);
+        final Intent intent = new Intent(MainActivity.this, FiltroMarcaAcivity.class);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(intent);
+            }
+        });
         // Al terminar de inicializar todas las variables
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
