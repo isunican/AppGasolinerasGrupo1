@@ -132,6 +132,7 @@ public class Gasolinera implements Parcelable {
     };
 
     /**
+     * Author: Jaime López-Agudo Higuera
      * hasTipoGasolina
      *
      * Determina si la gasolinera tiene gasolina95 o gasoleo
@@ -141,13 +142,11 @@ public class Gasolinera implements Parcelable {
     public String hasTipoGasolina(){
         String tiposGasolina="";
         if(gasoleoA!=0.0){
-            Log.d("hasGasoleo","___________________________________tengo gasoleo");
             tiposGasolina+="Gasoleo ";
-        }else if(gasolina95!=0.0) {
-            Log.d("hasGasolina", "___________________________________tengo gasolina");
+        }if(gasolina95!=0.0) {
             tiposGasolina += "Gasolina95 ";
         }
-        Log.d("TIPOS DE GASOLINA: ","LOS TIPOS DE GASOLINA SON LOS SIGUIENTES:"+tiposGasolina);
+        Log.d("TIPOS DE GASOLINA: ","LOS TIPOS DE GASOLINA DE "+rotulo+" SON LOS SIGUIENTES:"+tiposGasolina);
         return tiposGasolina;
     }
 }
