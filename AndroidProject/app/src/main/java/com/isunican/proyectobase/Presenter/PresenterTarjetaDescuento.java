@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class PresenterTarjetaDescuento {
 
-    private ArrayList<TarjetaDescuento> listaDeTarjetasDelUsuario;
+    private ArrayList<TarjetaDescuento> listaTarjetasDescuento;
 
     public PresenterTarjetaDescuento(){
         // Esto no deberia de ir aqui si no a la hora de crear la aplicacion
@@ -22,8 +22,10 @@ public class PresenterTarjetaDescuento {
         // Hay que implementar la funcionalidad de lectura y escritura de datos
     }
 
-    public ArrayList<TarjetaDescuento> getListaDeTarjetasDelUsuario() {
-        return listaDeTarjetasDelUsuario;
+    public ArrayList<TarjetaDescuento> getListaDeTarjetasDelUsuario() { return listaTarjetasDescuento; }
+
+    public void setListaDeTarjetasDelUsuario(ArrayList<TarjetaDescuento> listaDeTarjetasDelUsuario) {
+        this.listaTarjetasDescuento = listaDeTarjetasDelUsuario;
     }
 
     public boolean anhadirNuevaTarjeta(String nombre, String descripcion, String marca, String tipoTarjeta, String descuento)
@@ -34,8 +36,9 @@ public class PresenterTarjetaDescuento {
         } else {
             tarjetaNueva = new TarjetaDescuentoPorLitro(nombre, descripcion, marca, Double.parseDouble(descuento));
         }
-        listaDeTarjetasDelUsuario.add(tarjetaNueva);
-        return listaDeTarjetasDelUsuario.contains(tarjetaNueva);
+        listaTarjetasDescuento.add(tarjetaNueva);
+        System.out.println(tarjetaNueva.toString());
+        return listaTarjetasDescuento.contains(tarjetaNueva);
     }
 
     public ArrayList<Gasolinera> actualizarListaDePrecios(ArrayList<Gasolinera> gasolineras){
@@ -47,7 +50,7 @@ public class PresenterTarjetaDescuento {
     //A la hora de aplicar el cambio de precios realiza los descuentos de cts/Litro y posteriormente el porcentaje
     private Gasolinera cambioPrecios (Gasolinera gasolinera) {
         double descuentoTotal = 0;
-        for (TarjetaDescuento tarjetaDescuento: listaDeTarjetasDelUsuario){
+        for (TarjetaDescuento tarjetaDescuento: listaTarjetasDescuento){
             if (gasolinera.getRotulo().equals(tarjetaDescuento.getMarca())) {
                 if (tarjetaDescuento instanceof TarjetaDescuentoPorcentaje){
                     descuentoTotal = ((TarjetaDescuentoPorcentaje) tarjetaDescuento).getDescuentoPorcentaje();
@@ -73,8 +76,8 @@ public class PresenterTarjetaDescuento {
 
     public boolean cargarListaDeTarjetasGuardadas(){
         try {
-            listaDeTarjetasDelUsuario = new ArrayList<>();
-            listaDeTarjetasDelUsuario.add(new TarjetaDescuentoPorcentaje("TarjetaDescuento Repsol", "descripcion basica", "Repsol",0.1));
+            listaTarjetasDescuento = new ArrayList<>();
+            listaTarjetasDescuento.add(new TarjetaDescuentoPorcentaje("TarjetaDescuentoRepsol", "descripcion basica", "Repsol",0.1));
             System.out.println("Carga correcta");
             return true;
         } catch (Exception e)
