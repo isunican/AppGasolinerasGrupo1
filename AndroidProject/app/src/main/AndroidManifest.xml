@@ -19,8 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Views.InfoActivity" />
-        <activity android:name=".Views.DetailActivity" />
+        <activity android:name=".Views.InfoActivity"></activity>
+        <activity android:name=".Views.DetailActivity"></activity>
+        <activity android:name=".Views.FiltrosActivity"
+            android:theme="@style/AppTheme.FloatingWindow"></activity>
     </application>
 
 </manifest>
