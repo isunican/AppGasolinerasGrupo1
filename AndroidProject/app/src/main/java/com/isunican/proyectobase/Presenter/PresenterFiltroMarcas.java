@@ -26,7 +26,7 @@ public class PresenterFiltroMarcas {
      * @param lista ArrayList: lista de gasolineras disponibles
      */
     public PresenterFiltroMarcas(ArrayList<Gasolinera> lista){
-        this.listaActualizada = lista;
+        this.listaActualizada = new ArrayList<>();
         this.listaGasolineras = lista;
         marcas = new ArrayList<>();
         for(Gasolinera g: lista){
@@ -56,26 +56,23 @@ public class PresenterFiltroMarcas {
      * @param marca escogida para filtrar
      * @return false si la marca no existe, true si la marca existe y la operacio se completa correctamente
      */
-    private boolean aplicaFiltro(String marca){
-        if(!marcas.contains(marca))return false;
+    private void aplicaFiltro(String marca){
         listaActualizada = new ArrayList<>();
         for(Gasolinera g: listaGasolineras){
-            if(g.getRotulo().equals(marca)) listaGasolineras.remove(g);
+            if(g.getRotulo().toLowerCase().equals(marca.toLowerCase())) listaActualizada.add(g);
         }
-
-        return true;
     }
 
     /**
      * Filtra las gasolineras por la marca seleccionada
-     * @param marca seleccionada
+     * @param marca  nombre completo de la marca seleccionada
      * @return lista original de gasolineras si no se selecciona ninguna gasolinera
      * @return lista actualizada de gasolineras si la operacion se completa correctamente
      */
     public List<Gasolinera> filtraGasolineras(String marca){
         if(marca.isEmpty()) return listaGasolineras;
-        boolean completada= aplicaFiltro(marca);
-        if(!completada) return listaGasolineras;
+        aplicaFiltro(marca);
+        if(listaActualizada.isEmpty()) return listaGasolineras;
         return listaActualizada;
     }
 
