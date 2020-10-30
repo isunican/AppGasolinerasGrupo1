@@ -179,6 +179,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 FiltrosActivity filtro = new FiltrosActivity();
                 filtro.show(getSupportFragmentManager(), "Dialog");
                 break;
+
+
+            case R.id.itemNuevaTarjetaDescuento:
+                Intent myIntent = new Intent(MainActivity.this, NuevaTarjetaDescuentoActivity.class);
+                MainActivity.this.startActivityForResult(myIntent, REQUEST_CODE_NEW_DISCOUNT_CARD);
+                break;
+
             default:
                 Log.d("MIGUEL", "Default en switch");
         }
@@ -401,5 +408,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return view;
         }
     }
-
 }
