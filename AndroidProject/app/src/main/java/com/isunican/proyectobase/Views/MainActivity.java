@@ -97,8 +97,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         layout.addView(progressBar,params);
         */
-
-
+        
         // Muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
