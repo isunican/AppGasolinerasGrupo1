@@ -16,10 +16,8 @@
         android:layout_marginTop="12dp"
         android:layout_marginRight="20dp"
         android:inputType="textCapSentences|textAutoCorrect"
-        android:textSize="12dp" />
+        android:textSize="12dp"
+        android:hint="Buscar..."
+        android:imeOptions="actionSend"/>
 
-    <ListView
-        android:id="@+id/list_marcas"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 </LinearLayout>

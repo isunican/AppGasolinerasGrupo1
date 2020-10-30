@@ -6,7 +6,9 @@ import com.isunican.proyectobase.Model.*;
 import com.isunican.proyectobase.R;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +36,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -49,9 +53,11 @@ import android.widget.Toast;
 
 ------------------------------------------------------------------
 */
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     PresenterGasolineras presenterGasolineras;
+    //Codigo sucio
+    PresenterFiltroMarcas presenterFiltroMarcas;
 
     // Vista de lista y adaptador para cargar datos en ella
     ListView listViewGasolineras;
@@ -69,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * onCreate
-     *
+     * <p>
      * Crea los elementos que conforman la actividad
      *
      * @param savedInstanceState
@@ -82,14 +88,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.activity_precio_gasolina_drawer);
 
         this.presenterGasolineras = new PresenterGasolineras();
-
         // Barra de progreso
         // https://materialdoc.com/components/progress/
-        progressBar = new ProgressBar(MainActivity.this,null,android.R.attr.progressBarStyleLarge);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100,100);
+        progressBar = new ProgressBar(MainActivity.this, null, android.R.attr.progressBarStyleLarge);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
         layout = findViewById(R.id.activity_precio_gasolina);
-        layout.addView(progressBar,params);
+        layout.addView(progressBar, params);
 
         // Muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -109,7 +114,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
-
     }
 
     @Override
@@ -120,14 +124,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+
     /**
      * Menú action bar
-     *
+     * <p>
      * Redefine métodos para el uso de un menú de tipo action bar.
-     *
+     * <p>
      * onCreateOptionsMenu
      * Carga las opciones del menú a partir del fichero de recursos menu/menu.xml
-     *
+     * <p>
      * onOptionsItemSelected
      * Define las respuestas a las distintas opciones del menú
      */
@@ -136,13 +141,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(item.getItemId()==R.id.itemActualizar){
+        if (item.getItemId() == R.id.itemActualizar) {
             mSwipeRefreshLayout.setRefreshing(true);
             new CargaDatosGasolinerasTask(this).execute();
-        }
-        else if(item.getItemId()==R.id.itemInfo){
+        } else if (item.getItemId() == R.id.itemInfo) {
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
             MainActivity.this.startActivity(myIntent);
         }
@@ -151,17 +156,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()){
+        switch (menuItem.getItemId()) {
             case R.id.filtroTipoGasolina:
                 FiltrosActivity filtro = new FiltrosActivity();
                 filtro.show(getSupportFragmentManager(), "Dialog");
                 break;
 
             case R.id.filtroMarcaGasolinera:
-                final Intent intent = new Intent(MainActivity.this, FiltroMarcaAcivity.class);
-                intent.putExtra(getResources().getString(R.string.pasoListaGasolinerasFiltros),
-                        (Parcelable) presenterGasolineras.getGasolineras());
-                startActivity(intent);
+
+                presenterFiltroMarcas = new PresenterFiltroMarcas((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
+                final EditText campo_busqueda = new EditText(this);
+
+                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+
+                // Get the layout inflater
+                LayoutInflater inflater = this.getLayoutInflater();
+                // Inflate and set the layout for the dialog
+                // Pass null as the parent view because its going in the dialog layout
+                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                        android.R.layout.simple_dropdown_item_1line, presenterFiltroMarcas.getMarcas());
+                alertDialogBuilder.setView(inflater.inflate(R.layout.activity_filtro_marca_acivity, null))
+                        .setAdapter(dataAdapter, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+
+                        });
+                alertDialogBuilder.setView(campo_busqueda);
+
+                AlertDialog alertDialog = alertDialogBuilder.create();
+                alertDialog.show();
                 break;
 
             default:
@@ -179,17 +204,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     /**
      * CargaDatosGasolinerasTask
-     *
+     * <p>
      * Tarea asincrona para obtener los datos de las gasolineras
      * en segundo plano.
-     *
+     * <p>
      * Redefinimos varios métodos que se ejecutan en el siguiente orden:
      * onPreExecute: activamos el dialogo de progreso
      * doInBackground: solicitamos que el presenter cargue los datos
      * onPostExecute: desactiva el dialogo de progreso,
-     *    muestra las gasolineras en formato lista (a partir de un adapter)
-     *    y define la acción al realizar al seleccionar alguna de ellas
-     *
+     * muestra las gasolineras en formato lista (a partir de un adapter)
+     * y define la acción al realizar al seleccionar alguna de ellas
+     * <p>
      * http://www.sgoliver.net/blog/tareas-en-segundo-plano-en-android-i-thread-y-asynctask/
      */
     private class CargaDatosGasolinerasTask extends AsyncTask<Void, Void, Boolean> {
@@ -198,6 +223,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         /**
          * Constructor de la tarea asincrona
+         *
          * @param activity
          */
         public CargaDatosGasolinerasTask(Activity activity) {
@@ -206,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         /**
          * onPreExecute
-         *
+         * <p>
          * Metodo ejecutado de forma previa a la ejecucion de la tarea definida en el metodo doInBackground()
          * Muestra un diálogo de progreso
          */
@@ -217,9 +243,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         /**
          * doInBackground
-         *
+         * <p>
          * Tarea ejecutada en segundo plano
          * Llama al presenter para que lance el método de carga de los datos de las gasolineras
+         *
          * @param params
          * @return boolean
          */
@@ -230,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         /**
          * onPostExecute
-         *
+         * <p>
          * Se ejecuta al finalizar doInBackground
          * Oculta el diálogo de progreso.
          * Muestra en una lista los datos de las gasolineras cargadas,
