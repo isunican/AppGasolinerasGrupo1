@@ -12,10 +12,6 @@
     <item
         android:id="@+id/itemInfo"
         android:title="@string/menuInfo" />
-
-    <!--opcion para añadir nueva tarjeta descuento -->
-    <item
-        android:id="@+id/itemNuevaTarjetaDescuento"
-        android:title="Nueva tarjeta descuento" />
+    
 
 </menu>
