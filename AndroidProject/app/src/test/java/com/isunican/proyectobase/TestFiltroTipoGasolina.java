@@ -15,6 +15,12 @@ import static org.junit.Assert.fail;
 public class TestFiltroTipoGasolina {
 
 
+    private Gasolinera gasolineraConDiesel=new Gasolinera(2,"localidad2","provincia2","direccion2",1.0,0.0,"gasolinera2");
+    private Gasolinera gasolineraSinDiesel=new Gasolinera(1,"localidad1","provincia1","direccion1",0.0,1.0,"gasolinera1");
+    private Gasolinera gasolineraDieselGasolina=new Gasolinera(3,"localidad3","provincia3","direccion3",1.0,1.0,"gasolinera3");
+    private Gasolinera gasolineraSin=new Gasolinera(4,"localidad4","provincia4","direccion4",0.0,0.0,"gasolinera4");
+    private List<Gasolinera>listaBajoPrueba;
+    private List<Gasolinera>listaEsperada;
     @Test
     public void testFiltrosTipoGasolina(){
         PresenterGasolineras presenter=new PresenterGasolineras();
@@ -26,22 +32,38 @@ public class TestFiltroTipoGasolina {
             Assert.assertTrue(true);
         }
         //UGIC.1b
-        List<Gasolinera>listaSinDiesel=new ArrayList<Gasolinera>();
-        List<Gasolinera>listaVacia=new ArrayList<Gasolinera>();
-        listaSinDiesel.add(new Gasolinera(1,"localidad1","provincia1","direccion1",0,1.0,"gasolinera1"));
-        assertEquals(presenter.filtraGasolinerasTipoCombustible("Diesel ",listaSinDiesel), listaVacia);
+        listaBajoPrueba=new ArrayList<Gasolinera>();
+        listaEsperada=new ArrayList<Gasolinera>();
+        listaBajoPrueba.add(gasolineraSinDiesel);
+        assertEquals(presenter.filtraGasolinerasTipoCombustible("Diesel ",listaBajoPrueba), listaEsperada);
         //UGIC.1c
-        List<Gasolinera>listaConDiesel=new ArrayList<Gasolinera>();
-        listaConDiesel.add(new Gasolinera(1,"localidad1","provincia1","direccion1",0,1.0,"gasolinera1"));
-        listaConDiesel.add(new Gasolinera(2,"localidad2","provincia2","direccion2",1,0.0,"gasolinera2"));
-
+        listaBajoPrueba=new ArrayList<Gasolinera>();
+        listaEsperada=new ArrayList<Gasolinera>();
+        listaBajoPrueba.add(gasolineraConDiesel);
+        listaBajoPrueba.add(gasolineraSinDiesel);
+        listaEsperada.add(gasolineraConDiesel);
+        assertEquals(presenter.filtraGasolinerasTipoCombustible("Diesel ",listaBajoPrueba),listaEsperada);
         //UGIC.1d
+        listaBajoPrueba=new ArrayList<Gasolinera>();
+        listaBajoPrueba.add(gasolineraConDiesel);
+        listaBajoPrueba.add(gasolineraConDiesel);
+        listaBajoPrueba.add(gasolineraConDiesel);
+        listaEsperada=new ArrayList<Gasolinera>();
+        listaEsperada.add(gasolineraConDiesel);
+        listaEsperada.add(gasolineraConDiesel);
+        listaEsperada.add(gasolineraConDiesel);
+        assertEquals(presenter.filtraGasolinerasTipoCombustible("Diesel ",listaBajoPrueba),listaEsperada);
+
     }
     @Test
     public void testTiposGasolina(){
         //UID.1a
+        assertEquals(gasolineraDieselGasolina.tiposGasolina(),"Diesel Gasolina95 ");
         //UID.1b
+        assertEquals(gasolineraConDiesel.tiposGasolina(),"Diesel ");
         //UID.1c
+        assertEquals(gasolineraSinDiesel.tiposGasolina(),"Gasolina95 ");
         //UID.1d
+        assertEquals(gasolineraSin.tiposGasolina(),"");
     }
 }
