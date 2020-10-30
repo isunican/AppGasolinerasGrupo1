@@ -139,14 +139,13 @@ public class Gasolinera implements Parcelable {
      * @return String ("Gasolina95 ") si tiene gasolina 95, ("Gasoleo ") y
      * si tiene gasoleo, ("Gasoleo Gasolina95 ") si ambos
      */
-    public String hasTipoGasolina(){
+    public String tiposGasolina(){
         String tiposGasolina="";
         if(gasoleoA!=0.0){
             tiposGasolina+="Diesel ";
         }if(gasolina95!=0.0) {
             tiposGasolina += "Gasolina95 ";
         }
-        Log.d("TIPOS DE GASOLINA: ","LOS TIPOS DE GASOLINA DE "+rotulo+" SON LOS SIGUIENTES:"+tiposGasolina);
         return tiposGasolina;
     }
 }

@@ -8,7 +8,6 @@ import com.isunican.proyectobase.Utilities.RemoteFetch;
 
 import java.io.BufferedInputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /*
@@ -131,15 +130,17 @@ public class PresenterGasolineras {
      * @param tipo Tipo de gasolina buscada
      * @return boolean
      */
-    public List<Gasolinera> filtraGasolinerasTipoCombustible(String tipo,List<Gasolinera>lista){
+    public List<Gasolinera> filtraGasolinerasTipoCombustible(String tipo,List<Gasolinera>lista) throws NullPointerException{
+        if(lista==null){
+            throw new NullPointerException();
+        }
         List<Gasolinera>gasolinerasFiltradas=new ArrayList<Gasolinera>();
-        for(Gasolinera g : lista){
-            if(g.hasTipoGasolina().contains(tipo)){
+        for(Gasolinera g : lista) {
+            if (g.tiposGasolina().contains(tipo)) {
                 gasolinerasFiltradas.add(g);
 
             }
         }
-        Log.d("Error", gasolinerasFiltradas.toString());
         return gasolinerasFiltradas;
     }
 

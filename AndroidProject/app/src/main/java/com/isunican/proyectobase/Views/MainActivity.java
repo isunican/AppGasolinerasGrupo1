@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Swipe and refresh (para recargar la lista con un swipe)
     SwipeRefreshLayout mSwipeRefreshLayout;
+    private static final int REQUEST_FILTRO_TIPO_GASOLINA=1999;
+
 
     // Sidebar
     DrawerLayout layout;
@@ -162,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 Intent myIntent = new Intent(MainActivity.this, FiltrosActivity.class);
                 myIntent.putExtra("tipo",tipoGasolina);
-                startActivityForResult(myIntent,1999);
+                startActivityForResult(myIntent,REQUEST_FILTRO_TIPO_GASOLINA);
                 break;
             default:
                 Log.d("MIGUEL", "Ningun item del panel ha sido seleccionado");
@@ -177,11 +179,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onActivityResult(requestCode, resultCode, data);
         switch(requestCode){
             //Al acabar la actividad FiltrosActivity correctamente salta aqui
-            case 1999:
+            case REQUEST_FILTRO_TIPO_GASOLINA:
                 if(resultCode==Activity.RESULT_OK){
                     String tipoGasolina=data.getStringExtra("tipo");
                     Log.d("Funciona y mando: ",tipoGasolina);
-                    List<Gasolinera>gasolinerasFiltradas=presenterGasolineras.filtraGasolinerasTipoCombustible(tipoGasolina,listaGasolinerasActual);
+                    List<Gasolinera> gasolinerasFiltradas=null;
+                    try {
+
+                        gasolinerasFiltradas = presenterGasolineras.filtraGasolinerasTipoCombustible(tipoGasolina, listaGasolinerasActual);
+                    }catch(NullPointerException e){
+                        Toast.makeText(getApplicationContext(),"Lista nula, no se pudo aplicar filtro",Toast.LENGTH_LONG);
+                    }
                     adapter.clear();
                     adapter.addAll(gasolinerasFiltradas);
 
