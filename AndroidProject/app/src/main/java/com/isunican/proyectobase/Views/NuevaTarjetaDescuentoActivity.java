@@ -17,30 +17,25 @@ import com.isunican.proyectobase.R;
 
 public class NuevaTarjetaDescuentoActivity extends AppCompatActivity implements View.OnClickListener {
 
-    TextView txtNombre;
-    TextView txtMarca;
-    TextView txtTipoDescuento;
-    TextView txtDescuento;
-    TextView txtComentarios;
-    TextView nombre;
-    TextView marca;
-    TextView descuento;
-    TextView comentarios;
+    private TextView txtNombre;
+    private TextView txtMarca;
+    private TextView txtTipoDescuento;
+    private TextView txtDescuento;
+    private TextView txtComentarios;
+    private TextView nombre;
+    private TextView marca;
+    private TextView descuento;
+    private TextView comentarios;
 
-    Spinner spnTipoDescuento;
+    private Spinner spnTipoDescuento;
 
-    Button btnGuardar;
-    Button btnCancelar;
-
-    PresenterTarjetaDescuento presenter;
+    private Button btnGuardar;
+    private Button btnCancelar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nueva_tarjeta_descuento);
-
-        // Presenter
-        presenter = new PresenterTarjetaDescuento();
 
         // Muestra el titulo del formulario
         getSupportActionBar().setTitle("Nueva tarjeta descuento");
@@ -72,7 +67,6 @@ public class NuevaTarjetaDescuentoActivity extends AppCompatActivity implements 
         spnTipoDescuento.setAdapter(adapter);
     }
 
-
     public void onClick(View v) {
         if(v.getId() == R.id.btnGuardar) {
             // lee y almacena datos
@@ -82,19 +76,21 @@ public class NuevaTarjetaDescuentoActivity extends AppCompatActivity implements 
             String strDescuento = descuento.getText().toString();
             String strComentarios = comentarios.getText().toString();
 
-            System.out.println(strNombre + strMarca +strTipoDescuento + strDescuento + strComentarios);
             // Si hay algún campo sin rellenar, salta un aviso al usuario
             if (strNombre.equals("")  || strMarca.equals("") || strDescuento.equals("")){
-                System.out.println("estro promer if");
                 Toast toast = Toast.makeText(getApplicationContext(), "Complete todos los campos", Toast.LENGTH_LONG);
                 toast.show();
             } else {
-                System.out.println("entro else");
-                presenter.anhadirNuevaTarjeta(strNombre,strComentarios,strMarca,strTipoDescuento,strDescuento);
-                // TENER EN CUENTA QUE NO SE ESTAN ACTUALIZANDO TODAVIA LOS PRECIOS
+                Intent intent = getIntent();
+                intent.putExtra("nombre", strNombre);
+                intent.putExtra("marca", strMarca);
+                intent.putExtra("tipo", strTipoDescuento);
+                intent.putExtra("descuento", strDescuento);
+                intent.putExtra("descripcion", strComentarios);
+                setResult(RESULT_OK, intent);
+
+                // Mensaje de comprobación al usuario, y vuelta a la página principal
                 Toast toast = Toast.makeText(getApplicationContext(), "Tarjeta añadida correctamente", Toast.LENGTH_LONG);
-                Intent intent = new Intent(NuevaTarjetaDescuentoActivity.this, MainActivity.class);
-                NuevaTarjetaDescuentoActivity.this.startActivity(intent);
                 toast.show();
             }
         } else if (v.getId() == R.id.btnCancelar) {
@@ -104,6 +100,4 @@ public class NuevaTarjetaDescuentoActivity extends AppCompatActivity implements 
             startActivity(intent);
         }
     }
-
-
 }
