@@ -46,6 +46,7 @@ public class PresenterFiltroMarcas {
      * @param filtro para aplicar a la lista de marcas
      * @return nueva lista de marcas
      */
+    @Deprecated
     public List<String> buscaMarcas(String filtro){
 
         return BrandSearch.searchList(filtro, marcas);

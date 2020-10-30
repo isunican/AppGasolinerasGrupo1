@@ -16,6 +16,8 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import java.util.ArrayList;
@@ -157,6 +159,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.filtroMarcaGasolinera:
                 final Intent intent = new Intent(MainActivity.this, FiltroMarcaAcivity.class);
+                intent.putExtra(getResources().getString(R.string.pasoListaGasolinerasFiltros),
+                        (Parcelable) presenterGasolineras.getGasolineras());
                 startActivity(intent);
                 break;
 

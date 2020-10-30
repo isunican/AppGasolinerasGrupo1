@@ -1,6 +1,9 @@
 package com.isunican.proyectobase.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.isunican.proyectobase.Model.Gasolinera;
+import com.isunican.proyectobase.Presenter.PresenterFiltroMarcas;
 import com.isunican.proyectobase.R;
 import android.os.Bundle;
 import android.text.Editable;
@@ -10,19 +13,27 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 
 public class FiltroMarcaAcivity extends AppCompatActivity {
 
     EditText campo_marca;
     private  ListView lista_marcas;
     private ArrayAdapter<String> adapter;
-    private String[] marcasGasolineras={"Repsol","Cepsa","Petronol","Galp","Cobo","Shell","Carrefour","Avia","Meroil", "Eroski", "EasyGas"};
+    private ArrayList<Gasolinera> listaSinFiltrar;
+    private ArrayList<Gasolinera> listaFiltrada;
+    private PresenterFiltroMarcas presenterFiltroMarcas;
+    private ArrayList marcasGasolineras;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filtro_marca_acivity);
 
+        listaSinFiltrar=getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoListaGasolinerasFiltros));
+        presenterFiltroMarcas = new PresenterFiltroMarcas(listaSinFiltrar);
+        marcasGasolineras = (ArrayList) presenterFiltroMarcas.getMarcas();
         //
         campo_marca = findViewById(R.id.txtMarca);
         lista_marcas = findViewById(R.id.list_marcas);
