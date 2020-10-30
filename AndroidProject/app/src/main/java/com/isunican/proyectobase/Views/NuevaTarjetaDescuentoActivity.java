@@ -38,7 +38,7 @@ public class NuevaTarjetaDescuentoActivity extends AppCompatActivity implements 
         setContentView(R.layout.activity_nueva_tarjeta_descuento);
 
         // Muestra el titulo del formulario
-        getSupportActionBar().setTitle("Nueva tarjeta descuento");
+        getSupportActionBar().setTitle(getResources().getString(R.string.nueva_tarjeta_descuento));
 
         // Vistas
         txtNombre = findViewById(R.id.txtNombreTarjeta);
@@ -59,7 +59,8 @@ public class NuevaTarjetaDescuentoActivity extends AppCompatActivity implements 
         btnCancelar.setOnClickListener(this);
 
         // Datos del spinner del tipo de descuento
-        String[] datos = new String[] {"Porcentual", "cts/L"};
+        String[] datos = new String[] {getResources().getString(R.string.porcentual),
+                getResources().getString(R.string.cts_litro)};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, datos);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -78,7 +79,8 @@ public class NuevaTarjetaDescuentoActivity extends AppCompatActivity implements 
 
             // Si hay algún campo sin rellenar, salta un aviso al usuario
             if (strNombre.equals("")  || strMarca.equals("") || strDescuento.equals("")){
-                Toast toast = Toast.makeText(getApplicationContext(), "Complete todos los campos", Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        getResources().getString(R.string.complete_todos_los_campos), Toast.LENGTH_LONG);
                 toast.show();
             } else {
                 Intent intent = getIntent();
@@ -88,16 +90,16 @@ public class NuevaTarjetaDescuentoActivity extends AppCompatActivity implements 
                 intent.putExtra("descuento", strDescuento);
                 intent.putExtra("descripcion", strComentarios);
                 setResult(RESULT_OK, intent);
-
-                // Mensaje de comprobación al usuario, y vuelta a la página principal
-                Toast toast = Toast.makeText(getApplicationContext(), "Tarjeta añadida correctamente", Toast.LENGTH_LONG);
-                toast.show();
             }
         } else if (v.getId() == R.id.btnCancelar) {
-            // Vuelve a la pantalla inicial
-            Intent intent = new Intent(NuevaTarjetaDescuentoActivity.this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
+            // Vuelve a la pantalla inicial sin pasarle ningún dato
+            setResult(RESULT_CANCELED);
+            finish();
         }
+    }
+    @Override
+    public void onBackPressed(){
+        setResult(RESULT_CANCELED);
+        finish();
     }
 }
