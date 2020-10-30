@@ -50,7 +50,7 @@ public class FiltrosActivity extends AppCompatActivity implements View.OnClickLi
         //Porcentajes que ocupa la ventana en la pantalla
         getWindow().setLayout((int)(ancho*0.85), (int)(alto*0.70));
 
-        String[] datos = new String[] {"Gasolina 95", "Diesel"};
+        String[] datos = new String[] {"Gasolina95", "Diesel"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, datos);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);

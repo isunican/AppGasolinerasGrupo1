@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     PresenterGasolineras presenterGasolineras;
 
+    List<Gasolinera>listaGasolinerasActual;
     // Vista de lista y adaptador para cargar datos en ella
     ListView listViewGasolineras;
     ArrayAdapter<Gasolinera> adapter;
@@ -154,8 +155,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()){
+          switch (menuItem.getItemId()){
             case R.id.filtroTipoGasolina:
+
                 Intent myIntent = new Intent(MainActivity.this, FiltrosActivity.class);
                 myIntent.putExtra("tipo",tipoGasolina);
                 startActivityForResult(myIntent,1999);
@@ -178,10 +180,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 if(resultCode==Activity.RESULT_OK){
                     String tipoGasolina=data.getStringExtra("tipo");
                     Log.d("Funciona y mando: ",tipoGasolina);
-                    presenterGasolineras.filtraGasolinerasTipoCombustible(tipoGasolina);
+                    List<Gasolinera>gasolinerasFiltradas=presenterGasolineras.filtraGasolinerasTipoCombustible(tipoGasolina,listaGasolinerasActual);
                     adapter.clear();
-                    adapter.addAll(presenterGasolineras.getGasolinerasFiltradas());
-                    Log.d("Filtro","algo");
+                    adapter.addAll(gasolinerasFiltradas);
+
+                }else{
+                    Log.d("Error","No se ha cargado el filtro");
                 }
                 break;
         }
@@ -253,6 +257,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          */
         @Override
         protected void onPostExecute(Boolean res) {
+            listaGasolinerasActual=presenterGasolineras.getGasolineras();
             Toast toast;
 
             // Si el progressDialog estaba activado, lo oculta
@@ -263,14 +268,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Si se ha obtenido resultado en la tarea en segundo plano
             if (res) {
                 // Definimos el array adapter
-                presenterGasolineras.getGasolineras().add(new Gasolinera(9999,"localidad1","provincia1","direccion1",0.0,100.0,"La gasolinera de prueba de Jaime"));
-                adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
+                adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>) listaGasolinerasActual);
 
                 // Obtenemos la vista de la lista
                 listViewGasolineras = findViewById(R.id.listViewGasolineras);
 
                 // Cargamos los datos en la lista
-                if (!presenterGasolineras.getGasolineras().isEmpty()) {
+                if (!listaGasolinerasActual.isEmpty()) {
                     // datos obtenidos con exito
                     listViewGasolineras.setAdapter(adapter);
                     toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_exito), Toast.LENGTH_LONG);
@@ -307,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                      */
                     Intent myIntent = new Intent(MainActivity.this, DetailActivity.class);
                     myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera),
-                            presenterGasolineras.getGasolineras().get(position));
+                            listaGasolinerasActual.get(position));
                     MainActivity.this.startActivity(myIntent);
 
                 }

@@ -8,6 +8,7 @@ import com.isunican.proyectobase.Utilities.RemoteFetch;
 
 import java.io.BufferedInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /*
@@ -22,8 +23,6 @@ import java.util.List;
 public class PresenterGasolineras {
 
     private List<Gasolinera> gasolineras;
-    //Lista de gasolineras filtradas
-    private List<Gasolinera> gasolinerasFiltradas;
 
     //URLs para obtener datos de las gasolineras
     //https://sedeaplicaciones.minetur.gob.es/ServiciosRESTCarburantes/PreciosCarburantes/help
@@ -43,7 +42,6 @@ public class PresenterGasolineras {
         return gasolineras;
     }
 
-    public List<Gasolinera> getGasolinerasFiltradas(){return gasolinerasFiltradas; }
 
     public void setGasolineras(List<Gasolinera> l) {
         this.gasolineras = l;
@@ -78,10 +76,10 @@ public class PresenterGasolineras {
      */
     public boolean cargaDatosDummy(){
         this.gasolineras.add(new Gasolinera(1000,SANTANDER,SANTANDER, "Av Valdecilla", 1.299,1.359,"AVIA"));
-        this.gasolineras.add(new Gasolinera(1053,SANTANDER,SANTANDER, "Plaza Matias Montero", 1.270,1.349,"CAMPSA"));
-        this.gasolineras.add(new Gasolinera(420,SANTANDER,SANTANDER, "Area Arrabal Puerto de Raos", 1.249,1.279,"E.E.S.S. MAS, S.L."));
-        this.gasolineras.add(new Gasolinera(9564,SANTANDER,SANTANDER, "Av Parayas", 1.189,1.269,"EASYGAS"));
-        this.gasolineras.add(new Gasolinera(1025,SANTANDER,SANTANDER, "Calle el Empalme", 1.259,1.319,"CARREFOUR"));
+        this.gasolineras.add(new Gasolinera(1053,SANTANDER,SANTANDER, "Plaza Matias Montero", 0,1.349,"CAMPSA"));
+        this.gasolineras.add(new Gasolinera(420,SANTANDER,SANTANDER, "Area Arrabal Puerto de Raos", 0,1.279,"E.E.S.S. MAS, S.L."));
+        this.gasolineras.add(new Gasolinera(9564,SANTANDER,SANTANDER, "Av Parayas", 1.189,0,"EASYGAS"));
+        this.gasolineras.add(new Gasolinera(1025,SANTANDER,SANTANDER, "Calle el Empalme", 1.259,0,"CARREFOUR"));
         return true;
     }
 
@@ -133,14 +131,16 @@ public class PresenterGasolineras {
      * @param tipo Tipo de gasolina buscada
      * @return boolean
      */
-    public boolean filtraGasolinerasTipoCombustible(String tipo){
-        this.gasolinerasFiltradas=new ArrayList<Gasolinera>();
-        for(Gasolinera g : gasolineras){
+    public List<Gasolinera> filtraGasolinerasTipoCombustible(String tipo,List<Gasolinera>lista){
+        List<Gasolinera>gasolinerasFiltradas=new ArrayList<Gasolinera>();
+        for(Gasolinera g : lista){
             if(g.hasTipoGasolina().contains(tipo)){
                 gasolinerasFiltradas.add(g);
+
             }
         }
-        return true;
+        Log.d("Error", gasolinerasFiltradas.toString());
+        return gasolinerasFiltradas;
     }
 
 
