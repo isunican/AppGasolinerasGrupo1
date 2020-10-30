@@ -90,6 +90,7 @@ public class NuevaTarjetaDescuentoActivity extends AppCompatActivity implements 
                 intent.putExtra("descuento", strDescuento);
                 intent.putExtra("descripcion", strComentarios);
                 setResult(RESULT_OK, intent);
+                finish();
             }
         } else if (v.getId() == R.id.btnCancelar) {
             // Vuelve a la pantalla inicial sin pasarle ningún dato
