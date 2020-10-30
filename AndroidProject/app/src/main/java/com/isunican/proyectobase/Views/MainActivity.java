@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     // Sidebar
-    RelativeLayout layout;
-    DrawerLayout drawerLayout;
+    DrawerLayout layout;
+    //DrawerLayout drawerLayout;
     NavigationView navigationView;
 
     //Filtro
@@ -80,19 +80,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view_main);
         navigationView.setNavigationItemSelectedListener(this);
-        drawerLayout = findViewById(R.id.activity_precio_gasolina_drawer);
+        layout = findViewById(R.id.activity_precio_gasolina_drawer);
 
         this.presenterGasolineras = new PresenterGasolineras();
 
         // Barra de progreso
         // https://materialdoc.com/components/progress/
+        /*
         progressBar = new ProgressBar(MainActivity.this,null,android.R.attr.progressBarStyleLarge);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100,100);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        layout = findViewById(R.id.main_layout);
+
         layout.addView(progressBar,params);
+        */
 
 
         // Muestra el logo en el actionBar
@@ -118,8 +120,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
+        if (layout.isDrawerOpen(GravityCompat.START)) {
+            layout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -166,8 +168,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Log.d("MIGUEL", "Ningun item del panel ha sido seleccionado");
                 break;
         }
-        menuItem.setChecked(true);
-        drawerLayout.closeDrawer(GravityCompat.START);
+        layout.closeDrawer(GravityCompat.START);
         return true;
     }
     @Override
@@ -226,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          */
         @Override
         protected void onPreExecute() {
-            progressBar.setVisibility(View.VISIBLE);  //To show ProgressBar
+            //progressBar.setVisibility(View.VISIBLE);  //To show ProgressBar
         }
 
         /**
@@ -261,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Toast toast;
 
             // Si el progressDialog estaba activado, lo oculta
-            progressBar.setVisibility(View.GONE);     // To Hide ProgressBar
+            //progressBar.setVisibility(View.GONE);     // To Hide ProgressBar
 
             mSwipeRefreshLayout.setRefreshing(false);
 
