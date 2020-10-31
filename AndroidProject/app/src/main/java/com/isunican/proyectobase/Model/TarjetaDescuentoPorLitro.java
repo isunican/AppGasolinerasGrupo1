@@ -35,11 +35,11 @@ public class TarjetaDescuentoPorLitro extends TarjetaDescuento implements Parcel
         textoTarjetaDescuento +=
                 "Nombre: " + getNombre() + "\n"+
                 "Descripcion: " + getDescripcion() + "\n"+
+                "Marca: "+ getMarca()+ "\n"+
                 "Descuento obtenido por litro: " + getDescuentoPorLitro() + " " + "\n\n";
 
         return textoTarjetaDescuento;
     }
-
     /**
      * interfaz Parcelable
      *

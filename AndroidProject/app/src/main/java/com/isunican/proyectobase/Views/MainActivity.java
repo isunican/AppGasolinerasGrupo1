@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     PresenterGasolineras presenterGasolineras;
     PresenterTarjetaDescuento presenterTarjetaDescuento;
 
+    List<Gasolinera> gasolinerasActuales;
+
     // Vista de lista y adaptador para cargar datos en ella
     ListView listViewGasolineras;
     ArrayAdapter<Gasolinera> adapter;
@@ -164,11 +166,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 final String descuento = data.getStringExtra("descuento");
                 final String descripcion = data.getStringExtra("descripcion");
                 presenterTarjetaDescuento.anhadirNuevaTarjeta(nombre, descripcion, marca, tipo, descuento);
-                Toast.makeText(this, "Result: " + nombre, Toast.LENGTH_LONG).show();
+                //Esto tiene que cambiar cuando se haga la historia de ver tarjetas de descuento porque tenemos que usar solo una tarjeta de desucento al tiempo
+                List<Gasolinera> gasolinerasActualesActualizadas = presenterTarjetaDescuento.actualizarListaDePrecios(gasolinerasActuales);
+                adapter.clear();
+                gasolinerasActuales = gasolinerasActualesActualizadas;
+                adapter.addAll(gasolinerasActuales);
+                adapter.notifyDataSetChanged();
             }
-            else
+            else if(resultCode == Activity.RESULT_CANCELED)
             {
-                Toast.makeText(this, "No se ha podido guardar la tarjeta. Revise sus datos", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Se ha cancelado la creacion de una nueva tarjeta", Toast.LENGTH_LONG).show();
+            }
+            else{
+                Toast.makeText(this, "Error al guardar la tarjeta", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -328,6 +338,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          */
         @Override
         protected void onPostExecute(Boolean res) {
+            gasolinerasActuales = presenterGasolineras.getGasolineras();
             Toast toast;
 
             // Si el progressDialog estaba activado, lo oculta
@@ -338,13 +349,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Si se ha obtenido resultado en la tarea en segundo plano
             if (res) {
                 // Definimos el array adapter
-                adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
+
+                adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>)gasolinerasActuales);
 
                 // Obtenemos la vista de la lista
                 listViewGasolineras = findViewById(R.id.listViewGasolineras);
 
                 // Cargamos los datos en la lista
-                if (!presenterGasolineras.getGasolineras().isEmpty()) {
+                if (!gasolinerasActuales.isEmpty()) {
                     // datos obtenidos con exito
                     listViewGasolineras.setAdapter(adapter);
                     toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_exito), Toast.LENGTH_LONG);
@@ -381,7 +393,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                      */
                     Intent myIntent = new Intent(MainActivity.this, DetailActivity.class);
                     myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera),
-                            presenterGasolineras.getGasolineras().get(position));
+                            gasolinerasActuales.get(position));
                     MainActivity.this.startActivity(myIntent);
 
                 }

@@ -7,7 +7,9 @@ import com.isunican.proyectobase.Model.TarjetaDescuento;
 import com.isunican.proyectobase.Model.TarjetaDescuentoPorLitro;
 import com.isunican.proyectobase.Model.TarjetaDescuentoPorcentaje;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PresenterTarjetaDescuento {
 
@@ -41,35 +43,33 @@ public class PresenterTarjetaDescuento {
         return listaTarjetasDescuento.contains(tarjetaNueva);
     }
 
-    public ArrayList<Gasolinera> actualizarListaDePrecios(ArrayList<Gasolinera> gasolineras){
+    public List<Gasolinera> actualizarListaDePrecios(List<Gasolinera> gasolineras){
         for (Gasolinera g: gasolineras) {
             g = cambioPrecios(g);
         }
-        return gasolineras;
+        return new ArrayList<Gasolinera>(gasolineras);
     }
     //A la hora de aplicar el cambio de precios realiza los descuentos de cts/Litro y posteriormente el porcentaje
     private Gasolinera cambioPrecios (Gasolinera gasolinera) {
         double descuentoTotal = 0;
+        double gasoleoA = 0;
+        double gasolina95 = 0;
         for (TarjetaDescuento tarjetaDescuento: listaTarjetasDescuento){
             if (gasolinera.getRotulo().equals(tarjetaDescuento.getMarca())) {
                 if (tarjetaDescuento instanceof TarjetaDescuentoPorcentaje){
                     descuentoTotal = ((TarjetaDescuentoPorcentaje) tarjetaDescuento).getDescuentoPorcentaje();
                 } else if(tarjetaDescuento instanceof  TarjetaDescuentoPorLitro) {
-                    gasolinera.setGasoleoA(
-                            gasolinera.getGasoleoA() - ((TarjetaDescuentoPorLitro) tarjetaDescuento).getDescuentoPorLitro()
-                    );
-                    gasolinera.setGasolina95(
-                            gasolinera.getGasolina95() - ((TarjetaDescuentoPorLitro) tarjetaDescuento).getDescuentoPorLitro()
-                    );
+                    gasoleoA = gasolinera.getGasoleoA() - ((TarjetaDescuentoPorLitro) tarjetaDescuento).getDescuentoPorLitro();
+                    gasolina95 = gasolinera.getGasolina95() - ((TarjetaDescuentoPorLitro) tarjetaDescuento).getDescuentoPorLitro();
+                    gasolinera.setGasoleoA(Math.round(gasoleoA*1000.0)/1000.0);
+                    gasolinera.setGasolina95(Math.round(gasolina95*1000.0)/1000.0);
                 }
             }
         }
-        gasolinera.setGasoleoA(
-                gasolinera.getGasoleoA() -(gasolinera.getGasoleoA()*descuentoTotal)
-        );
-        gasolinera.setGasolina95(
-                gasolinera.getGasolina95() - (gasolinera.getGasolina95()*descuentoTotal)
-        );
+        gasoleoA = gasolinera.getGasoleoA() -(gasolinera.getGasoleoA()*descuentoTotal);
+        gasolina95 = gasolinera.getGasolina95() - (gasolinera.getGasolina95()*descuentoTotal);
+        gasolinera.setGasoleoA(Math.round(gasoleoA*1000.0)/1000.0);
+        gasolinera.setGasolina95(Math.round(gasolina95*1000.0)/1000.0);
         return gasolinera;
     }
 

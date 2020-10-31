@@ -8,7 +8,7 @@ import android.os.Parcelable;
  * Author: Adrian Celis Fernandez.
  * Date: 27/10/2020.
  */
-public class TarjetaDescuento implements Parcelable{
+public abstract class TarjetaDescuento implements Parcelable{
     private String nombre;
     private String descripcion;
     private String marca;
@@ -60,12 +60,12 @@ public class TarjetaDescuento implements Parcelable{
     public static final Parcelable.Creator<TarjetaDescuento> CREATOR = new Parcelable.Creator<TarjetaDescuento>() {
         @Override
         public TarjetaDescuento createFromParcel(Parcel in) {
-            return new TarjetaDescuento(in);
+            return null;
         }
 
         @Override
         public TarjetaDescuento[] newArray(int size) {
-            return new TarjetaDescuento[size];
+            return null;
         }
     };
 }
