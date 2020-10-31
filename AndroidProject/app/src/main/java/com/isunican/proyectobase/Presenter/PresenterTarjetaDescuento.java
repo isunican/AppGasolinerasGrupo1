@@ -8,6 +8,7 @@ import com.isunican.proyectobase.Model.TarjetaDescuentoPorLitro;
 import com.isunican.proyectobase.Model.TarjetaDescuentoPorcentaje;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PresenterTarjetaDescuento {
 
@@ -41,7 +42,7 @@ public class PresenterTarjetaDescuento {
         return listaTarjetasDescuento.contains(tarjetaNueva);
     }
 
-    public ArrayList<Gasolinera> actualizarListaDePrecios(ArrayList<Gasolinera> gasolineras){
+    public List<Gasolinera> actualizarListaDePrecios(List<Gasolinera> gasolineras){
         for (Gasolinera g: gasolineras) {
             g = cambioPrecios(g);
         }
