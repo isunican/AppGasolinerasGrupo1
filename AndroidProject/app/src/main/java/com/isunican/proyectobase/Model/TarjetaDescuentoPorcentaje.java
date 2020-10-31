@@ -48,6 +48,7 @@ public class TarjetaDescuentoPorcentaje extends TarjetaDescuento implements Parc
         textoTarjetaDescuento +=
                 "Nombre: " + getNombre() + "\n"+
                 "Descripcion: " + getDescripcion() + "\n"+
+                "Marca" + getMarca() + "\n"+
                 "Descuento obtenido en porcentaje (precio total): " + getDescuentoPorcentaje() + " " + "\n\n";
 
         return textoTarjetaDescuento;
