@@ -20,7 +20,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Parcelable;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 
 import java.util.ArrayList;
@@ -72,6 +74,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Sidebar
     RelativeLayout layout;
     DrawerLayout drawerLayout;
+
+    //Adapter para la listView
+    ArrayAdapter<String> dataAdapter;
 
     /**
      * onCreate
@@ -165,28 +170,51 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.filtroMarcaGasolinera:
 
                 presenterFiltroMarcas = new PresenterFiltroMarcas((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
-                final EditText campo_busqueda = new EditText(this);
 
+                // Show filter options in a pop-up dialog
                 AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
                 // Get the layout inflater
                 LayoutInflater inflater = this.getLayoutInflater();
-                // Inflate and set the layout for the dialog
-                // Pass null as the parent view because its going in the dialog layout
-                ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                View view = inflater.inflate(R.layout.activity_filtro_marca_acivity, null);
+
+                // List elements
+                final EditText marcaTxt = view.findViewById(R.id.txtMarca);
+                final ListView marcaListView = view.findViewById(R.id.list_marcas);
+
+                // Create list elements with an array adapter
+                dataAdapter = new ArrayAdapter<String>(this,
                         android.R.layout.simple_dropdown_item_1line, presenterFiltroMarcas.getMarcas());
-                alertDialogBuilder.setView(inflater.inflate(R.layout.activity_filtro_marca_acivity, null))
-                        .setAdapter(dataAdapter, new DialogInterface.OnClickListener() {
+
+                marcaListView.setAdapter(dataAdapter);
+                alertDialogBuilder.setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
+                            public void onClick(DialogInterface dialog,
+                                                int which) {
+                                dialog.dismiss();
                             }
-
                         });
-                alertDialogBuilder.setView(campo_busqueda);
+                marcaTxt.addTextChangedListener(new TextWatcher(){
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-                AlertDialog alertDialog = alertDialogBuilder.create();
-                alertDialog.show();
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+                @Override
+                public void afterTextChanged(Editable s) {dataAdapter.getFilter().filter(s);}
+            });
+                marcaListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+                    public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                        String marca = marcaListView.getItemAtPosition(position).toString();
+                        marcaTxt.setText(marca);
+                    }
+                });
+
+                // Set elements in the dialog
+                alertDialogBuilder.setView(view);
+                alertDialogBuilder.show();
                 break;
 
             default:
