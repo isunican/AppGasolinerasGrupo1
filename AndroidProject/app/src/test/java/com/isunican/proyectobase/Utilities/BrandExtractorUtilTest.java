@@ -2,16 +2,12 @@ package com.isunican.proyectobase.Utilities;
 
 import org.junit.*;
 
-import java.util.ArrayList;
+public class BrandExtractorUtilTest {
 
-import static org.junit.Assert.*;
-
-public class BrandSearchTest {
-
-    static BrandSearch sut;
+    static BrandExtractorUtil sut;
     @Before
     public void setup(){
-        sut= new BrandSearch();
+        sut= new BrandExtractorUtil();
     }
 
     @Test
