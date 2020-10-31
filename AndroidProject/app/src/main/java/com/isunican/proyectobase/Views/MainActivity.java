@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     PresenterGasolineras presenterGasolineras;
 
+    List<Gasolinera>listaGasolinerasActual;
     // Vista de lista y adaptador para cargar datos en ella
     ListView listViewGasolineras;
     ArrayAdapter<Gasolinera> adapter;
@@ -59,10 +60,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Swipe and refresh (para recargar la lista con un swipe)
     SwipeRefreshLayout mSwipeRefreshLayout;
+    private static final int REQUEST_FILTRO_TIPO_GASOLINA=1999;
+
 
     // Sidebar
-    RelativeLayout layout;
-    DrawerLayout drawerLayout;
+    DrawerLayout layout;
+    //DrawerLayout drawerLayout;
+    NavigationView navigationView;
+
+    //Filtro
+    String tipoGasolina;
 
     /**
      * onCreate
@@ -75,19 +82,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setNavigationViewListener();
-        drawerLayout = findViewById(R.id.activity_precio_gasolina_drawer);
+        navigationView = findViewById(R.id.nav_view_main);
+        navigationView.setNavigationItemSelectedListener(this);
+        layout = findViewById(R.id.activity_precio_gasolina_drawer);
 
         this.presenterGasolineras = new PresenterGasolineras();
 
         // Barra de progreso
         // https://materialdoc.com/components/progress/
+        /*
         progressBar = new ProgressBar(MainActivity.this,null,android.R.attr.progressBarStyleLarge);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100,100);
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        layout = findViewById(R.id.activity_precio_gasolina);
-        layout.addView(progressBar,params);
 
+        layout.addView(progressBar,params);
+        */
+        
         // Muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
@@ -111,8 +121,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
+        if (layout.isDrawerOpen(GravityCompat.START)) {
+            layout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -148,23 +158,46 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()){
+          switch (menuItem.getItemId()){
             case R.id.filtroTipoGasolina:
-                FiltrosActivity filtro = new FiltrosActivity();
-                filtro.show(getSupportFragmentManager(), "Dialog");
+
+                Intent myIntent = new Intent(MainActivity.this, FiltrosActivity.class);
+                myIntent.putExtra("tipo",tipoGasolina);
+                startActivityForResult(myIntent,REQUEST_FILTRO_TIPO_GASOLINA);
                 break;
             default:
-                Log.d("MIGUEL", "Default en switch");
+                Log.d("MIGUEL", "Ningun item del panel ha sido seleccionado");
+                break;
         }
-        drawerLayout.closeDrawer(GravityCompat.START);
-        return false;
+        layout.closeDrawer(GravityCompat.START);
+        return true;
     }
+    @Override
+    public void onActivityResult(int requestCode,int resultCode,Intent data) {
 
-    private void setNavigationViewListener() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode){
+            //Al acabar la actividad FiltrosActivity correctamente salta aqui
+            case REQUEST_FILTRO_TIPO_GASOLINA:
+                if(resultCode==Activity.RESULT_OK){
+                    String tipoGasolina=data.getStringExtra("tipo");
+                    Log.d("Funciona y mando: ",tipoGasolina);
+                    List<Gasolinera> gasolinerasFiltradas=null;
+                    try {
+
+                        gasolinerasFiltradas = presenterGasolineras.filtraGasolinerasTipoCombustible(tipoGasolina, listaGasolinerasActual);
+                    }catch(NullPointerException e){
+                        Toast.makeText(getApplicationContext(),"Lista nula, no se pudo aplicar filtro",Toast.LENGTH_LONG);
+                    }
+                    adapter.clear();
+                    adapter.addAll(gasolinerasFiltradas);
+
+                }else{
+                    Log.d("Error","No se ha cargado el filtro");
+                }
+                break;
+        }
     }
-
 
     /**
      * CargaDatosGasolinerasTask
@@ -201,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          */
         @Override
         protected void onPreExecute() {
-            progressBar.setVisibility(View.VISIBLE);  //To show ProgressBar
+            //progressBar.setVisibility(View.VISIBLE);  //To show ProgressBar
         }
 
         /**
@@ -232,23 +265,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          */
         @Override
         protected void onPostExecute(Boolean res) {
+            listaGasolinerasActual=presenterGasolineras.getGasolineras();
             Toast toast;
 
             // Si el progressDialog estaba activado, lo oculta
-            progressBar.setVisibility(View.GONE);     // To Hide ProgressBar
+            //progressBar.setVisibility(View.GONE);     // To Hide ProgressBar
 
             mSwipeRefreshLayout.setRefreshing(false);
 
             // Si se ha obtenido resultado en la tarea en segundo plano
             if (res) {
                 // Definimos el array adapter
-                adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
+                adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>) listaGasolinerasActual);
 
                 // Obtenemos la vista de la lista
                 listViewGasolineras = findViewById(R.id.listViewGasolineras);
 
                 // Cargamos los datos en la lista
-                if (!presenterGasolineras.getGasolineras().isEmpty()) {
+                if (!listaGasolinerasActual.isEmpty()) {
                     // datos obtenidos con exito
                     listViewGasolineras.setAdapter(adapter);
                     toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_exito), Toast.LENGTH_LONG);
@@ -285,7 +319,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                      */
                     Intent myIntent = new Intent(MainActivity.this, DetailActivity.class);
                     myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera),
-                            presenterGasolineras.getGasolineras().get(position));
+                            listaGasolinerasActual.get(position));
                     MainActivity.this.startActivity(myIntent);
 
                 }
