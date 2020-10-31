@@ -60,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/btn_dropdown"
-        android:spinnerMode="dropdown"/>
+        android:spinnerMode="dropdown" />
 
 
     <TextView
@@ -94,31 +94,4 @@
         android:layout_weight="1"
         android:ems="10"
         android:inputType="textMultiLine" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnCancelar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:text="Cancelar"
-            android:textSize="18sp" />
-
-        <Button
-            android:id="@+id/btnGuardar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
-            android:text="Guardar"
-            android:textSize="18sp" />
-    </LinearLayout>
-
 </LinearLayout>

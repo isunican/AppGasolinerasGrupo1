@@ -27,10 +27,10 @@ public class NuevaTarjetaDescuentoActivity extends AppCompatActivity implements 
     private TextView descuento;
     private TextView comentarios;
 
-    private Spinner spnTipoDescuento;
+   // private Spinner spnTipoDescuento;
 
-    private Button btnGuardar;
-    private Button btnCancelar;
+    //private Button btnGuardar;
+    //private Button btnCancelar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,17 +46,17 @@ public class NuevaTarjetaDescuentoActivity extends AppCompatActivity implements 
         txtTipoDescuento = findViewById(R.id.txtTipoDescuento);
         txtDescuento = findViewById(R.id.txtDescuento);
         txtComentarios = findViewById(R.id.txtComentarios);
-        spnTipoDescuento = findViewById(R.id.spnTipoDescuento);
+       // spnTipoDescuento = findViewById(R.id.spnTipoDescuento);
         nombre = findViewById(R.id.nombreTarjeta);
         marca = findViewById(R.id.marcaGasolinera);
         descuento = findViewById(R.id.descuento);
         comentarios = findViewById(R.id.comentarios);
-        btnGuardar = findViewById(R.id.btnGuardar);
-        btnCancelar = findViewById(R.id.btnCancelar);
+        //btnGuardar = findViewById(R.id.btnGuardar);
+        //btnCancelar = findViewById(R.id.btnCancelar);
 
         // Listeners de los botones
-        btnGuardar.setOnClickListener(this);
-        btnCancelar.setOnClickListener(this);
+        //btnGuardar.setOnClickListener(this);
+        //btnCancelar.setOnClickListener(this);
 
         // Datos del spinner del tipo de descuento
         String[] datos = new String[] {getResources().getString(R.string.porcentual),
@@ -65,15 +65,17 @@ public class NuevaTarjetaDescuentoActivity extends AppCompatActivity implements 
                 android.R.layout.simple_spinner_item, datos);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Aplica el adaptador creado a nuestro spinner
-        spnTipoDescuento.setAdapter(adapter);
+        //spnTipoDescuento.setAdapter(adapter);
     }
 
+
     public void onClick(View v) {
+        /**
         if(v.getId() == R.id.btnGuardar) {
             // lee y almacena datos
             String strNombre = nombre.getText().toString();
             String strMarca = marca.getText().toString();
-            String strTipoDescuento = spnTipoDescuento.getSelectedItem().toString();
+            //String strTipoDescuento = spnTipoDescuento.getSelectedItem().toString();
             String strDescuento = descuento.getText().toString();
             String strComentarios = comentarios.getText().toString();
 
@@ -86,7 +88,7 @@ public class NuevaTarjetaDescuentoActivity extends AppCompatActivity implements 
                 Intent intent = getIntent();
                 intent.putExtra("nombre", strNombre);
                 intent.putExtra("marca", strMarca);
-                intent.putExtra("tipo", strTipoDescuento);
+                //intent.putExtra("tipo", strTipoDescuento);
                 intent.putExtra("descuento", strDescuento);
                 intent.putExtra("descripcion", strComentarios);
                 setResult(RESULT_OK, intent);
@@ -94,10 +96,18 @@ public class NuevaTarjetaDescuentoActivity extends AppCompatActivity implements 
             }
         } else if (v.getId() == R.id.btnCancelar) {
             // Vuelve a la pantalla inicial sin pasarle ningún dato
-            setResult(RESULT_CANCELED);
-            finish();
+            //setResult(RESULT_CANCELED);
+            //finish();
+
+
+            //  dialog.dismiss();
         }
+
+         */
+
     }
+
+
     @Override
     public void onBackPressed(){
         setResult(RESULT_CANCELED);

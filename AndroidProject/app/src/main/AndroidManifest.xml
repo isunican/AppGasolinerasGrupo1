@@ -23,8 +23,6 @@
         <activity android:name=".Views.DetailActivity"></activity>
         <activity android:name=".Views.FiltrosActivity"
             android:theme="@style/AppTheme.FloatingWindow"></activity>
-        <activity android:name=".Views.InfoActivity" />
-        <activity android:name=".Views.DetailActivity" />
     </application>
 
 </manifest>
