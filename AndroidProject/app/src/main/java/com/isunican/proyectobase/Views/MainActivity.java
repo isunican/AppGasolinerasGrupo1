@@ -61,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Codigo sucio
     PresenterFiltroMarcas presenterFiltroMarcas;
 
+    ArrayList<Gasolinera> currentList; //Lista con el filtro aplicado
+
     // Vista de lista y adaptador para cargar datos en ella
     ListView listViewGasolineras;
     ArrayAdapter<Gasolinera> adapter;
@@ -91,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         setNavigationViewListener();
         drawerLayout = findViewById(R.id.activity_precio_gasolina_drawer);
+
+        currentList = new ArrayList<>();
 
         this.presenterGasolineras = new PresenterGasolineras();
         // Barra de progreso
@@ -192,6 +196,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             @Override
                             public void onClick(DialogInterface dialog,
                                                 int which) {
+                                //Actualiza la lista actual para solo contener las gasolineras con la marca seleccionada
+                                currentList= (ArrayList<Gasolinera>) presenterFiltroMarcas.filtraGasolineras(marcaTxt.getText().toString());
+
+                                adapter=new GasolineraArrayAdapter(MainActivity.this, 0, currentList);
+                                listViewGasolineras = findViewById(R.id.listViewGasolineras);
+                                listViewGasolineras.setAdapter(adapter);
+                                Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.filtro_aplicado), Toast.LENGTH_LONG);
+                                toast.show();
                                 dialog.dismiss();
                             }
                         });
@@ -209,8 +221,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                         String marca = marcaListView.getItemAtPosition(position).toString();
                         marcaTxt.setText(marca);
+
                     }
                 });
+
 
                 // Set elements in the dialog
                 alertDialogBuilder.setView(view);
@@ -308,7 +322,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Si se ha obtenido resultado en la tarea en segundo plano
             if (res) {
                 // Definimos el array adapter
-                adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
+                adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>) presenterGasolineras.getGasolineras() );
 
                 // Obtenemos la vista de la lista
                 listViewGasolineras = findViewById(R.id.listViewGasolineras);
