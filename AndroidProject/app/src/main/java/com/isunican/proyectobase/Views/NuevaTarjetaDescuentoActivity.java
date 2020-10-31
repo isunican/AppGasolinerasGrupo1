@@ -29,9 +29,6 @@ public class NuevaTarjetaDescuentoActivity extends AppCompatActivity implements 
 
    // private Spinner spnTipoDescuento;
 
-    //private Button btnGuardar;
-    //private Button btnCancelar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,22 +45,16 @@ public class NuevaTarjetaDescuentoActivity extends AppCompatActivity implements 
         txtComentarios = findViewById(R.id.txtComentarios);
        // spnTipoDescuento = findViewById(R.id.spnTipoDescuento);
         nombre = findViewById(R.id.nombreTarjeta);
-        marca = findViewById(R.id.marcaGasolinera);
+        marca = findViewById(R.id.marca);
         descuento = findViewById(R.id.descuento);
         comentarios = findViewById(R.id.comentarios);
-        //btnGuardar = findViewById(R.id.btnGuardar);
-        //btnCancelar = findViewById(R.id.btnCancelar);
-
-        // Listeners de los botones
-        //btnGuardar.setOnClickListener(this);
-        //btnCancelar.setOnClickListener(this);
 
         // Datos del spinner del tipo de descuento
-        String[] datos = new String[] {getResources().getString(R.string.porcentual),
-                getResources().getString(R.string.cts_litro)};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, datos);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //String[] datos = new String[] {getResources().getString(R.string.porcentual),
+          //      getResources().getString(R.string.cts_litro)};
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+          //      android.R.layout.simple_spinner_item, datos);
+        //adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // Aplica el adaptador creado a nuestro spinner
         //spnTipoDescuento.setAdapter(adapter);
     }
@@ -106,7 +97,6 @@ public class NuevaTarjetaDescuentoActivity extends AppCompatActivity implements 
          */
 
     }
-
 
     @Override
     public void onBackPressed(){

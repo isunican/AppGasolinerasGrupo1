@@ -200,17 +200,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 final View view = inflater.inflate(R.layout.activity_nueva_tarjeta_descuento, null);
 
                 final TextView nombre = view.findViewById(R.id.txtNombreTarjeta);
-                final TextView marca = view.findViewById(R.id.marcaGasolinera);
-                final Spinner spn = view.findViewById(R.id.spnTipoDescuento);
+                final Spinner marca = view.findViewById(R.id.marca);
+                final Spinner spnTipoDescuento = view.findViewById(R.id.spnTipoDescuento);
                 final TextView descuento = view.findViewById(R.id.descuento);
                 final TextView comentarios = view.findViewById(R.id.comentarios);
 
-                String[] datos = new String[] {getResources().getString(R.string.porcentual),
+                // Spinner de tipo descuento
+                String[] datosTipoDescuento = new String[] {getResources().getString(R.string.porcentual),
                         getResources().getString(R.string.cts_litro)};
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                        android.R.layout.simple_spinner_item, datos);
+                        android.R.layout.simple_spinner_item, datosTipoDescuento);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spn.setAdapter(adapter);
+                spnTipoDescuento.setAdapter(adapter);
+
+                // WIP: Spinner de marcas
+                //String[] datosMarca = new String[] {getResources().getString(R.string.porcentual),
+                  //      getResources().getString(R.string.cts_litro)};
+
 
                 alertDialogBuilder.setPositiveButton("Guardar",
                       new DialogInterface.OnClickListener() {
@@ -219,15 +225,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                                 int which) {
                                 // lee y almacena datos
                                 String strNombre = nombre.getText().toString();
-                                String strMarca = marca.getText().toString();
-                                String strTipoDescuento = spn.getSelectedItem().toString();
+                                String strMarca = spnTipoDescuento.getSelectedItem().toString();
+                                String strTipoDescuento = spnTipoDescuento.getSelectedItem().toString();
                                 String strDescuento = descuento.getText().toString();
                                 String strComentarios = comentarios.getText().toString();
 
                                 // Si hay algún campo sin rellenar, salta un aviso al usuario
-                                if (strNombre.equals("")  || strMarca.equals("") || strDescuento.equals("")){
+                                if (strNombre.equals("")) {
                                     Toast toast = Toast.makeText(getApplicationContext(),
-                                            getResources().getString(R.string.complete_todos_los_campos), Toast.LENGTH_LONG);
+                                            getResources().getString(R.string.complete_nombre), Toast.LENGTH_LONG);
+                                    toast.show();
+                                } else if (strMarca.equals("")){
+                                    Toast toast = Toast.makeText(getApplicationContext(),
+                                            getResources().getString(R.string.complete_marca), Toast.LENGTH_LONG);
+                                    toast.show();
+                                } else if (strDescuento.equals("")){
+                                    Toast toast = Toast.makeText(getApplicationContext(),
+                                            getResources().getString(R.string.complete_descuento), Toast.LENGTH_LONG);
                                     toast.show();
                                 } else {
                                     //Intent intent = getIntent();
@@ -238,8 +252,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     //intent.putExtra("descripcion", strComentarios);
                                     //setResult(RESULT_OK, intent);
                                     //finish();
+
                                     System.out.println(strNombre+" "+strMarca+" "+strTipoDescuento+" "+strDescuento+" "+strComentarios);
-                                     dialog.dismiss();
+                                    dialog.dismiss();
                                 }
                             }
                         });

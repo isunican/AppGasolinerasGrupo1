@@ -40,12 +40,11 @@
         android:textSize="24sp" />
 
     <EditText
-        android:id="@+id/marcaGasolinera"
+        android:id="@+id/marca"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:ems="10"
-        android:inputType="textPersonName" />
+        android:ems="10" />
 
     <TextView
         android:id="@+id/txtTipoDescuento"
@@ -59,6 +58,8 @@
         android:id="@+id/spnTipoDescuento"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_weight="0"
         android:background="@android:drawable/btn_dropdown"
         android:spinnerMode="dropdown" />
 
