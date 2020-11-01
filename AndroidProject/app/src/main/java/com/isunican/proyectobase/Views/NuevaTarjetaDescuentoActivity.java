@@ -35,7 +35,7 @@ public class NuevaTarjetaDescuentoActivity extends AppCompatActivity implements 
         setContentView(R.layout.activity_nueva_tarjeta_descuento);
 
         // Muestra el titulo del formulario
-        getSupportActionBar().setTitle(getResources().getString(R.string.nueva_tarjeta_descuento));
+        getSupportActionBar().setTitle(getResources().getString(R.string.slider_menu_text_nueva_tarjeta_descuento));
 
         // Vistas
         txtNombre = findViewById(R.id.txtNombreTarjeta);
