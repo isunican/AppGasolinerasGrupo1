@@ -75,10 +75,7 @@ Prueba 1: Campo del formulario sin completar
 
 ## 4.  pruebas unitarias
 
-> - Tarjetas de descuento por litro
-> - Tarjetas de descuento por porcentaje
+- ### Presenter de tarjetas de descuento
 
-
-
-- Presenter de tarjetas de descuento
-
+  - anhadirNuevaTarjeta
+  - actualizarListaDePrecios
