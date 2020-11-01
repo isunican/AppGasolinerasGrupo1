@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             case R.id.itemNuevaTarjetaDescuento:
                 // Intento de hacer un alertDialog
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
                 // Get the layout inflater
                 LayoutInflater inflater = this.getLayoutInflater();
@@ -216,7 +216,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // WIP: Spinner de marcas
                 //String[] datosMarca = new String[] {getResources().getString(R.string.porcentual),
                 //      getResources().getString(R.string.cts_litro)};
-
 
                 alertDialogBuilder.setPositiveButton("Guardar",
                         new DialogInterface.OnClickListener() {
@@ -248,18 +247,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     Toast toast = Toast.makeText(getApplicationContext(),
                                             getResources().getString(R.string.complete_descuento), Toast.LENGTH_LONG);
                                     toast.show();
-                                }
-                                else {
+                                } else {
                                     if(presenterTarjetaDescuento.anhadirNuevaTarjeta(strNombre, strComentario, "CEPSA", strTipoDescuento, strDescuento))
                                     {
                                         Toast toast= Toast.makeText(getApplicationContext(),
                                                 getResources().getString(R.string.tarjeta_descuento_guardada), Toast.LENGTH_LONG);
                                         toast.show();
                                         updateListWithNewDiscountCard();
+                                        dialog.dismiss();
                                     };
-
-                                    //System.out.println(strNombre+" "+strMarca+" "+strTipoDescuento+" "+strDescuento+" "+strComentario);
-                                    dialog.dismiss();
                                 }
                             }
                         });
@@ -272,11 +268,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 dialog.dismiss();
                             }
                         });
-
                 // Set elements in the dialog
                 alertDialogBuilder.setView(view);
                 alertDialogBuilder.show();
-
                 break;
 
             default:
