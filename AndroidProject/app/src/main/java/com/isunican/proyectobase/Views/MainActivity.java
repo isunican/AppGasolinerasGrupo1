@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 final TextView comentarios = view.findViewById(R.id.comentarios);
 
                 // Spinner de tipo descuento
-                String[] datosTipoDescuento = new String[] {getResources().getString(R.string.porcentual),
+                String[] datosTipoDescuento = new String[] {getResources().getString(R.string.default_type_discount_card),getResources().getString(R.string.porcentual),
                         getResources().getString(R.string.cts_litro)};
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                         android.R.layout.simple_spinner_item, datosTipoDescuento);
@@ -215,11 +215,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 // WIP: Spinner de marcas
                 //String[] datosMarca = new String[] {getResources().getString(R.string.porcentual),
-                  //      getResources().getString(R.string.cts_litro)};
+                //      getResources().getString(R.string.cts_litro)};
 
 
                 alertDialogBuilder.setPositiveButton("Guardar",
-                      new DialogInterface.OnClickListener() {
+                        new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog,
                                                 int which) {
@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 String strMarca = spnTipoDescuento.getSelectedItem().toString();
                                 String strTipoDescuento = spnTipoDescuento.getSelectedItem().toString();
                                 String strDescuento = descuento.getText().toString();
-                                String strComentarios = comentarios.getText().toString();
+                                String strComentario = comentarios.getText().toString();
 
                                 // Si hay algún campo sin rellenar, salta un aviso al usuario
                                 if (strNombre.equals("")) {
@@ -239,21 +239,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     Toast toast = Toast.makeText(getApplicationContext(),
                                             getResources().getString(R.string.complete_marca), Toast.LENGTH_LONG);
                                     toast.show();
-                                } else if (strDescuento.equals("")){
+                                } else if (strTipoDescuento.equals(getResources().getString(R.string.default_type_discount_card))){
+                                    Toast toast = Toast.makeText(getApplicationContext(),
+                                            getResources().getString(R.string.complete_tipo_descuento), Toast.LENGTH_LONG);
+                                    toast.show();
+                                }
+                                else if (strDescuento.equals("")){
                                     Toast toast = Toast.makeText(getApplicationContext(),
                                             getResources().getString(R.string.complete_descuento), Toast.LENGTH_LONG);
                                     toast.show();
-                                } else {
-                                    //Intent intent = getIntent();
-                                    //intent.putExtra("nombre", strNombre);
-                                    //intent.putExtra("marca", strMarca);
-                                    //intent.putExtra("tipo", strTipoDescuento);
-                                    //intent.putExtra("descuento", strDescuento);
-                                    //intent.putExtra("descripcion", strComentarios);
-                                    //setResult(RESULT_OK, intent);
-                                    //finish();
+                                }
+                                else {
+                                    if(presenterTarjetaDescuento.anhadirNuevaTarjeta(strNombre, strComentario, "CEPSA", strTipoDescuento, strDescuento))
+                                    {
+                                        Toast toast= Toast.makeText(getApplicationContext(),
+                                                getResources().getString(R.string.tarjeta_descuento_guardada), Toast.LENGTH_LONG);
+                                        toast.show();
+                                        updateListWithNewDiscountCard();
+                                    };
 
-                                    System.out.println(strNombre+" "+strMarca+" "+strTipoDescuento+" "+strDescuento+" "+strComentarios);
+                                    //System.out.println(strNombre+" "+strMarca+" "+strTipoDescuento+" "+strDescuento+" "+strComentario);
                                     dialog.dismiss();
                                 }
                             }
@@ -279,6 +284,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return false;
+    }
+
+    private void updateListWithNewDiscountCard(){
+        //Esto tiene que cambiar cuando se haga la historia de ver tarjetas de descuento porque tenemos que usar solo una tarjeta de desucento al tiempo
+        List<Gasolinera> gasolinerasActualesActualizadas = presenterTarjetaDescuento.actualizarListaDePrecios(gasolinerasActuales);
+        adapter.clear();
+        gasolinerasActuales = gasolinerasActualesActualizadas;
+        adapter.addAll(gasolinerasActuales);
+        adapter.notifyDataSetChanged();
     }
 
     private void setNavigationViewListener() {

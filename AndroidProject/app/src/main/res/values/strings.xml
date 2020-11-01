@@ -24,5 +24,7 @@
     <string name="complete_descuento">El campo Descuento es obligatorio</string>
     <string name="porcentual">Porcentual</string>
     <string name="cts_litro">cts/Litro</string>
-    <string name="nueva_tarjeta_descuento">Nueva tarjeta descuento</string>
+    <string name="tarjeta_descuento_guardada">La tarjeta de descuento se guardo correctamente</string>
+    <string name="default_type_discount_card">Elija un tipo de descuento</string>
+    <string name="complete_tipo_descuento">El tipo de descuento se encuentra sin seleccionar</string>
 </resources>
