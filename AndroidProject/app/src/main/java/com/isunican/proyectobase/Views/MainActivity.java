@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         layout.addView(progressBar,params);
         */
-        
+
         // Muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
@@ -180,17 +180,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //Al acabar la actividad FiltrosActivity correctamente salta aqui
             case REQUEST_FILTRO_TIPO_GASOLINA:
                 if(resultCode==Activity.RESULT_OK){
-                    String tipoGasolina=data.getStringExtra("tipo");
+                    tipoGasolina=data.getStringExtra("tipo");
                     Log.d("Funciona y mando: ",tipoGasolina);
                     List<Gasolinera> gasolinerasFiltradas=null;
                     try {
-
                         gasolinerasFiltradas = presenterGasolineras.filtraGasolinerasTipoCombustible(tipoGasolina, listaGasolinerasActual);
+                        adapter.clear();
+                        adapter.addAll(gasolinerasFiltradas);
                     }catch(NullPointerException e){
                         Toast.makeText(getApplicationContext(),"Lista nula, no se pudo aplicar filtro",Toast.LENGTH_LONG);
                     }
-                    adapter.clear();
-                    adapter.addAll(gasolinerasFiltradas);
+
 
                 }else{
                     Log.d("Error","No se ha cargado el filtro");
@@ -373,21 +373,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             gasolina95.setText(" " + gasolinera.getGasolina95() + getResources().getString(R.string.moneda));
 
             // carga icono
-            {
-                String rotuleImageID = gasolinera.getRotulo().toLowerCase();
-
-                // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
-                // En ese caso getIdentifier devuelve esos digitos en vez de 0.
-                int imageID = context.getResources().getIdentifier(rotuleImageID,
-                        "drawable", context.getPackageName());
-
-                if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
-                    imageID = context.getResources().getIdentifier(getResources().getString(R.string.pordefecto),
-                            "drawable", context.getPackageName());
-                }
-                logo.setImageResource(imageID);
-            }
-
+            cargaIcono(gasolinera, logo);
 
             // Si las dimensiones de la pantalla son menores
             // reducimos el texto de las etiquetas para que se vea correctamente
@@ -407,6 +393,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             return view;
+        }
+
+        private void cargaIcono(Gasolinera gasolinera, ImageView logo) {
+            String rotuleImageID = gasolinera.getRotulo().toLowerCase();
+
+            // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
+            // En ese caso getIdentifier devuelve esos digitos en vez de 0.
+            int imageID = context.getResources().getIdentifier(rotuleImageID,
+                    "drawable", context.getPackageName());
+
+            if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
+                imageID = context.getResources().getIdentifier(getResources().getString(R.string.pordefecto),
+                        "drawable", context.getPackageName());
+            }
+            logo.setImageResource(imageID);
         }
     }
 
