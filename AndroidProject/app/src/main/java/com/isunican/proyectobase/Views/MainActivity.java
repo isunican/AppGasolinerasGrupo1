@@ -19,7 +19,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -29,7 +28,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -61,7 +59,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Codigo sucio
     PresenterFiltroMarcas presenterFiltroMarcas;
 
-    ArrayList<Gasolinera> currentList; //Lista con el filtro aplicado
+    //Lista con el filtro aplicado
+    ArrayList<Gasolinera> currentList;
 
     // Vista de lista y adaptador para cargar datos en ella
     ListView listViewGasolineras;
@@ -175,9 +174,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 presenterFiltroMarcas = new PresenterFiltroMarcas((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
 
-                // Show filter options in a pop-up dialog
-                AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-
                 // Get the layout inflater
                 LayoutInflater inflater = this.getLayoutInflater();
                 View view = inflater.inflate(R.layout.activity_filtro_marca_acivity, null);
@@ -186,27 +182,48 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 final EditText marcaTxt = view.findViewById(R.id.txtMarca);
                 final ListView marcaListView = view.findViewById(R.id.list_marcas);
 
+                //Create alertDialog
+                final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
+                        //.setView(view)
+                        //Set to null. We override the onclick
+                        .setPositiveButton(android.R.string.ok, null)
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .create();
+
                 // Create list elements with an array adapter
                 dataAdapter = new ArrayAdapter<String>(this,
                         android.R.layout.simple_dropdown_item_1line, presenterFiltroMarcas.getMarcas());
 
                 marcaListView.setAdapter(dataAdapter);
-                alertDialogBuilder.setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                //Actualiza la lista actual para solo contener las gasolineras con la marca seleccionada
-                                currentList= (ArrayList<Gasolinera>) presenterFiltroMarcas.filtraGasolineras(marcaTxt.getText().toString());
 
-                                adapter=new GasolineraArrayAdapter(MainActivity.this, 0, currentList);
-                                listViewGasolineras = findViewById(R.id.listViewGasolineras);
-                                listViewGasolineras.setAdapter(adapter);
-                                Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.filtro_aplicado), Toast.LENGTH_LONG);
-                                toast.show();
-                                dialog.dismiss();
+                //Positive button
+                alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        Button b = alertDialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+                        b.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if(marcaTxt.getText().toString().isEmpty()){
+
+                                    marcaTxt.setError("Campo vacio");
+
+                                }else{
+                                    //Actualiza la lista actual para solo contener las gasolineras con la marca seleccionada
+                                    currentList= (ArrayList<Gasolinera>) presenterFiltroMarcas.filtraGasolineras(marcaTxt.getText().toString());
+                                    adapter=new GasolineraArrayAdapter(MainActivity.this, 0, currentList);
+                                    listViewGasolineras = findViewById(R.id.listViewGasolineras);
+                                    listViewGasolineras.setAdapter(adapter);
+
+                                    Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.filtro_aplicado), Toast.LENGTH_LONG);
+                                    toast.show();
+                                    alertDialogBuilder.dismiss();
+                                }
                             }
                         });
+                    }
+                });
+
                 marcaTxt.addTextChangedListener(new TextWatcher(){
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
@@ -221,14 +238,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                         String marca = marcaListView.getItemAtPosition(position).toString();
                         marcaTxt.setText(marca);
-
                     }
                 });
-
 
                 // Set elements in the dialog
                 alertDialogBuilder.setView(view);
                 alertDialogBuilder.show();
+
                 break;
 
             default:
@@ -242,6 +258,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
+
 
 
     /**
