@@ -240,15 +240,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 // lee y almacena datos
                                 String strNombre = nombre.getText().toString();
                                 String strMarca = spnMarca.getSelectedItem().toString();
-                                System.out.println(strMarca);
                                 String strTipoDescuento = spnTipoDescuento.getSelectedItem().toString();
                                 String strDescuento = descuento.getText().toString();
                                 String strComentario = comentarios.getText().toString();
 
-                                // Si hay algún campo sin rellenar, salta un aviso al usuario
+                                // Si hay algun campo sin rellenar, salta un aviso al usuario
                                 if (strNombre.equals("")) {
-                                    nombre.setError("fgdf");
-
+                                    nombre.setError(getResources().getString(R.string.complete_nombre));
                                 } else if (strMarca.equals(getResources().getString(R.string.default_brand))) {
                                     TextView errorText = (TextView)spnMarca.getSelectedView();
                                     errorText.setError("");
