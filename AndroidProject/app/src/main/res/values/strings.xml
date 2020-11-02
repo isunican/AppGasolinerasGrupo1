@@ -28,4 +28,5 @@
     <string name="tarjeta_descuento_guardada">La tarjeta de descuento se guardo correctamente</string>
     <string name="default_type_discount_card">Elija un tipo de descuento</string>
     <string name="complete_tipo_descuento">El tipo de descuento se encuentra sin seleccionar</string>
+    <string name="nueva_tarjeta_descuento">Nueva tarjeta descuento</string>
 </resources>
