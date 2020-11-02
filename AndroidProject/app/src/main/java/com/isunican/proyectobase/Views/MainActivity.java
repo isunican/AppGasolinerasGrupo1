@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 final View view = inflater.inflate(R.layout.activity_nueva_tarjeta_descuento, null);
 
                 // Elementos del formulario
-                final TextView nombre = view.findViewById(R.id.txtNombreTarjeta);
+                final TextView nombre = view.findViewById(R.id.nombreTarjeta);
                 final Spinner spnMarca = view.findViewById(R.id.spnMarcas);
                 final Spinner spnTipoDescuento = view.findViewById(R.id.spnTipoDescuento);
                 final TextView descuento = view.findViewById(R.id.descuento);
@@ -237,6 +237,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             public void onClick(View view) {
                                 // lee y almacena datos
                                 String strNombre = nombre.getText().toString();
+                                System.out.println(strNombre);
                                 String strMarca = spnTipoDescuento.getSelectedItem().toString();
                                 String strTipoDescuento = spnTipoDescuento.getSelectedItem().toString();
                                 String strDescuento = descuento.getText().toString();
@@ -244,10 +245,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                                 // Si hay algún campo sin rellenar, salta un aviso al usuario
                                 if (strNombre.equals("")) {
-                                    Toast toast = Toast.makeText(getApplicationContext(),
-                                            getResources().getString(R.string.complete_nombre), Toast.LENGTH_LONG);
                                     nombre.setError("fgdf");
-                                    toast.show();
 
                                 } else if (strMarca.equals(getResources().getString(R.string.default_brand))) {
                                     Toast toast = Toast.makeText(getApplicationContext(),
@@ -258,12 +256,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                             getResources().getString(R.string.complete_tipo_descuento), Toast.LENGTH_LONG);
                                     toast.show();
                                 } else if (strDescuento.equals("")) {
-                                    Toast toast = Toast.makeText(getApplicationContext(),
-                                            getResources().getString(R.string.complete_descuento), Toast.LENGTH_LONG);
                                     descuento.setError(getResources().getString(R.string.complete_descuento));
-                                    toast.show();
                                 } else {
-                                    if (presenterTarjetaDescuento.anhadirNuevaTarjeta(strNombre, strComentario, "CEPSA", strTipoDescuento, strDescuento)) {
+                                    if (presenterTarjetaDescuento.anhadirNuevaTarjeta(strNombre, strComentario, strMarca, strTipoDescuento, strDescuento)) {
                                         Toast toast = Toast.makeText(getApplicationContext(),
                                                 getResources().getString(R.string.tarjeta_descuento_guardada), Toast.LENGTH_LONG);
                                         toast.show();
