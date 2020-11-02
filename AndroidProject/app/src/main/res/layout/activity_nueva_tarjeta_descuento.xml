@@ -6,14 +6,7 @@
     android:layout_height="match_parent"
     android:layout_margin="15dp"
 
-    android:orientation="vertical"
-    tools:context=".Views.NuevaTarjetaDescuentoActivity"><![CDATA[
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="15dp"
     android:orientation="vertical">
-
-    ]]>
 
     <TextView
         android:id="@+id/txtNombreTarjeta"
