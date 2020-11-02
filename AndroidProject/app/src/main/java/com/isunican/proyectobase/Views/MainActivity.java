@@ -6,7 +6,9 @@ import com.isunican.proyectobase.Model.*;
 import com.isunican.proyectobase.R;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -160,10 +163,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
           switch (menuItem.getItemId()){
             case R.id.filtroTipoGasolina:
-
+                /*
                 Intent myIntent = new Intent(MainActivity.this, FiltrosActivity.class);
                 myIntent.putExtra("tipo",tipoGasolina);
                 startActivityForResult(myIntent,REQUEST_FILTRO_TIPO_GASOLINA);
+                */
+                creaVentanaFiltroTipoGasolina();
                 break;
             default:
                 Log.d("MIGUEL", "Ningun item del panel ha sido seleccionado");
@@ -197,6 +202,81 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
                 break;
         }
+    }
+
+    public void creaVentanaFiltroTipoGasolina(PresenterGasolineras presenterFiltroTipoGasolina){
+
+        // Get the layout inflater
+        LayoutInflater inflater = this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.filtros_gasolinera, null);
+
+        // List elements
+        final TextView tipoGasolinaTxt = view.findViewById(R.id.tipoGasolinaTag);
+        final Spinner tipoGasolinaSpinner = view.findViewById(R.id.spinner_tipoGasolina);
+
+        //Create alertDialog
+        final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
+                //.setView(view)
+                //Set to null. We override the onclick
+                .setPositiveButton(android.R.string.ok, null)
+                .setNegativeButton(android.R.string.cancel, null)
+                .create();
+
+        // Create list elements with an array adapter
+        String[] datos = new String[] {"Gasolina95", "Diesel"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, datos);
+
+        //Positive button
+        alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button b = alertDialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(marcaTxt.getText().toString().isEmpty()){
+
+                            marcaTxt.setError("Campo vacio");
+
+                        }else{
+                            //Actualiza la lista actual para solo contener las gasolineras con la marca seleccionada
+                            currentList= (ArrayList<Gasolinera>) presenterFiltroMarcas.filtraGasolineras(marcaTxt.getText().toString());
+                            adapter=new GasolineraArrayAdapter(MainActivity.this, 0, currentList);
+                            listViewGasolineras = findViewById(R.id.listViewGasolineras);
+                            listViewGasolineras.setAdapter(adapter);
+
+                            Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.filtro_aplicado), Toast.LENGTH_LONG);
+                            toast.show();
+                            alertDialogBuilder.dismiss();
+                        }
+                    }
+                });
+            }
+        });
+
+        marcaTxt.addTextChangedListener(new TextWatcher(){
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {dataAdapter.getFilter().filter(s);}
+        });
+        marcaListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                String marca = marcaListView.getItemAtPosition(position).toString();
+                marcaTxt.setText(marca);
+            }
+        });
+
+        // Set elements in the dialog
+        alertDialogBuilder.setView(view);
+        alertDialogBuilder.show();
+
+
     }
 
     /**
