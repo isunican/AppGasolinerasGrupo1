@@ -81,18 +81,21 @@ Prueba 1: Campo del formulario sin completar
   
     | Identificador | Proceso                                                      | Valor esperado |
     | ------------- | ------------------------------------------------------------ | -------------- |
-    | UT.1.a        | nombre="TestPorcOk" descripcion="Test" marca="Cepsa" tipoTarjeta="Porcentual" | true           |
-    | UT.1.b        | nombre="TestPorcFail"                                        | false          |
-    | UT.1.c        | nombre="TestCtsOK"                                           | true           |
-    | UT.1.d        | nombre="TestCtsFail"                                         | false          |
+    | UT.1.a        | nombre="TestPorcOk" descripcion="Test" marca="Cepsa" tipoTarjeta="Porcentual" descuento="33.3" | true           |
+    | UT.1.b        | nombre="TestPorcFail1" descripcion="Test" marca="Cepsa" tipoTarjeta="Porcentual" descuento="456" | false          |
+    | UT.1.d        | nombre="TestPorcFail2" descripcion="Test" marca="Cepsa" tipoTarjeta="Porcentual" descuento="cincuenta" | false          |
+    | UT.1.d        | nombre="TestCtsOK"descripcion="Test" marca="Cepsa" tipoTarjeta="ctsLitro" descuento="5" | true           |
+    | UT.1.e        | nombre="TestCtsFail"descripcion="Test" marca="Cepsa" tipoTarjeta="ctsLitro" descuento="cuatro" | false          |
+    | UT.1.f        | nombre="TestTipoFail"descripcion="Test" marca="Cepsa" tipoTarjeta="test" descuento="3" | false          |
   
     
   
   - actualizarListaDePrecios
   
-    | Identificador | Proceso | Valor esperado |
-    | ------------- | ------- | -------------- |
-    | UT.2.a        |         |                |
-    | UT.2.b        |         |                |
-  
+    | Identificador | Proceso                                                      | Valor esperado                     |
+    | ------------- | ------------------------------------------------------------ | ---------------------------------- |
+    | UT.2.a        | gasolineras=lista con gasolineras compatibles descuento="5"  | lista con los descuentos aplicados |
+    | UT.2.b        | gasolineras=lista con gasolineras incompatibles descuento="5" | lista sin descuentos aplicados     |
+  | UT.2.c        | gasolineras=lista vacia descuento="5"                        | lista vacia                        |
+    
     
