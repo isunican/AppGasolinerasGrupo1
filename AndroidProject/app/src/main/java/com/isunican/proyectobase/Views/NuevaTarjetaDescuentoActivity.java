@@ -45,7 +45,7 @@ public class NuevaTarjetaDescuentoActivity extends AppCompatActivity implements 
         txtComentarios = findViewById(R.id.txtComentarios);
        // spnTipoDescuento = findViewById(R.id.spnTipoDescuento);
         nombre = findViewById(R.id.nombreTarjeta);
-        marca = findViewById(R.id.marca);
+        //marca = findViewById(R.id.marca);
         descuento = findViewById(R.id.descuento);
         comentarios = findViewById(R.id.comentarios);
 

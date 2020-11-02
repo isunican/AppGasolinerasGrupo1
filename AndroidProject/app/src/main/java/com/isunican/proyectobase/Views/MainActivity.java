@@ -4,6 +4,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.isunican.proyectobase.Presenter.*;
 import com.isunican.proyectobase.Model.*;
 import com.isunican.proyectobase.R;
+import com.isunican.proyectobase.Utilities.BrandExtractorUtil;
 
 import android.app.Activity;
 import android.content.Context;
@@ -200,7 +201,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 final View view = inflater.inflate(R.layout.activity_nueva_tarjeta_descuento, null);
 
                 final TextView nombre = view.findViewById(R.id.txtNombreTarjeta);
-                final Spinner marca = view.findViewById(R.id.marca);
+                final Spinner spnMarca = view.findViewById(R.id.spnMarcas);
                 final Spinner spnTipoDescuento = view.findViewById(R.id.spnTipoDescuento);
                 final TextView descuento = view.findViewById(R.id.descuento);
                 final TextView comentarios = view.findViewById(R.id.comentarios);
@@ -212,6 +213,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         android.R.layout.simple_spinner_item, datosTipoDescuento);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spnTipoDescuento.setAdapter(adapter);
+
+               // BrandExtractorUtil utilidad = new BrandExtractorUtil();
+
+                List<String> datosMarcas = BrandExtractorUtil.extractBrands((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
+                datosMarcas.add(0,getResources().getString(R.string.default_brand));
+                ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,
+                        android.R.layout.simple_spinner_item, datosMarcas);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spnMarca.setAdapter(adapter2);
 
                 // WIP: Spinner de marcas
                 //String[] datosMarca = new String[] {getResources().getString(R.string.porcentual),

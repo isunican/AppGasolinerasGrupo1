@@ -39,12 +39,13 @@
         android:text="Marca:"
         android:textSize="24sp" />
 
-    <EditText
-        android:id="@+id/marca"
+    <Spinner
+        android:id="@+id/spnMarcas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:ems="10" />
+        android:layout_margin="10dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown" />
 
     <TextView
         android:id="@+id/txtTipoDescuento"

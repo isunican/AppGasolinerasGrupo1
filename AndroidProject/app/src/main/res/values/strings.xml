@@ -27,6 +27,7 @@
     <string name="slider_menu_text_nueva_tarjeta_descuento">Nueva tarjeta descuento</string>
     <string name="tarjeta_descuento_guardada">La tarjeta de descuento se guardo correctamente</string>
     <string name="default_type_discount_card">Elija un tipo de descuento</string>
+    <string name="default_brand">Elija una marca de gasolinera</string>
     <string name="complete_tipo_descuento">El tipo de descuento se encuentra sin seleccionar</string>
     <string name="nueva_tarjeta_descuento">Nueva tarjeta descuento</string>
 </resources>
