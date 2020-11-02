@@ -158,34 +158,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return true;
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        if(requestCode == REQUEST_CODE_NEW_DISCOUNT_CARD){
-            if(resultCode == Activity.RESULT_OK) {
-                final String nombre = data.getStringExtra("nombre");
-                final String marca = data.getStringExtra("marca");
-                final String tipo = data.getStringExtra("tipo");
-                final String descuento = data.getStringExtra("descuento");
-                final String descripcion = data.getStringExtra("descripcion");
-                presenterTarjetaDescuento.anhadirNuevaTarjeta(nombre, descripcion, marca, tipo, descuento);
-                //Esto tiene que cambiar cuando se haga la historia de ver tarjetas de descuento porque tenemos que usar solo una tarjeta de desucento al tiempo
-                List<Gasolinera> gasolinerasActualesActualizadas = presenterTarjetaDescuento.actualizarListaDePrecios(gasolinerasActuales);
-                adapter.clear();
-                gasolinerasActuales = gasolinerasActualesActualizadas;
-                adapter.addAll(gasolinerasActuales);
-                adapter.notifyDataSetChanged();
-            }
-            else if(resultCode == Activity.RESULT_CANCELED)
-            {
-                Toast.makeText(this, "Se ha cancelado la creacion de una nueva tarjeta", Toast.LENGTH_LONG).show();
-            }
-            else{
-                Toast.makeText(this, "Error al guardar la tarjeta", Toast.LENGTH_LONG).show();
-            }
-        }
-    }
+    
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
