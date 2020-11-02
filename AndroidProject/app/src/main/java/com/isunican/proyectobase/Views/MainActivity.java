@@ -5,11 +5,13 @@ import com.isunican.proyectobase.Presenter.*;
 import com.isunican.proyectobase.Model.*;
 import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.Utilities.BrandExtractorUtil;
+import com.isunican.proyectobase.Utilities.CommonUtils;
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -223,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 List<String> datosMarcas = BrandExtractorUtil.extractBrands((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
                 datosMarcas.add(0,getResources().getString(R.string.default_brand));
                 ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,
-                        android.R.layout.simple_spinner_item, datosMarcas);
+                        android.R.layout.simple_spinner_item, CommonUtils.sortStringList(datosMarcas));
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spnMarca.setAdapter(adapter2);
 
@@ -237,8 +239,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             public void onClick(View view) {
                                 // lee y almacena datos
                                 String strNombre = nombre.getText().toString();
-                                System.out.println(strNombre);
-                                String strMarca = spnTipoDescuento.getSelectedItem().toString();
+                                String strMarca = spnMarca.getSelectedItem().toString();
+                                System.out.println(strMarca);
                                 String strTipoDescuento = spnTipoDescuento.getSelectedItem().toString();
                                 String strDescuento = descuento.getText().toString();
                                 String strComentario = comentarios.getText().toString();
@@ -248,13 +250,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     nombre.setError("fgdf");
 
                                 } else if (strMarca.equals(getResources().getString(R.string.default_brand))) {
-                                    Toast toast = Toast.makeText(getApplicationContext(),
-                                            getResources().getString(R.string.complete_marca), Toast.LENGTH_LONG);
-                                    toast.show();
+                                    TextView errorText = (TextView)spnMarca.getSelectedView();
+                                    errorText.setError("");
+                                    errorText.setTextColor(Color.RED);
                                 } else if (strTipoDescuento.equals(getResources().getString(R.string.default_type_discount_card))) {
-                                    Toast toast = Toast.makeText(getApplicationContext(),
-                                            getResources().getString(R.string.complete_tipo_descuento), Toast.LENGTH_LONG);
-                                    toast.show();
+                                    TextView errorText = (TextView)spnTipoDescuento.getSelectedView();
+                                    errorText.setError("");
+                                    errorText.setTextColor(Color.RED);
                                 } else if (strDescuento.equals("")) {
                                     descuento.setError(getResources().getString(R.string.complete_descuento));
                                 } else {
@@ -283,7 +285,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void updateListWithNewDiscountCard(){
         //Esto tiene que cambiar cuando se haga la historia de ver tarjetas de descuento porque tenemos que usar solo una tarjeta de desucento al tiempo
-        List<Gasolinera> gasolinerasActualesActualizadas = presenterTarjetaDescuento.actualizarListaDePrecios(gasolinerasActuales);
+        List<Gasolinera> gasolinerasActualesActualizadas = presenterTarjetaDescuento.actualizarListaDePrecios(presenterGasolineras.getGasolineras());
         adapter.clear();
         gasolinerasActuales = gasolinerasActualesActualizadas;
         adapter.addAll(gasolinerasActuales);
