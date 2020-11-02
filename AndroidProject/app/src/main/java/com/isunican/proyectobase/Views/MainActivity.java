@@ -4,6 +4,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.isunican.proyectobase.Presenter.*;
 import com.isunican.proyectobase.Model.*;
 import com.isunican.proyectobase.R;
+import com.isunican.proyectobase.Utilities.BrandExtractorUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -184,7 +185,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 //Create alertDialog
                 final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
-                        //.setView(view)
                         //Set to null. We override the onclick
                         .setPositiveButton(android.R.string.ok, null)
                         .setNegativeButton(android.R.string.cancel, null)
@@ -196,19 +196,26 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 marcaListView.setAdapter(dataAdapter);
 
-                //Positive button
+                // Positive button
                 alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
                     public void onShow(DialogInterface dialog) {
+
                         Button b = alertDialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
                         b.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+
+                                ArrayList<String> listaAux = (ArrayList)presenterFiltroMarcas.getMarcas();
+
                                 if(marcaTxt.getText().toString().isEmpty()){
 
-                                    marcaTxt.setError("Campo vacio");
+                                    marcaTxt.setError(getResources().getString(R.string.campo_vacio));
 
-                                }else{
+                                }else if(!listaAux.contains(marcaTxt.getText().toString())){
+                                    marcaTxt.setError(getResources().getString(R.string.marca_invalida));
+                                }
+                                else{
                                     //Actualiza la lista actual para solo contener las gasolineras con la marca seleccionada
                                     currentList= (ArrayList<Gasolinera>) presenterFiltroMarcas.filtraGasolineras(marcaTxt.getText().toString());
                                     adapter=new GasolineraArrayAdapter(MainActivity.this, 0, currentList);
@@ -232,7 +239,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
                 @Override
-                public void afterTextChanged(Editable s) {dataAdapter.getFilter().filter(s);}
+                public void afterTextChanged(Editable s) {dataAdapter.getFilter().filter(s);
+
+                }
             });
                 marcaListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
                     public void onItemClick(AdapterView<?> a, View v, int position, long id) {

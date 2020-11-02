@@ -21,5 +21,6 @@
     <string name="filtrar_marcaGasolinera">Filtrar por rótulo </string>
     <string name="filtro_aplicado">Datos filtrados</string>
     <string name="campo_vacio">Campo vacío</string>
+    <string name="marca_invalida">Marca inválida</string>
     <!-- El nombre de filtrar por marca de gasolinera no cabía en el panel lateral-->
 </resources>
