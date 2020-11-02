@@ -20,7 +20,7 @@
     <string name="guardar">Guardar</string>
     <string name="cancelar">Cancelar</string>
     <string name="complete_nombre">El campo Nombre es oblgatorio</string>
-    <string name="complete_marca">El campo Marca es obligatorio</string>
+    <string name="complete_marca">La marca se encuentra sin seleccionar</string>
     <string name="complete_descuento">El campo Descuento es obligatorio</string>
     <string name="porcentual">Porcentual</string>
     <string name="cts_litro">cts/Litro</string>

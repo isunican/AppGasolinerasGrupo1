@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -193,20 +194,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
             case R.id.itemNuevaTarjetaDescuento:
-                // Intento de hacer un alertDialog
-                final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 
-                // Get the layout inflater
+                // Creacion alertDialog
+                final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
+                        .setPositiveButton(android.R.string.ok,null)
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .create();
+
                 LayoutInflater inflater = this.getLayoutInflater();
                 final View view = inflater.inflate(R.layout.activity_nueva_tarjeta_descuento, null);
 
+                // Elementos del formulario
                 final TextView nombre = view.findViewById(R.id.txtNombreTarjeta);
                 final Spinner spnMarca = view.findViewById(R.id.spnMarcas);
                 final Spinner spnTipoDescuento = view.findViewById(R.id.spnTipoDescuento);
                 final TextView descuento = view.findViewById(R.id.descuento);
                 final TextView comentarios = view.findViewById(R.id.comentarios);
 
-                // Spinner de tipo descuento
+                // Datos spinner de tipo descuento
                 String[] datosTipoDescuento = new String[] {getResources().getString(R.string.default_type_discount_card),getResources().getString(R.string.porcentual),
                         getResources().getString(R.string.cts_litro)};
                 ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
@@ -214,8 +219,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spnTipoDescuento.setAdapter(adapter);
 
-               // BrandExtractorUtil utilidad = new BrandExtractorUtil();
-
+                // Datos spinner de marcas
                 List<String> datosMarcas = BrandExtractorUtil.extractBrands((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
                 datosMarcas.add(0,getResources().getString(R.string.default_brand));
                 ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,
@@ -223,15 +227,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spnMarca.setAdapter(adapter2);
 
-                // WIP: Spinner de marcas
-                //String[] datosMarca = new String[] {getResources().getString(R.string.porcentual),
-                //      getResources().getString(R.string.cts_litro)};
-
-                alertDialogBuilder.setPositiveButton("Guardar",
-                        new DialogInterface.OnClickListener() {
+                // Definicion positive button ("guardar")
+                alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        Button b = alertDialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+                        b.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
+                            public void onClick(View view) {
                                 // lee y almacena datos
                                 String strNombre = nombre.getText().toString();
                                 String strMarca = spnTipoDescuento.getSelectedItem().toString();
@@ -243,42 +246,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                 if (strNombre.equals("")) {
                                     Toast toast = Toast.makeText(getApplicationContext(),
                                             getResources().getString(R.string.complete_nombre), Toast.LENGTH_LONG);
+                                    nombre.setError("fgdf");
                                     toast.show();
-                                } else if (strMarca.equals("")){
+
+                                } else if (strMarca.equals(getResources().getString(R.string.default_brand))) {
                                     Toast toast = Toast.makeText(getApplicationContext(),
                                             getResources().getString(R.string.complete_marca), Toast.LENGTH_LONG);
                                     toast.show();
-                                } else if (strTipoDescuento.equals(getResources().getString(R.string.default_type_discount_card))){
+                                } else if (strTipoDescuento.equals(getResources().getString(R.string.default_type_discount_card))) {
                                     Toast toast = Toast.makeText(getApplicationContext(),
                                             getResources().getString(R.string.complete_tipo_descuento), Toast.LENGTH_LONG);
                                     toast.show();
-                                }
-                                else if (strDescuento.equals("")){
+                                } else if (strDescuento.equals("")) {
                                     Toast toast = Toast.makeText(getApplicationContext(),
                                             getResources().getString(R.string.complete_descuento), Toast.LENGTH_LONG);
+                                    descuento.setError(getResources().getString(R.string.complete_descuento));
                                     toast.show();
                                 } else {
-                                    if(presenterTarjetaDescuento.anhadirNuevaTarjeta(strNombre, strComentario, "CEPSA", strTipoDescuento, strDescuento))
-                                    {
-                                        Toast toast= Toast.makeText(getApplicationContext(),
+                                    if (presenterTarjetaDescuento.anhadirNuevaTarjeta(strNombre, strComentario, "CEPSA", strTipoDescuento, strDescuento)) {
+                                        Toast toast = Toast.makeText(getApplicationContext(),
                                                 getResources().getString(R.string.tarjeta_descuento_guardada), Toast.LENGTH_LONG);
                                         toast.show();
                                         updateListWithNewDiscountCard();
-                                        dialog.dismiss();
-                                    };
+                                        alertDialogBuilder.dismiss();
+                                    }
                                 }
                             }
                         });
-
-                alertDialogBuilder.setNegativeButton("Cancelar",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog,
-                                                int which) {
-                                dialog.dismiss();
-                            }
-                        });
-                // Set elements in the dialog
+                    }
+                });
                 alertDialogBuilder.setView(view);
                 alertDialogBuilder.show();
                 break;
