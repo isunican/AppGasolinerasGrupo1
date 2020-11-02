@@ -10,26 +10,51 @@ import com.isunican.proyectobase.Model.TarjetaDescuentoPorcentaje;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * -----------------------------------------------------
+ * Presenter utilizado para la gestion de tarjetas de
+ * descuento de la aplicacion
+ * -----------------------------------------------------
+ *
+ * @author Adrian Celis
+ * @version 0.1.4
+ */
 public class PresenterTarjetaDescuento {
 
     private ArrayList<TarjetaDescuento> listaTarjetasDescuento;
 
+    /**
+     * Constructor que inicializa la tarjeta de descuentos
+     * para que pueda se utilizada
+     */
     public PresenterTarjetaDescuento(){
-        // Esto no deberia de ir aqui si no a la hora de crear la aplicacion
-        //TODO: Realizar una lectura y escritura de archivos para poder guardar las tarjetas y obtenerlas cuando se abra y cierre la aplicacion
-        //TODO: Esta funcionalidad no tiene que estar aqui, tiene que estar en la main activity
-        cargarListaDeTarjetasGuardadas();
-        // Esto no deberia de crear una lista nueva
-        // Hay que implementar la funcionalidad de lectura y escritura de datos
+        this.listaTarjetasDescuento = new ArrayList<TarjetaDescuento>();
     }
 
+    /**
+     * Retorna la lista de tarjetas de descuento
+     * @return ArrayList de TarjetaDescuento
+     */
     public ArrayList<TarjetaDescuento> getListaDeTarjetasDelUsuario() { return listaTarjetasDescuento; }
 
+    /**
+     * Establece la lista de tarjetas de descuento
+     * @param listaDeTarjetasDelUsuario lista de tarjetas a establecer
+     */
     public void setListaDeTarjetasDelUsuario(ArrayList<TarjetaDescuento> listaDeTarjetasDelUsuario) {
         this.listaTarjetasDescuento = listaDeTarjetasDelUsuario;
     }
 
+    /**
+     * Crea una nueva tarjeta con los parametros otorgados
+     * e incorpora la tarjeta sobre la lista
+     * @param nombre nombre de la tarjeta
+     * @param descripcion descripcion sobre la tarjeta
+     * @param marca marca sobre la que se aplican los descuentos
+     * @param tipoTarjeta tipo de tarjeta de descuento
+     * @param descuento descuento que se aplica
+     * @return true si la tarjeta se ha guardado correactemente, si no false.
+     */
     public boolean anhadirNuevaTarjeta(String nombre, String descripcion, String marca, String tipoTarjeta, String descuento)
     {
         TarjetaDescuento tarjetaNueva;
@@ -43,12 +68,25 @@ public class PresenterTarjetaDescuento {
         return listaTarjetasDescuento.contains(tarjetaNueva);
     }
 
+    /**
+     * Actualiza la lista de precios haciendo uso de la
+     * tarjetas que se encuentran en la lista
+     * @param gasolineras listado de tarjetas a actualizar
+     * @return listado de gasolineras con precios actualizados
+     */
     public List<Gasolinera> actualizarListaDePrecios(List<Gasolinera> gasolineras){
         for (Gasolinera g: gasolineras) {
             g = cambioPrecios(g);
         }
         return new ArrayList<Gasolinera>(gasolineras);
     }
+
+    /**
+     * Metodo privado que recive una gasolinera y actualiza sus precios
+     * dependiendo de las tarjetas de descuento que se encuentren en la lista
+     * @param gasolinera gasolinera a actualizar
+     * @return gasolinera con los precios actualizados
+     */
     //A la hora de aplicar el cambio de precios realiza los descuentos de cts/Litro y posteriormente el porcentaje
     private Gasolinera cambioPrecios (Gasolinera gasolinera) {
         double descuentoTotal = 0;
@@ -71,19 +109,5 @@ public class PresenterTarjetaDescuento {
         gasolinera.setGasoleoA(Math.round(gasoleoA*1000.0)/1000.0);
         gasolinera.setGasolina95(Math.round(gasolina95*1000.0)/1000.0);
         return gasolinera;
-    }
-
-
-    private boolean cargarListaDeTarjetasGuardadas(){
-        try {
-            listaTarjetasDescuento = new ArrayList<>();
-            listaTarjetasDescuento.add(new TarjetaDescuentoPorcentaje("TarjetaDescuentoRepsol", "descripcion basica", "Repsol",0.1));
-            System.out.println("Carga correcta");
-            return true;
-        } catch (Exception e)
-        {
-            Log.e("ERROR", "No se ha podido cargar la lista de tarjetas guardadas");
-            return false;
-        }
     }
 }
