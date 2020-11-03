@@ -17,7 +17,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -272,13 +271,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.itemNuevaTarjetaDescuento:
 
                 // Creacion alertDialog
-                final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
-                        .setPositiveButton(android.R.string.ok,null)
+                final AlertDialog alertDialogBuilderNewCardDiscount = new AlertDialog.Builder(this)
+                        .setPositiveButton(android.R.string.ok, null)
                         .setNegativeButton(android.R.string.cancel, null)
                         .create();
 
-                LayoutInflater inflater = this.getLayoutInflater();
-                final View view = inflater.inflate(R.layout.activity_nueva_tarjeta_descuento, null);
+                inflater = this.getLayoutInflater();
+                view = inflater.inflate(R.layout.activity_nueva_tarjeta_descuento, null);
 
                 // Elementos del formulario
                 final TextView nombre = view.findViewById(R.id.nombreTarjeta);
@@ -304,10 +303,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 spnMarca.setAdapter(adapter2);
 
                 // Definicion positive button ("guardar")
-                alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+                alertDialogBuilderNewCardDiscount.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
                     public void onShow(DialogInterface dialog) {
-                        Button b = alertDialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+                        Button b = alertDialogBuilderNewCardDiscount.getButton(AlertDialog.BUTTON_POSITIVE);
                         b.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -337,15 +336,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                                 getResources().getString(R.string.tarjeta_descuento_guardada), Toast.LENGTH_LONG);
                                         toast.show();
                                         updateListWithNewDiscountCard();
-                                        alertDialogBuilder.dismiss();
+                                        alertDialogBuilderNewCardDiscount.dismiss();
                                     }
                                 }
                             }
                         });
                     }
                 });
-                alertDialogBuilder.setView(view);
-                alertDialogBuilder.show();
+                alertDialogBuilderNewCardDiscount.setView(view);
+                alertDialogBuilderNewCardDiscount.show();
                 break;
 
             default:
@@ -359,39 +358,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onActivityResult(int requestCode,int resultCode,Intent data) {
 
         super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode){
+        switch (requestCode) {
             //Al acabar la actividad FiltrosActivity correctamente salta aqui
             case REQUEST_FILTRO_TIPO_GASOLINA:
-                if(resultCode==Activity.RESULT_OK){
-                    String tipoGasolina=data.getStringExtra("tipo");
-                    Log.d("Funciona y mando: ",tipoGasolina);
-                    List<Gasolinera> gasolinerasFiltradas=null;
+                if (resultCode == Activity.RESULT_OK) {
+                    String tipoGasolina = data.getStringExtra("tipo");
+                    Log.d("Funciona y mando: ", tipoGasolina);
+                    List<Gasolinera> gasolinerasFiltradas = null;
                     try {
 
                         gasolinerasFiltradas = presenterGasolineras.filtraGasolinerasTipoCombustible(tipoGasolina, listaGasolinerasActual);
-                    }catch(NullPointerException e){
-                        Toast.makeText(getApplicationContext(),"Lista nula, no se pudo aplicar filtro",Toast.LENGTH_LONG);
+                    } catch (NullPointerException e) {
+                        Toast.makeText(getApplicationContext(), "Lista nula, no se pudo aplicar filtro", Toast.LENGTH_LONG);
                     }
                     adapter.clear();
                     adapter.addAll(gasolinerasFiltradas);
 
-                }else{
-                    Log.d("Error","No se ha cargado el filtro");
+                } else {
+                    Log.d("Error", "No se ha cargado el filtro");
                 }
                 break;
         }
+    }
     private void updateListWithNewDiscountCard(){
         //Esto tiene que cambiar cuando se haga la historia de ver tarjetas de descuento porque tenemos que usar solo una tarjeta de desucento al tiempo
         List<Gasolinera> gasolinerasActualesActualizadas = presenterTarjetaDescuento.actualizarListaDePrecios(presenterGasolineras.getGasolineras());
         adapter.clear();
-        gasolinerasActuales = gasolinerasActualesActualizadas;
-        adapter.addAll(gasolinerasActuales);
+        listaGasolinerasActual = gasolinerasActualesActualizadas;
+        adapter.addAll(listaGasolinerasActual);
         adapter.notifyDataSetChanged();
-    }
-
-    private void setNavigationViewListener() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
     }
 
 
@@ -477,7 +472,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Definimos el array adapter
                 adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>) presenterGasolineras.getGasolineras() );
 
-                adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>)gasolinerasActuales);
+                adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>)listaGasolinerasActual);
 
                 // Obtenemos la vista de la lista
                 listViewGasolineras = findViewById(R.id.listViewGasolineras);
