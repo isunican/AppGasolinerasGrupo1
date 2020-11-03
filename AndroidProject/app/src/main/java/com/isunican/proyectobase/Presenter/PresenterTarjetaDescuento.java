@@ -64,9 +64,9 @@ public class PresenterTarjetaDescuento {
         }catch (Exception e){
             return false;
         }
+        if (discount>100 || discount<0) return false;
+        if (discount>1) discount = discount/100;
         if (tipoTarjeta.equals("Porcentual")){
-            if (discount>100 || discount<0) return false;
-            if (discount>1) discount = discount/100;
             tarjetaNueva = new TarjetaDescuentoPorcentaje(nombre, descripcion, marca, discount);
         } else if (tipoTarjeta.equals("cts/Litro")) {
             tarjetaNueva = new TarjetaDescuentoPorLitro(nombre, descripcion, marca, discount);
