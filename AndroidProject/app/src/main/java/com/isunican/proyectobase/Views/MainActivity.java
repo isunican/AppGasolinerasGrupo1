@@ -4,7 +4,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.isunican.proyectobase.Presenter.*;
 import com.isunican.proyectobase.Model.*;
 import com.isunican.proyectobase.R;
-import com.isunican.proyectobase.Utilities.BrandExtractorUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -15,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -77,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     RelativeLayout layout;
     DrawerLayout drawerLayout;
 
+    //Prueba
+    ActionBarDrawerToggle toggle;
     //Adapter para la listView
     ArrayAdapter<String> dataAdapter;
 
@@ -105,10 +107,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layout = findViewById(R.id.activity_precio_gasolina);
         layout.addView(progressBar, params);
 
+        /////////Posible imple
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         // Muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
 
+        //////Posible
+
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+
+        drawerLayout.setDrawerListener(toggle);
+        toggle.syncState();
         // Swipe and refresh
         // Al hacer swipe en la lista, lanza la tarea asíncrona de carga de datos
         mSwipeRefreshLayout = findViewById(R.id.swiperefresh);
@@ -159,7 +171,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (item.getItemId() == R.id.itemInfo) {
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
             MainActivity.this.startActivity(myIntent);
+        }else if(toggle.onOptionsItemSelected(item))
+        {
+            return true;
         }
+
+
         return true;
     }
 
@@ -174,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.filtroMarcaGasolinera:
 
                 presenterFiltroMarcas = new PresenterFiltroMarcas((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
-
                 // Get the layout inflater
                 LayoutInflater inflater = this.getLayoutInflater();
                 View view = inflater.inflate(R.layout.activity_filtro_marca_acivity, null);
