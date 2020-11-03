@@ -17,4 +17,6 @@
     <string name="marca">Marca</string>
     <string name="tipoGasolina">Tipo de Gasolina</string>
     <string name="filtrar_tipoGasolina">Filtrar por tipo de gasolina</string>
+    <string name="navigation_drawer_open">Abrir drawer</string>
+    <string name="navigation_drawer_close">Cerrar drawer</string>
 </resources>

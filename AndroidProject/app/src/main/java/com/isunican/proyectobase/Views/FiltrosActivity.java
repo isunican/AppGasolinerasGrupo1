@@ -31,8 +31,9 @@ import com.isunican.proyectobase.R;
  *
  * @author Miguel Carbayo
  */
-public class FiltrosActivity extends AppCompatActivity implements View.OnClickListener {
-
+public class FiltrosActivity //extends AppCompatActivity implements View.OnClickListener
+                                {
+    /*
     Spinner spinnerTiposGasolina;
     Button btnAplicar;
 
@@ -43,7 +44,7 @@ public class FiltrosActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.filtros_gasolinera);
 
         spinnerTiposGasolina = findViewById(R.id.spinner_tipoGasolina);
-        btnAplicar = findViewById(R.id.aplicar_button);
+        //btnAplicar = findViewById(R.id.aplicar_button);
         btnAplicar.setOnClickListener(this);
 
         //Ventana flotante
@@ -84,4 +85,5 @@ public class FiltrosActivity extends AppCompatActivity implements View.OnClickLi
                 break;
         }
     }
+    */
 }

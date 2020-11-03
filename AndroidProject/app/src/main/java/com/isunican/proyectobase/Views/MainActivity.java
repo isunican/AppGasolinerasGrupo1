@@ -14,6 +14,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -32,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -68,8 +70,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Sidebar
     DrawerLayout layout;
-    //DrawerLayout drawerLayout;
     NavigationView navigationView;
+    ActionBarDrawerToggle toggle;
 
     //Filtro
     String tipoGasolina;
@@ -104,6 +106,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        toggle = new ActionBarDrawerToggle(this, layout,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        layout.setDrawerListener(toggle);
+        toggle.syncState();
 
         // Swipe and refresh
         // Al hacer swipe en la lista, lanza la tarea asíncrona de carga de datos
@@ -119,6 +127,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
+
+        // Tests
+        Button test_filtroTipoGasolina = findViewById(R.id.button_test_filtroTipoGasolina);
+        test_filtroTipoGasolina.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                creaVentanaFiltroTipoGasolina();
+            }
+        });
+
 
     }
 
@@ -148,6 +166,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if(toggle.onOptionsItemSelected(item)){
+            return true;
+        }
         if(item.getItemId()==R.id.itemActualizar){
             mSwipeRefreshLayout.setRefreshing(true);
             new CargaDatosGasolinerasTask(this).execute();
@@ -204,14 +225,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public void creaVentanaFiltroTipoGasolina(PresenterGasolineras presenterFiltroTipoGasolina){
+    /*
+     * Ventana de dialogo para filtrar por tipo de gasolina con un spinner
+     * para seleccionar el tipo
+     */
+    public void creaVentanaFiltroTipoGasolina(){
 
         // Get the layout inflater
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.filtros_gasolinera, null);
 
         // List elements
-        final TextView tipoGasolinaTxt = view.findViewById(R.id.tipoGasolinaTag);
         final Spinner tipoGasolinaSpinner = view.findViewById(R.id.spinner_tipoGasolina);
 
         //Create alertDialog
@@ -220,12 +244,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //Set to null. We override the onclick
                 .setPositiveButton(android.R.string.ok, null)
                 .setNegativeButton(android.R.string.cancel, null)
+                .setTitle(getResources().getString(R.string.filtrar_tipoGasolina))
                 .create();
 
         // Create list elements with an array adapter
         String[] datos = new String[] {"Gasolina95", "Diesel"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, datos);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        tipoGasolinaSpinner.setAdapter(adapter);
 
         //Positive button
         alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -235,40 +262,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if(marcaTxt.getText().toString().isEmpty()){
-
-                            marcaTxt.setError("Campo vacio");
-
-                        }else{
-                            //Actualiza la lista actual para solo contener las gasolineras con la marca seleccionada
-                            currentList= (ArrayList<Gasolinera>) presenterFiltroMarcas.filtraGasolineras(marcaTxt.getText().toString());
-                            adapter=new GasolineraArrayAdapter(MainActivity.this, 0, currentList);
-                            listViewGasolineras = findViewById(R.id.listViewGasolineras);
-                            listViewGasolineras.setAdapter(adapter);
-
-                            Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.filtro_aplicado), Toast.LENGTH_LONG);
-                            toast.show();
-                            alertDialogBuilder.dismiss();
-                        }
+                        String strTipoGasolina = tipoGasolinaSpinner.getSelectedItem().toString();
+                        // TODO Filtrar con la lógica
+                        Toast.makeText(getApplicationContext(), strTipoGasolina, Toast.LENGTH_LONG).show();
+                        alertDialogBuilder.dismiss();
                     }
                 });
-            }
-        });
-
-        marcaTxt.addTextChangedListener(new TextWatcher(){
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {dataAdapter.getFilter().filter(s);}
-        });
-        marcaListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                String marca = marcaListView.getItemAtPosition(position).toString();
-                marcaTxt.setText(marca);
             }
         });
 
