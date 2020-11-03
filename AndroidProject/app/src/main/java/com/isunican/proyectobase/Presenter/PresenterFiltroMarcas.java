@@ -5,6 +5,7 @@ import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.Utilities.BrandExtractorUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,6 +33,8 @@ public class PresenterFiltroMarcas {
         this.listaActualizada = new ArrayList<>();
         this.listaGasolineras = lista;
         marcas = (ArrayList<String>) BrandExtractorUtil.extractBrands(listaGasolineras);
+        Collections.sort(marcas);
+        marcas.add(0,"(Ninguno)");
     }
 
     /**
