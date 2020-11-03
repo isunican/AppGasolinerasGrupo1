@@ -13,6 +13,7 @@
     <string name="menuInfo">Info</string>
     <string name="pasoDatosInfo">DatosInfo</string>
     <string name="pasoDatosGasolinera">DatosGasolinera</string>
+    <string name="pasoListaGasolinerasFiltros">ListaGasolineras</string>
     <string name="aplicar">Aplicar</string>
     <string name="marca">Marca</string>
     <string name="tipoGasolina">Tipo de Gasolina</string>
@@ -30,4 +31,8 @@
     <string name="default_brand">Elija una marca de gasolinera</string>
     <string name="complete_tipo_descuento">El tipo de descuento se encuentra sin seleccionar</string>
     <string name="nueva_tarjeta_descuento">Nueva tarjeta descuento</string>
+    <string name="filtrar_marcaGasolinera">Filtrar por rótulo </string>
+    <string name="filtro_aplicado">Datos filtrados</string>
+    <string name="campo_vacio">Campo vacío</string>
+    <!-- El nombre de filtrar por marca de gasolinera no cabía en el panel lateral-->
 </resources>
