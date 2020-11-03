@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Swipe and refresh (para recargar la lista con un swipe)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    private static final int REQUEST_FILTRO_TIPO_GASOLINA=1999;
+
 
 
     // Sidebar
@@ -73,8 +73,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     ActionBarDrawerToggle toggle;
 
-    //Filtro
-    String tipoGasolina;
 
     /**
      * onCreate
@@ -184,11 +182,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
           switch (menuItem.getItemId()){
             case R.id.filtroTipoGasolina:
-                /*
-                Intent myIntent = new Intent(MainActivity.this, FiltrosActivity.class);
-                myIntent.putExtra("tipo",tipoGasolina);
-                startActivityForResult(myIntent,REQUEST_FILTRO_TIPO_GASOLINA);
-                */
                 creaVentanaFiltroTipoGasolina();
                 break;
             default:
@@ -198,33 +191,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layout.closeDrawer(GravityCompat.START);
         return true;
     }
-    @Override
-    public void onActivityResult(int requestCode,int resultCode,Intent data) {
-
-        super.onActivityResult(requestCode, resultCode, data);
-        switch(requestCode){
-            //Al acabar la actividad FiltrosActivity correctamente salta aqui
-            case REQUEST_FILTRO_TIPO_GASOLINA:
-                if(resultCode==Activity.RESULT_OK){
-                    tipoGasolina=data.getStringExtra("tipo");
-                    Log.d("Funciona y mando: ",tipoGasolina);
-                    List<Gasolinera> gasolinerasFiltradas=null;
-                    try {
-                        gasolinerasFiltradas = presenterGasolineras.filtraGasolinerasTipoCombustible(tipoGasolina, listaGasolinerasActual);
-                        adapter.clear();
-                        adapter.addAll(gasolinerasFiltradas);
-                    }catch(NullPointerException e){
-                        Toast.makeText(getApplicationContext(),"Lista nula, no se pudo aplicar filtro",Toast.LENGTH_LONG);
-                    }
-
-
-                }else{
-                    Log.d("Error","No se ha cargado el filtro");
-                }
-                break;
-        }
-    }
-
     /*
      * Ventana de dialogo para filtrar por tipo de gasolina con un spinner
      * para seleccionar el tipo
@@ -263,7 +229,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onClick(View view) {
                         String strTipoGasolina = tipoGasolinaSpinner.getSelectedItem().toString();
-                        // TODO Filtrar con la lógica
+                        List<Gasolinera> gasolinerasFiltradas = presenterGasolineras.filtraGasolinerasTipoCombustible(strTipoGasolina, listaGasolinerasActual);
+                        refreshAdapter(gasolinerasFiltradas);
                         Toast.makeText(getApplicationContext(), strTipoGasolina, Toast.LENGTH_LONG).show();
                         alertDialogBuilder.dismiss();
                     }
@@ -276,6 +243,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         alertDialogBuilder.show();
 
 
+    }
+    private void refreshAdapter(List<Gasolinera>gasolinerasNuevas){
+        adapter.clear();
+        adapter.addAll(gasolinerasNuevas);
     }
 
     /**
