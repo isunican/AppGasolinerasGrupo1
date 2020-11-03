@@ -6,12 +6,15 @@ import com.isunican.proyectobase.Model.*;
 import com.isunican.proyectobase.R;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -30,10 +33,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,8 +70,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Sidebar
     DrawerLayout layout;
-    //DrawerLayout drawerLayout;
     NavigationView navigationView;
+    ActionBarDrawerToggle toggle;
 
     //Filtro
     String tipoGasolina;
@@ -97,10 +102,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         layout.addView(progressBar,params);
         */
-        
+
         // Muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        toggle = new ActionBarDrawerToggle(this, layout,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        layout.setDrawerListener(toggle);
+        toggle.syncState();
 
         // Swipe and refresh
         // Al hacer swipe en la lista, lanza la tarea asíncrona de carga de datos
@@ -116,6 +127,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
+
+        // Tests
+        Button test_filtroTipoGasolina = findViewById(R.id.button_test_filtroTipoGasolina);
+        test_filtroTipoGasolina.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                creaVentanaFiltroTipoGasolina();
+            }
+        });
+
 
     }
 
@@ -145,6 +166,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if(toggle.onOptionsItemSelected(item)){
+            return true;
+        }
         if(item.getItemId()==R.id.itemActualizar){
             mSwipeRefreshLayout.setRefreshing(true);
             new CargaDatosGasolinerasTask(this).execute();
@@ -160,10 +184,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
           switch (menuItem.getItemId()){
             case R.id.filtroTipoGasolina:
-
+                /*
                 Intent myIntent = new Intent(MainActivity.this, FiltrosActivity.class);
                 myIntent.putExtra("tipo",tipoGasolina);
                 startActivityForResult(myIntent,REQUEST_FILTRO_TIPO_GASOLINA);
+                */
+                creaVentanaFiltroTipoGasolina();
                 break;
             default:
                 Log.d("MIGUEL", "Ningun item del panel ha sido seleccionado");
@@ -180,23 +206,76 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //Al acabar la actividad FiltrosActivity correctamente salta aqui
             case REQUEST_FILTRO_TIPO_GASOLINA:
                 if(resultCode==Activity.RESULT_OK){
-                    String tipoGasolina=data.getStringExtra("tipo");
+                    tipoGasolina=data.getStringExtra("tipo");
                     Log.d("Funciona y mando: ",tipoGasolina);
                     List<Gasolinera> gasolinerasFiltradas=null;
                     try {
-
                         gasolinerasFiltradas = presenterGasolineras.filtraGasolinerasTipoCombustible(tipoGasolina, listaGasolinerasActual);
+                        adapter.clear();
+                        adapter.addAll(gasolinerasFiltradas);
                     }catch(NullPointerException e){
                         Toast.makeText(getApplicationContext(),"Lista nula, no se pudo aplicar filtro",Toast.LENGTH_LONG);
                     }
-                    adapter.clear();
-                    adapter.addAll(gasolinerasFiltradas);
+
 
                 }else{
                     Log.d("Error","No se ha cargado el filtro");
                 }
                 break;
         }
+    }
+
+    /*
+     * Ventana de dialogo para filtrar por tipo de gasolina con un spinner
+     * para seleccionar el tipo
+     */
+    public void creaVentanaFiltroTipoGasolina(){
+
+        // Get the layout inflater
+        LayoutInflater inflater = this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.filtros_gasolinera, null);
+
+        // List elements
+        final Spinner tipoGasolinaSpinner = view.findViewById(R.id.spinner_tipoGasolina);
+
+        //Create alertDialog
+        final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
+                //.setView(view)
+                //Set to null. We override the onclick
+                .setPositiveButton(android.R.string.ok, null)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setTitle(getResources().getString(R.string.filtrar_tipoGasolina))
+                .create();
+
+        // Create list elements with an array adapter
+        String[] datos = new String[] {"Gasolina95", "Diesel"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, datos);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        tipoGasolinaSpinner.setAdapter(adapter);
+
+        //Positive button
+        alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button b = alertDialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String strTipoGasolina = tipoGasolinaSpinner.getSelectedItem().toString();
+                        // TODO Filtrar con la lógica
+                        Toast.makeText(getApplicationContext(), strTipoGasolina, Toast.LENGTH_LONG).show();
+                        alertDialogBuilder.dismiss();
+                    }
+                });
+            }
+        });
+
+        // Set elements in the dialog
+        alertDialogBuilder.setView(view);
+        alertDialogBuilder.show();
+
+
     }
 
     /**
@@ -373,21 +452,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             gasolina95.setText(" " + gasolinera.getGasolina95() + getResources().getString(R.string.moneda));
 
             // carga icono
-            {
-                String rotuleImageID = gasolinera.getRotulo().toLowerCase();
-
-                // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
-                // En ese caso getIdentifier devuelve esos digitos en vez de 0.
-                int imageID = context.getResources().getIdentifier(rotuleImageID,
-                        "drawable", context.getPackageName());
-
-                if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
-                    imageID = context.getResources().getIdentifier(getResources().getString(R.string.pordefecto),
-                            "drawable", context.getPackageName());
-                }
-                logo.setImageResource(imageID);
-            }
-
+            cargaIcono(gasolinera, logo);
 
             // Si las dimensiones de la pantalla son menores
             // reducimos el texto de las etiquetas para que se vea correctamente
@@ -407,6 +472,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             return view;
+        }
+
+        private void cargaIcono(Gasolinera gasolinera, ImageView logo) {
+            String rotuleImageID = gasolinera.getRotulo().toLowerCase();
+
+            // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
+            // En ese caso getIdentifier devuelve esos digitos en vez de 0.
+            int imageID = context.getResources().getIdentifier(rotuleImageID,
+                    "drawable", context.getPackageName());
+
+            if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
+                imageID = context.getResources().getIdentifier(getResources().getString(R.string.pordefecto),
+                        "drawable", context.getPackageName());
+            }
+            logo.setImageResource(imageID);
         }
     }
 

@@ -58,12 +58,12 @@ public class TestFiltroTipoGasolina {
     @Test
     public void testTiposGasolina(){
         //UID.1a
-        assertEquals(gasolineraDieselGasolina.tiposGasolina(),"Diesel Gasolina95 ");
+        assertEquals("Diesel Gasolina95 ", gasolineraDieselGasolina.tiposGasolina());
         //UID.1b
-        assertEquals(gasolineraConDiesel.tiposGasolina(),"Diesel ");
+        assertEquals("Diesel ", gasolineraConDiesel.tiposGasolina());
         //UID.1c
-        assertEquals(gasolineraSinDiesel.tiposGasolina(),"Gasolina95 ");
+        assertEquals("Gasolina95 ", gasolineraSinDiesel.tiposGasolina());
         //UID.1d
-        assertEquals(gasolineraSin.tiposGasolina(),"");
+        assertEquals("", gasolineraSin.tiposGasolina());
     }
 }

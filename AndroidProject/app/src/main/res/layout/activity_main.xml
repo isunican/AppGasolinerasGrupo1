@@ -24,14 +24,31 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="right"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button_test_filtroTipoGasolina"
+            android:layout_width="12dp"
+            android:layout_height="9dp"
+            android:ellipsize="none"
+            android:gravity="right"
+            android:text="b"
+            android:visibility="visible" />
+    </LinearLayout>
+
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view_main"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:menu="@menu/slide_menu"
-        app:headerLayout="@layout/header_sidebar"/>
+        app:headerLayout="@layout/header_sidebar"
+        app:menu="@menu/slide_menu" />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
