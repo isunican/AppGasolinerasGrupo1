@@ -58,10 +58,20 @@ public class PresenterTarjetaDescuento {
     public boolean anhadirNuevaTarjeta(String nombre, String descripcion, String marca, String tipoTarjeta, String descuento)
     {
         TarjetaDescuento tarjetaNueva;
+        double discount;
+        try{
+            discount = Double.parseDouble(descuento);
+        }catch (Exception e){
+            return false;
+        }
         if (tipoTarjeta.equals("Porcentual")){
-            tarjetaNueva = new TarjetaDescuentoPorcentaje(nombre, descripcion, marca, Double.parseDouble(descuento));
-        } else {
-            tarjetaNueva = new TarjetaDescuentoPorLitro(nombre, descripcion, marca, Double.parseDouble(descuento));
+            if (discount>100 || discount<0) return false;
+            if (discount>1) discount = discount/100;
+            tarjetaNueva = new TarjetaDescuentoPorcentaje(nombre, descripcion, marca, discount);
+        } else if (tipoTarjeta.equals("cts/Litro")) {
+            tarjetaNueva = new TarjetaDescuentoPorLitro(nombre, descripcion, marca, discount);
+        }else {
+            return false;
         }
         listaTarjetasDescuento.add(tarjetaNueva);
         System.out.println(tarjetaNueva.toString());
