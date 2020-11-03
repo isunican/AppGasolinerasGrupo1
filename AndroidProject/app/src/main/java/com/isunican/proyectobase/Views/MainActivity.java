@@ -55,7 +55,6 @@ import android.widget.Toast;
 ------------------------------------------------------------------
 */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-    private static final int REQUEST_CODE_NEW_DISCOUNT_CARD = 0x1;
 
     PresenterGasolineras presenterGasolineras;
     PresenterTarjetaDescuento presenterTarjetaDescuento;
@@ -196,9 +195,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 // Datos spinner de marcas
                 List<String> datosMarcas = BrandExtractorUtil.extractBrands((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
+                datosMarcas = CommonUtils.sortStringList(datosMarcas);
                 datosMarcas.add(0,getResources().getString(R.string.default_brand));
                 ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,
-                        android.R.layout.simple_spinner_item, CommonUtils.sortStringList(datosMarcas));
+                        android.R.layout.simple_spinner_item, datosMarcas);
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spnMarca.setAdapter(adapter2);
 
