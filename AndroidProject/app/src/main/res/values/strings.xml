@@ -17,4 +17,17 @@
     <string name="marca">Marca</string>
     <string name="tipoGasolina">Tipo de Gasolina</string>
     <string name="filtrar_tipoGasolina">Filtrar por tipo de gasolina</string>
+    <string name="guardar">Guardar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="complete_nombre">El campo Nombre es obligatorio</string>
+    <string name="complete_marca">La marca se encuentra sin seleccionar</string>
+    <string name="complete_descuento">El campo Descuento es obligatorio</string>
+    <string name="porcentual">Porcentual</string>
+    <string name="cts_litro">cts/Litro</string>
+    <string name="slider_menu_text_nueva_tarjeta_descuento">Nueva tarjeta descuento</string>
+    <string name="tarjeta_descuento_guardada">La tarjeta de descuento se guardó correctamente</string>
+    <string name="default_type_discount_card">Elija un tipo de descuento</string>
+    <string name="default_brand">Elija una marca de gasolinera</string>
+    <string name="complete_tipo_descuento">El tipo de descuento se encuentra sin seleccionar</string>
+    <string name="nueva_tarjeta_descuento">Nueva tarjeta descuento</string>
 </resources>

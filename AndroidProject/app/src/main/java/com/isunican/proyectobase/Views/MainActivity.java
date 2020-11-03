@@ -4,14 +4,19 @@ import com.google.android.material.navigation.NavigationView;
 import com.isunican.proyectobase.Presenter.*;
 import com.isunican.proyectobase.Model.*;
 import com.isunican.proyectobase.R;
+import com.isunican.proyectobase.Utilities.BrandExtractorUtil;
+import com.isunican.proyectobase.Utilities.CommonUtils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -30,10 +35,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,8 +55,12 @@ import android.widget.Toast;
 ------------------------------------------------------------------
 */
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+    private static final int REQUEST_CODE_NEW_DISCOUNT_CARD = 0x1;
 
     PresenterGasolineras presenterGasolineras;
+    PresenterTarjetaDescuento presenterTarjetaDescuento;
+
+    List<Gasolinera> gasolinerasActuales;
 
     // Vista de lista y adaptador para cargar datos en ella
     ListView listViewGasolineras;
@@ -79,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.activity_precio_gasolina_drawer);
 
         this.presenterGasolineras = new PresenterGasolineras();
+        this.presenterTarjetaDescuento = new PresenterTarjetaDescuento();
 
         // Barra de progreso
         // https://materialdoc.com/components/progress/
@@ -145,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return true;
     }
-
+    
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
@@ -153,11 +166,101 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 FiltrosActivity filtro = new FiltrosActivity();
                 filtro.show(getSupportFragmentManager(), "Dialog");
                 break;
+
+
+            case R.id.itemNuevaTarjetaDescuento:
+
+                // Creacion alertDialog
+                final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
+                        .setPositiveButton(android.R.string.ok,null)
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .create();
+
+                LayoutInflater inflater = this.getLayoutInflater();
+                final View view = inflater.inflate(R.layout.activity_nueva_tarjeta_descuento, null);
+
+                // Elementos del formulario
+                final TextView nombre = view.findViewById(R.id.nombreTarjeta);
+                final Spinner spnMarca = view.findViewById(R.id.spnMarcas);
+                final Spinner spnTipoDescuento = view.findViewById(R.id.spnTipoDescuento);
+                final TextView descuento = view.findViewById(R.id.descuento);
+                final TextView comentarios = view.findViewById(R.id.comentarios);
+
+                // Datos spinner de tipo descuento
+                String[] datosTipoDescuento = new String[] {getResources().getString(R.string.default_type_discount_card),getResources().getString(R.string.porcentual),
+                        getResources().getString(R.string.cts_litro)};
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                        android.R.layout.simple_spinner_item, datosTipoDescuento);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spnTipoDescuento.setAdapter(adapter);
+
+                // Datos spinner de marcas
+                List<String> datosMarcas = BrandExtractorUtil.extractBrands((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
+                datosMarcas.add(0,getResources().getString(R.string.default_brand));
+                ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,
+                        android.R.layout.simple_spinner_item, CommonUtils.sortStringList(datosMarcas));
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spnMarca.setAdapter(adapter2);
+
+                // Definicion positive button ("guardar")
+                alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        Button b = alertDialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+                        b.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                // lee y almacena datos
+                                String strNombre = nombre.getText().toString();
+                                String strMarca = spnMarca.getSelectedItem().toString();
+                                String strTipoDescuento = spnTipoDescuento.getSelectedItem().toString();
+                                String strDescuento = descuento.getText().toString();
+                                String strComentario = comentarios.getText().toString();
+
+                                // Si hay algun campo sin rellenar, salta un aviso al usuario
+                                if (strNombre.equals("")) {
+                                    nombre.setError(getResources().getString(R.string.complete_nombre));
+                                } else if (strMarca.equals(getResources().getString(R.string.default_brand))) {
+                                    TextView errorText = (TextView)spnMarca.getSelectedView();
+                                    errorText.setError("");
+                                    errorText.setTextColor(Color.RED);
+                                } else if (strTipoDescuento.equals(getResources().getString(R.string.default_type_discount_card))) {
+                                    TextView errorText = (TextView)spnTipoDescuento.getSelectedView();
+                                    errorText.setError("");
+                                    errorText.setTextColor(Color.RED);
+                                } else if (strDescuento.equals("")) {
+                                    descuento.setError(getResources().getString(R.string.complete_descuento));
+                                } else {
+                                    if (presenterTarjetaDescuento.anhadirNuevaTarjeta(strNombre, strComentario, strMarca, strTipoDescuento, strDescuento)) {
+                                        Toast toast = Toast.makeText(getApplicationContext(),
+                                                getResources().getString(R.string.tarjeta_descuento_guardada), Toast.LENGTH_LONG);
+                                        toast.show();
+                                        updateListWithNewDiscountCard();
+                                        alertDialogBuilder.dismiss();
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+                alertDialogBuilder.setView(view);
+                alertDialogBuilder.show();
+                break;
+
             default:
                 Log.d("MIGUEL", "Default en switch");
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return false;
+    }
+
+    private void updateListWithNewDiscountCard(){
+        //Esto tiene que cambiar cuando se haga la historia de ver tarjetas de descuento porque tenemos que usar solo una tarjeta de desucento al tiempo
+        List<Gasolinera> gasolinerasActualesActualizadas = presenterTarjetaDescuento.actualizarListaDePrecios(presenterGasolineras.getGasolineras());
+        adapter.clear();
+        gasolinerasActuales = gasolinerasActualesActualizadas;
+        adapter.addAll(gasolinerasActuales);
+        adapter.notifyDataSetChanged();
     }
 
     private void setNavigationViewListener() {
@@ -232,6 +335,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          */
         @Override
         protected void onPostExecute(Boolean res) {
+            gasolinerasActuales = presenterGasolineras.getGasolineras();
             Toast toast;
 
             // Si el progressDialog estaba activado, lo oculta
@@ -242,13 +346,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Si se ha obtenido resultado en la tarea en segundo plano
             if (res) {
                 // Definimos el array adapter
-                adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
+
+                adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>)gasolinerasActuales);
 
                 // Obtenemos la vista de la lista
                 listViewGasolineras = findViewById(R.id.listViewGasolineras);
 
                 // Cargamos los datos en la lista
-                if (!presenterGasolineras.getGasolineras().isEmpty()) {
+                if (!gasolinerasActuales.isEmpty()) {
                     // datos obtenidos con exito
                     listViewGasolineras.setAdapter(adapter);
                     toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_exito), Toast.LENGTH_LONG);
@@ -285,7 +390,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                      */
                     Intent myIntent = new Intent(MainActivity.this, DetailActivity.class);
                     myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera),
-                            presenterGasolineras.getGasolineras().get(position));
+                            gasolinerasActuales.get(position));
                     MainActivity.this.startActivity(myIntent);
 
                 }
@@ -375,5 +480,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return view;
         }
     }
-
 }
