@@ -1,13 +1,10 @@
 package com.isunican.proyectobase.Presenter;
 
-import android.util.Log;
-
 import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.Model.TarjetaDescuento;
 import com.isunican.proyectobase.Model.TarjetaDescuentoPorLitro;
 import com.isunican.proyectobase.Model.TarjetaDescuentoPorcentaje;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -21,7 +18,7 @@ import java.util.List;
  */
 public class PresenterTarjetaDescuento {
 
-    private ArrayList<TarjetaDescuento> listaTarjetasDescuento;
+    private List<TarjetaDescuento> listaTarjetasDescuento;
 
     /**
      * Constructor que inicializa la tarjeta de descuentos
@@ -35,7 +32,7 @@ public class PresenterTarjetaDescuento {
      * Retorna la lista de tarjetas de descuento
      * @return ArrayList de TarjetaDescuento
      */
-    public ArrayList<TarjetaDescuento> getListaDeTarjetasDelUsuario() { return listaTarjetasDescuento; }
+    public List<TarjetaDescuento> getListaDeTarjetasDelUsuario() { return listaTarjetasDescuento; }
 
     /**
      * Establece la lista de tarjetas de descuento
@@ -74,7 +71,6 @@ public class PresenterTarjetaDescuento {
             return false;
         }
         listaTarjetasDescuento.add(tarjetaNueva);
-        System.out.println(tarjetaNueva.toString());
         return listaTarjetasDescuento.contains(tarjetaNueva);
     }
 
@@ -86,7 +82,7 @@ public class PresenterTarjetaDescuento {
      */
     public List<Gasolinera> actualizarListaDePrecios(List<Gasolinera> gasolineras){
         for (Gasolinera g: gasolineras) {
-            g = cambioPrecios(g);
+            cambioPrecios(g);
         }
         return new ArrayList<Gasolinera>(gasolineras);
     }

@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //Filtro
     String tipoGasolina;
+    private static final int btn_positivo = DialogInterface.BUTTON_POSITIVE;
 
     /**
      * onCreate
@@ -110,16 +111,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.presenterGasolineras = new PresenterGasolineras();
         this.presenterTarjetaDescuento = new PresenterTarjetaDescuento();
 
-        // Barra de progreso
-        // https://materialdoc.com/components/progress/
-        /*
-        progressBar = new ProgressBar(MainActivity.this,null,android.R.attr.progressBarStyleLarge);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100,100);
-        params.addRule(RelativeLayout.CENTER_IN_PARENT);
-
-        layout.addView(progressBar,params);
-        */
-
         // Muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
@@ -127,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         toggle = new ActionBarDrawerToggle(this, layout,
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        layout.setDrawerListener(toggle);
+        layout.addDrawerListener(toggle);
         toggle.syncState();
 
         // Swipe and refresh
@@ -146,8 +137,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         new CargaDatosGasolinerasTask(this).execute();
 
         // Tests
-        Button test_filtroTipoGasolina = findViewById(R.id.button_test_filtroTipoGasolina);
-        test_filtroTipoGasolina.setOnClickListener(new View.OnClickListener() {
+        Button testFiltroTipoGasolina = findViewById(R.id.button_test_filtroTipoGasolina);
+        testFiltroTipoGasolina.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 creaVentanaFiltroTipoGasolina();
@@ -194,6 +185,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (item.getItemId() == R.id.itemInfo) {
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
             MainActivity.this.startActivity(myIntent);
+        } else{
+            return false;
         }
         return true;
     }
@@ -235,14 +228,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
                     public void onShow(DialogInterface dialog) {
-                        Button b = alertDialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+                        Button b = alertDialogBuilder.getButton(btn_positivo);
                         b.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 if(marcaTxt.getText().toString().isEmpty()){
-
                                     marcaTxt.setError("Campo vacio");
-
                                 }else{
                                     //Actualiza la lista actual para solo contener las gasolineras con la marca seleccionada
                                     currentList= (ArrayList<Gasolinera>) presenterFiltroMarcas.filtraGasolineras(marcaTxt.getText().toString());
@@ -261,10 +252,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                 marcaTxt.addTextChangedListener(new TextWatcher(){
                 @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                    // Es necesario implementar estos métodos pero no hace nada
+                }
 
                 @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    // Es necesario implementar estos métodos pero no hace nada
+                }
 
                 @Override
                 public void afterTextChanged(Editable s) {dataAdapter.getFilter().filter(s);}
@@ -322,7 +317,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 alertDialogBuilderNewCardDiscount.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
                     public void onShow(DialogInterface dialog) {
-                        Button b = alertDialogBuilderNewCardDiscount.getButton(AlertDialog.BUTTON_POSITIVE);
+                        Button b = alertDialogBuilderNewCardDiscount.getButton(btn_positivo);
                         b.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -406,7 +401,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
-                Button b = alertDialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+                Button b = alertDialogBuilder.getButton(btn_positivo);
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -480,7 +475,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          */
         @Override
         protected void onPreExecute() {
-            //progressBar.setVisibility(View.VISIBLE);  //To show ProgressBar
+            // Nada que hacer
         }
 
         /**
@@ -514,9 +509,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         protected void onPostExecute(Boolean res) {
             listaGasolinerasActual=presenterGasolineras.getGasolineras();
             Toast toast;
-
-            // Si el progressDialog estaba activado, lo oculta
-            //progressBar.setVisibility(View.GONE);     // To Hide ProgressBar
 
             mSwipeRefreshLayout.setRefreshing(false);
 
@@ -605,7 +597,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Gasolinera gasolinera = listaGasolineras.get(position);
 
             // Indica el layout a usar en cada elemento de la lista
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.item_gasolinera, null);
 
             // Asocia las variables de dicho layout
