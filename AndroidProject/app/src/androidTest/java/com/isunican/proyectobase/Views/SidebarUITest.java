@@ -1,4 +1,4 @@
-package com.isunican.proyectobase;
+package com.isunican.proyectobase.Views;
 
 import android.view.Gravity;
 
