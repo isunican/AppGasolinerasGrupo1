@@ -6,11 +6,19 @@ import org.junit.*;
 
 import java.util.ArrayList;
 
+/**
+ * Clase de tests que contiene las pruebas unitarias de la utilidad Brand Extractor
+ * @author Luis Cruz
+ * @version 0.0.2
+ */
 public class BrandExtractorUtilTest {
 
     static ArrayList<Gasolinera> gasolineras;
     static ArrayList<Gasolinera> filtradas;
 
+    /*
+     * Preparacion de las listas usadas para los tests
+     */
     @Before
     public void setup(){
         gasolineras = new ArrayList<>();
@@ -42,26 +50,25 @@ public class BrandExtractorUtilTest {
 
         Assert.assertTrue(marcas.isEmpty());
 
+        //Caso de prueba 3: Lista de gasolineras nula
+        marcas = (ArrayList<String>) BrandExtractorUtil.extractBrands(null);
+        Assert.assertTrue(marcas.isEmpty());
 
     }
 
     /*
     *Test del método applyFiter
-    * TODO: Descubrir por qué aunque los objetos tienen el mismo contenido, los tests fallan
-     */
+    */
     @Test
     public void testApplyFilter(){
         //Caso de prueba 1: funcionamiento normal
         ArrayList<Gasolinera> filtered = (ArrayList<Gasolinera>) BrandExtractorUtil.applyFilter("CAMPSA", gasolineras);
-
         Assert.assertArrayEquals(filtered.toArray(),filtradas.toArray());
 
         filtered = (ArrayList<Gasolinera>) BrandExtractorUtil.applyFilter("campsa", gasolineras);
-
         Assert.assertArrayEquals(filtered.toArray(),filtradas.toArray());
 
         filtered = (ArrayList<Gasolinera>) BrandExtractorUtil.applyFilter("Campsa", gasolineras);
-
         Assert.assertArrayEquals(filtered.toArray(),filtradas.toArray());
 
         //Caso de prueba 2: marca no existente
@@ -72,6 +79,9 @@ public class BrandExtractorUtilTest {
 
         //Caso de prueba 3: lista vacía
         Assert.assertTrue(BrandExtractorUtil.applyFilter("AVIA", new ArrayList<Gasolinera>()).isEmpty());
+
+        //Caso de prueba 4: lista nula
+        Assert.assertTrue(BrandExtractorUtil.applyFilter("AVIA", null).isEmpty());
 
     }
 }

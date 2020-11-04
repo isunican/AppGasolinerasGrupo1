@@ -5,11 +5,12 @@ import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.Utilities.BrandExtractorUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * ---------------------------------------------------------------------------
- * Clase encargada de listar las marcas (rótulos) de gasolineras disponibles,
+ * Clase encargada de listar las marcas (rotulos) de gasolineras disponibles,
  * filtrar la lista de gasolineras por una marca escogida y devolver la lista
  * actualizada de gasolineras conteniendo solo las que concuerdan con la marca
  * especificada, si las hay
@@ -32,10 +33,12 @@ public class PresenterFiltroMarcas {
         this.listaActualizada = new ArrayList<>();
         this.listaGasolineras = lista;
         marcas = (ArrayList<String>) BrandExtractorUtil.extractBrands(listaGasolineras);
+        Collections.sort(marcas);
+        marcas.add(0,"(Ninguno)");
     }
 
     /**
-     * @return marcas(rótulos) de gasolineras
+     * @return marcas(rotulos) de gasolineras
      */
     public List<String> getMarcas() {
         return marcas;

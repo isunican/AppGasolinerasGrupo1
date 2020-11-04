@@ -50,6 +50,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+
 /*
 ------------------------------------------------------------------
     Vista principal
@@ -84,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     NavigationView navigationView;
     ActionBarDrawerToggle toggle;
 
+    //ActionBarDrawerToggle
+    ActionBarDrawerToggle toggle;
+
     //Adapter para la listView
     ArrayAdapter<String> dataAdapter;
 
@@ -111,14 +115,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.presenterGasolineras = new PresenterGasolineras();
         this.presenterTarjetaDescuento = new PresenterTarjetaDescuento();
 
-        // Muestra el logo en el actionBar
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        // Muestra el logo en el actionBar
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        toggle = new ActionBarDrawerToggle(this, layout,
-                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        layout.addDrawerListener(toggle);
+        //ActionBarDrawerToggle
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+
+        drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
 
         // Swipe and refresh
@@ -185,8 +193,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (item.getItemId() == R.id.itemInfo) {
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
             MainActivity.this.startActivity(myIntent);
-        } else{
-            return false;
+        }else if(toggle.onOptionsItemSelected(item)) {
+            return true;
+        }else if(item.getItemId() == R.id.itemFiltroMarca){
+            creaAlertDialogFiltroMarca();
         }
         return true;
     }
@@ -199,87 +209,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
 
             case R.id.filtroMarcaGasolinera:
-
-                presenterFiltroMarcas = new PresenterFiltroMarcas((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
-
-                // Get the layout inflater
-                LayoutInflater inflater = this.getLayoutInflater();
-                View view = inflater.inflate(R.layout.activity_filtro_marca_acivity, null);
-
-                // List elements
-                final EditText marcaTxt = view.findViewById(R.id.txtMarca);
-                final ListView marcaListView = view.findViewById(R.id.list_marcas);
-
-                //Create alertDialog
-                final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
-                        //.setView(view)
-                        //Set to null. We override the onclick
-                        .setPositiveButton(android.R.string.ok, null)
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .create();
-
-                // Create list elements with an array adapter
-                dataAdapter = new ArrayAdapter<String>(this,
-                        android.R.layout.simple_dropdown_item_1line, presenterFiltroMarcas.getMarcas());
-
-                marcaListView.setAdapter(dataAdapter);
-
-                //Positive button
-                alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
-                    @Override
-                    public void onShow(DialogInterface dialog) {
-                        Button b = alertDialogBuilder.getButton(btn_positivo);
-                        b.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                if(marcaTxt.getText().toString().isEmpty()){
-                                    marcaTxt.setError("Campo vacio");
-                                }else{
-                                    //Actualiza la lista actual para solo contener las gasolineras con la marca seleccionada
-                                    currentList= (ArrayList<Gasolinera>) presenterFiltroMarcas.filtraGasolineras(marcaTxt.getText().toString());
-                                    adapter=new GasolineraArrayAdapter(MainActivity.this, 0, currentList);
-                                    listViewGasolineras = findViewById(R.id.listViewGasolineras);
-                                    listViewGasolineras.setAdapter(adapter);
-
-                                    Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.filtro_aplicado), Toast.LENGTH_LONG);
-                                    toast.show();
-                                    alertDialogBuilder.dismiss();
-                                }
-                            }
-                        });
-                    }
-                });
-
-                marcaTxt.addTextChangedListener(new TextWatcher(){
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                    // Es necesario implementar estos métodos pero no hace nada
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    // Es necesario implementar estos métodos pero no hace nada
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {dataAdapter.getFilter().filter(s);}
-            });
-                marcaListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-                    public void onItemClick(AdapterView<?> a, View v, int position, long id) {
-                        String marca = marcaListView.getItemAtPosition(position).toString();
-                        marcaTxt.setText(marca);
-                    }
-                });
-
-                // Set elements in the dialog
-                alertDialogBuilder.setView(view);
-                alertDialogBuilder.show();
-
+                creaAlertDialogFiltroMarca();
                 break;
 
-
-
-            case R.id.itemNuevaTarjetaDescuento:
+                 case R.id.itemNuevaTarjetaDescuento:
 
                 // Creacion alertDialog
                 final AlertDialog alertDialogBuilderNewCardDiscount = new AlertDialog.Builder(this)
@@ -357,13 +290,104 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 alertDialogBuilderNewCardDiscount.setView(view);
                 alertDialogBuilderNewCardDiscount.show();
                 break;
-
+                
             default:
-                Log.d("MIGUEL", "Ningun item del panel ha sido seleccionado");
-                break;
+                Log.d("MIGUEL", "Default en switch");
         }
-        layout.closeDrawer(GravityCompat.START);
-        return true;
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return false;
+    }
+
+    private void setNavigationViewListener() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+    }
+
+
+    /**
+     * Crea el alertDialog del filtrar gasolinera por marca
+     */
+    public void creaAlertDialogFiltroMarca(){
+        presenterFiltroMarcas = new PresenterFiltroMarcas((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
+        // Get the layout inflater
+        LayoutInflater inflater = this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.activity_filtro_marca_acivity, null);
+
+        // List elements
+        final EditText marcaTxt = view.findViewById(R.id.txtMarca);
+        final ListView marcaListView = view.findViewById(R.id.list_marcas);
+
+        //Create alertDialog
+        final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
+                //Set to null. We override the onclick
+                .setPositiveButton(android.R.string.ok, null)
+                .setNegativeButton(android.R.string.cancel, null)
+                .create();
+
+        // Create list elements with an array adapter
+        dataAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, presenterFiltroMarcas.getMarcas());
+
+        marcaListView.setAdapter(dataAdapter);
+
+        // Positive button
+        alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+
+                Button b = alertDialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        ArrayList<String> listaAux = (ArrayList)presenterFiltroMarcas.getMarcas();
+
+                        if(marcaTxt.getText().toString().isEmpty()){
+
+                            marcaTxt.setError(getResources().getString(R.string.campo_vacio));
+
+                        }else if(!listaAux.contains(marcaTxt.getText().toString())){
+                            marcaTxt.setError(getResources().getString(R.string.marca_invalida));
+                        }
+                        else{
+                            //Actualiza la lista actual para solo contener las gasolineras con la marca seleccionada
+                            currentList= (ArrayList<Gasolinera>) presenterFiltroMarcas.filtraGasolineras(marcaTxt.getText().toString());
+                            adapter=new GasolineraArrayAdapter(MainActivity.this, 0, currentList);
+                            listViewGasolineras = findViewById(R.id.listViewGasolineras);
+                            listViewGasolineras.setAdapter(adapter);
+
+                            Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.toast_filtro_aplicado), Toast.LENGTH_LONG);
+                            toast.show();
+                            alertDialogBuilder.dismiss();
+                        }
+                    }
+                });
+            }
+        });
+
+        marcaTxt.addTextChangedListener(new TextWatcher(){
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+
+            @Override
+            public void afterTextChanged(Editable s) {dataAdapter.getFilter().filter(s);
+                     }
+        });
+        marcaListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                String marca = marcaListView.getItemAtPosition(position).toString();
+                marcaTxt.setText(marca);
+            }
+        });
+
+                // Set elements in the dialog
+        alertDialogBuilder.setView(view);
+        alertDialogBuilder.show();
+
     }
 
     /*
@@ -433,11 +457,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         adapter.addAll(listaGasolinerasActual);
         adapter.notifyDataSetChanged();
     }
-
-    private void refreshAdapter(List<Gasolinera>gasolinerasNuevas){
-        adapter.clear();
-        adapter.addAll(gasolinerasNuevas);
-    }
+   
 
     /**
      * CargaDatosGasolinerasTask

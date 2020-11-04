@@ -1,4 +1,6 @@
-<h1 style="text-align:center">Plan de pruebas - Añadir tarjetas de descuento, #399738</h1>
+<h1 style="text-align:center">Plan de pruebas - Filtrar gasolinera por marca, #399738</h1>
+
+
 
 
 
