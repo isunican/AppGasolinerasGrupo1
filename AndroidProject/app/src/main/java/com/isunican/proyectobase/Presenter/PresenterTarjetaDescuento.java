@@ -9,6 +9,7 @@ import com.isunican.proyectobase.Model.TarjetaDescuentoPorcentaje;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 /**
  * -----------------------------------------------------
@@ -85,6 +86,10 @@ public class PresenterTarjetaDescuento {
      * @return listado de gasolineras con precios actualizados
      */
     public List<Gasolinera> actualizarListaDePrecios(List<Gasolinera> gasolineras){
+        if (gasolineras == null)
+        {
+            return Collections.emptyList();
+        }
         for (Gasolinera g: gasolineras) {
             g = cambioPrecios(g);
         }
