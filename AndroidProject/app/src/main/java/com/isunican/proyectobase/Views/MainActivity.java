@@ -229,7 +229,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     @Override
                     public void onClick(View view) {
                         String strTipoGasolina = tipoGasolinaSpinner.getSelectedItem().toString();
-                        List<Gasolinera> gasolinerasFiltradas = presenterGasolineras.filtraGasolinerasTipoCombustible(strTipoGasolina, listaGasolinerasActual);
+                        List<Gasolinera> gasolinerasFiltradas=null;
+                        try{
+                            gasolinerasFiltradas = presenterGasolineras.filtraGasolinerasTipoCombustible(strTipoGasolina, listaGasolinerasActual);
+                        }catch(NullPointerException e){
+                            Toast.makeText(getApplicationContext(),"Error al al leer gasolineras",Toast.LENGTH_LONG);
+                        }
+
                         refreshAdapter(gasolinerasFiltradas);
                         Toast.makeText(getApplicationContext(), strTipoGasolina, Toast.LENGTH_LONG).show();
                         alertDialogBuilder.dismiss();

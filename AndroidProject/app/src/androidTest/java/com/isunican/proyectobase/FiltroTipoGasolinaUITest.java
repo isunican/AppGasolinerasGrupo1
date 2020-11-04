@@ -45,11 +45,7 @@ public class FiltroTipoGasolinaUITest {
         onData(allOf(is(instanceOf(String.class)),is("Gasolina95"))).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.spinner_tipoGasolina)).perform(click());
         onData(allOf(is(instanceOf(String.class)),is("Diesel"))).inRoot(isPlatformPopup()).perform(click());
-        //onData(anything()).inAdapterView(withId(R.id.spinner_tipoGasolina)).atPosition(1).perform(click());
-        //onData(allOf(is(instanceOf(String.class)))).atPosition(1).perform(click());
         onView(withText("OK")).perform(click());
-
-        //Botón cancelar
         onView(withId(R.id.button_test_filtroTipoGasolina)).perform(click());
         onView(withText("CANCEL")).perform(click());
 
