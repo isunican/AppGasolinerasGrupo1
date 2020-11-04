@@ -66,13 +66,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     // Swipe and refresh (para recargar la lista con un swipe)
     SwipeRefreshLayout mSwipeRefreshLayout;
 
-
-
     // Sidebar
     DrawerLayout layout;
     NavigationView navigationView;
     ActionBarDrawerToggle toggle;
-
 
     /**
      * onCreate
@@ -191,9 +188,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layout.closeDrawer(GravityCompat.START);
         return true;
     }
+
     /*
      * Ventana de dialogo para filtrar por tipo de gasolina con un spinner
      * para seleccionar el tipo
+     *
+     * author: Miguel Carbayo
      */
     public void creaVentanaFiltroTipoGasolina(){
 
@@ -247,9 +247,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Set elements in the dialog
         alertDialogBuilder.setView(view);
         alertDialogBuilder.show();
-
-
     }
+
     private void refreshAdapter(List<Gasolinera>gasolinerasNuevas){
         adapter.clear();
         adapter.addAll(gasolinerasNuevas);

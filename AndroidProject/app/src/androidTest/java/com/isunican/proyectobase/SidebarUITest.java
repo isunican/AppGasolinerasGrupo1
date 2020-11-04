@@ -25,7 +25,12 @@ import static androidx.test.espresso.contrib.DrawerMatchers.isClosed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-
+/*
+ * Clase test que prueba el funcionamiento del panel lateral (drawer)
+ * Espera 2 segundos, abre el panel y hace click en el boton de filtrar por
+ * tipo de gasolina
+ * Author: Miguel Carbayo
+ */
 @RunWith(AndroidJUnit4.class)
 public class SidebarUITest {
 
