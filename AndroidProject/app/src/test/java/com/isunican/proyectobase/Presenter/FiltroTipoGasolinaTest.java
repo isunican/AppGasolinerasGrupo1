@@ -1,4 +1,4 @@
-package com.isunican.proyectobase;
+package com.isunican.proyectobase.Presenter;
 
 import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.Presenter.PresenterGasolineras;
@@ -67,15 +67,5 @@ public class FiltroTipoGasolinaTest {
         assertEquals(presenter.filtraGasolinerasTipoCombustible("Diesel ",listaBajoPrueba),listaEsperada);
 
     }
-    @Test
-    public void tiposGasolinaTest(){
-        //UID.1a
-        assertEquals("Diesel Gasolina95 ", gasolineraDieselGasolina.tiposGasolina());
-        //UID.1b
-        assertEquals("Diesel ", gasolineraConDiesel.tiposGasolina());
-        //UID.1c
-        assertEquals("Gasolina95 ", gasolineraSinDiesel.tiposGasolina());
-        //UID.1d
-        assertEquals("", gasolineraSin.tiposGasolina());
-    }
+
 }

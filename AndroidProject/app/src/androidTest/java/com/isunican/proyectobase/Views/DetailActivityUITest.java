@@ -1,4 +1,4 @@
-package com.isunican.proyectobase;
+package com.isunican.proyectobase.Views;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -8,11 +8,13 @@ import android.util.Log;
 import android.widget.ListView;
 
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.isunican.proyectobase.Model.Gasolinera;
+import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.Views.DetailActivity;
 import com.isunican.proyectobase.Views.MainActivity;
 
@@ -45,7 +47,7 @@ public class DetailActivityUITest {
 
     @Test
     public void vistaDetalladaGasolinera(){
-        onData(anything()).inAdapterView(withId(R.id.listViewGasolineras)).atPosition(0).perform(click());
+        onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listViewGasolineras)).atPosition(0).perform(click());
         ListView listView = activityRule.getActivity().findViewById(R.id.listViewGasolineras);
         g = (Gasolinera) listView.getAdapter().getItem(0);
         onView(withId(R.id.nombreGasolineraText)).check(matches(withText(g.getRotulo())));
