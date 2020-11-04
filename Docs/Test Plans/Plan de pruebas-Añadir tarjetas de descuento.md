@@ -84,18 +84,21 @@ Prueba 1: Campo del formulario sin completar
     | UT.1.a        | nombre="TestPorcOk" descripcion="Test" marca="Cepsa" tipoTarjeta="Porcentual" descuento="33.3" | true           |
     | UT.1.b        | nombre="TestPorcFail1" descripcion="Test" marca="Cepsa" tipoTarjeta="Porcentual" descuento="456" | false          |
     | UT.1.d        | nombre="TestPorcFail2" descripcion="Test" marca="Cepsa" tipoTarjeta="Porcentual" descuento="cincuenta" | false          |
-    | UT.1.d        | nombre="TestCtsOK"descripcion="Test" marca="Cepsa" tipoTarjeta="ctsLitro" descuento="5" | true           |
-    | UT.1.e        | nombre="TestCtsFail"descripcion="Test" marca="Cepsa" tipoTarjeta="ctsLitro" descuento="cuatro" | false          |
+    | UT.1.d        | nombre="TestCtsOK"descripcion="Test" marca="Cepsa" tipoTarjeta="cts/Litro" descuento="5" | true           |
+    | UT.1.e        | nombre="TestCtsFail"descripcion="Test" marca="Cepsa" tipoTarjeta="cts/Litro" descuento="cuatro" | false          |
     | UT.1.f        | nombre="TestTipoFail"descripcion="Test" marca="Cepsa" tipoTarjeta="test" descuento="3" | false          |
   
     
   
   - actualizarListaDePrecios
   
-    | Identificador | Proceso                                                      | Valor esperado                     |
-    | ------------- | ------------------------------------------------------------ | ---------------------------------- |
-    | UT.2.a        | gasolineras=lista con gasolineras compatibles descuento="5"  | lista con los descuentos aplicados |
-    | UT.2.b        | gasolineras=lista con gasolineras incompatibles descuento="5" | lista sin descuentos aplicados     |
-  | UT.2.c        | gasolineras=lista vacia descuento="5"                        | lista vacia                        |
+    | Identificador | Proceso                                                      | Valor esperado                                               |
+    | ------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+    | UT.2.a | gasolineras = mezcla de gasolineras compatibles e incompatibles descuento="0%+0" | lista de gasolineras sin descuentos aplicados |
+    | UT.2.b       | gasolineras=1 gasolinera compatible descuento="5% + 2cts/Litro" | gasolinera con el descuento porcentual aplicado              |
+    | UT.2.c       | gasolineras=1 gasolinera incompatible descuento="5% + 2/ctsLitro" | gasolinera con el descuento sin aplicar                      |
+  | UT.2.d       | gasolineras= mezcla de gasolineras compatibles e incompatibles descuento="5% + 2cts/Litro" | lista de gasolineras con los descuentos aplicados cuando corresponde |
+    | UT.2.e       | gasolineras= lista vacía descuento="5% + 2cts/Litro"         | lista vacía                                                  |
+    | UT.2.f      | gasolineras=null descuento="5% + 2cts/Litro"                 | lista vacía                                                  |
     
     
