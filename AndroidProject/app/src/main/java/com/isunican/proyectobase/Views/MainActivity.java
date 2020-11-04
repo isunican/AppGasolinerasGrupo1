@@ -81,12 +81,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     // Sidebar
-    DrawerLayout layout;
     NavigationView navigationView;
-    ActionBarDrawerToggle toggle;
 
     //ActionBarDrawerToggle
     ActionBarDrawerToggle toggle;
+
+    DrawerLayout drawerLayout;
 
     //Adapter para la listView
     ArrayAdapter<String> dataAdapter;
@@ -108,7 +108,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
         navigationView = findViewById(R.id.nav_view_main);
         navigationView.setNavigationItemSelectedListener(this);
-        layout = findViewById(R.id.activity_precio_gasolina_drawer);
+        drawerLayout = findViewById(R.id.activity_precio_gasolina_drawer);
 
         currentList = new ArrayList<>();
 
@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         testFiltroTipoGasolina.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                creaVentanaFiltroTipoGasolina();
+              //  creaVentanaFiltroTipoGasolina();
             }
         });
 
@@ -158,8 +158,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void onBackPressed() {
-        if (layout.isDrawerOpen(GravityCompat.START)) {
-            layout.closeDrawer(GravityCompat.START);
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+           drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -212,8 +212,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 creaAlertDialogFiltroMarca();
                 break;
 
-                 case R.id.itemNuevaTarjetaDescuento:
-
+                case R.id.itemNuevaTarjetaDescuento:
+                LayoutInflater inflater;
+                View view;
                 // Creacion alertDialog
                 final AlertDialog alertDialogBuilderNewCardDiscount = new AlertDialog.Builder(this)
                         .setPositiveButton(android.R.string.ok, null)
@@ -292,16 +293,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
                 
             default:
-                Log.d("MIGUEL", "Default en switch");
+                Log.d("MIGUEL", "Ningún ítem seleccionado");
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return false;
     }
 
-    private void setNavigationViewListener() {
+    /*private void setNavigationViewListener() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-    }
+    }*/
 
 
     /**
@@ -396,6 +397,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      *
      * author: Miguel Carbayo
      */
+
     public void creaVentanaFiltroTipoGasolina(){
 
         // Get the layout inflater
@@ -449,6 +451,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         alertDialogBuilder.setView(view);
         alertDialogBuilder.show();
     }
+
+    private void refreshAdapter(List<Gasolinera> gasolinerasNuevas){
+        adapter.clear();
+        adapter.addAll(gasolinerasNuevas);
+    }
+
     private void updateListWithNewDiscountCard(){
         //Esto tiene que cambiar cuando se haga la historia de ver tarjetas de descuento porque tenemos que usar solo una tarjeta de desucento al tiempo
         List<Gasolinera> gasolinerasActualesActualizadas = presenterTarjetaDescuento.actualizarListaDePrecios(presenterGasolineras.getGasolineras());
