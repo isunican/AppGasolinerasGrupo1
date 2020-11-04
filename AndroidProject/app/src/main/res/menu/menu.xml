@@ -12,10 +12,10 @@
     <item
         android:id="@+id/itemInfo"
         android:title="@string/menuInfo" />
-    <!-- opcion auxiliar filtro por marca-->
+    <!-- opcion auxiliar filtro por marca -->
     <item
         android:id="@+id/itemFiltroMarca"
-        android:title="Filtro marca"
+        android:title="@string/filtro_marca"
         />
 
 </menu>

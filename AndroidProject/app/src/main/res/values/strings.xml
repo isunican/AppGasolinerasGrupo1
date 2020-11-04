@@ -24,5 +24,6 @@
     <string name="marca_invalida">Marca inválida</string>
     <string name="navigation_drawer_open">Open</string>
     <string name="navigation_drawer_close">close</string>
+    <string name="filtro_marca">Filtro marca</string>
     <!-- El nombre de filtrar por marca de gasolinera no cabía en el panel lateral-->
 </resources>
