@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,7 +35,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -119,13 +117,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
 
-        Button test_anhadeTarjetaDescuento = findViewById(R.id.button_test_anhadeTarjetaDescuento);
-        test_anhadeTarjetaDescuento.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                creaVentanaAnhadirTarjetaDescuento();
-            }
-        });
     }
 
     @Override
@@ -136,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+
     /**
      * Menú action bar
      *
@@ -162,6 +154,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
             MainActivity.this.startActivity(myIntent);
         }
+        else if(item.getItemId()==R.id.button_test_anhadeTarjetaDescuento){
+            creaVentanaAnhadirTarjetaDescuento();
+        }
         return true;
     }
     
@@ -172,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 FiltrosActivity filtro = new FiltrosActivity();
                 filtro.show(getSupportFragmentManager(), "Dialog");
                 break;
-
 
             case R.id.itemNuevaTarjetaDescuento:
                 creaVentanaAnhadirTarjetaDescuento();
@@ -193,8 +187,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Creacion alertDialog
         final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
-                .setPositiveButton(android.R.string.ok,null)
-                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(getResources().getString(R.string.guardar),null)
+                .setNegativeButton(getResources().getString(R.string.cancelar), null)
                 .create();
 
         LayoutInflater inflater = this.getLayoutInflater();
@@ -407,7 +401,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera),
                             gasolinerasActuales.get(position));
                     MainActivity.this.startActivity(myIntent);
-
                 }
             });
         }
@@ -491,7 +484,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 tmp = view.findViewById(R.id.textViewGasolina95);
                 tmp.setTextSize(11);
             }
-
             return view;
         }
     }
