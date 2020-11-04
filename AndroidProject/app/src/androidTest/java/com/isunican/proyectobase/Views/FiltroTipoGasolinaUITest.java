@@ -34,12 +34,8 @@ public class FiltroTipoGasolinaUITest {
 
     private static final String FIRST_ITEM_TEXT = "Gasolina95";
     private static final String SECOND_ITEM_TEXT = "Diesel";
-<<<<<<< HEAD:AndroidProject/app/src/androidTest/java/com/isunican/proyectobase/FiltroTipoGasolinaUITest.java
     private static final String OK = "OK";
     private static final String CANCEL = "CANCEL";
-=======
-    private static final String FIRST_ITEM_TEXT = "Gasolina95";
->>>>>>> develop:AndroidProject/app/src/androidTest/java/com/isunican/proyectobase/Views/FiltroTipoGasolinaUITest.java
 
     @Rule
     public IntentsTestRule<MainActivity> activityRule =
@@ -52,11 +48,7 @@ public class FiltroTipoGasolinaUITest {
         onData(allOf(is(instanceOf(String.class)),is(FIRST_ITEM_TEXT))).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.spinner_tipoGasolina)).perform(click());
         onData(allOf(is(instanceOf(String.class)),is(SECOND_ITEM_TEXT))).inRoot(isPlatformPopup()).perform(click());
-<<<<<<< HEAD:AndroidProject/app/src/androidTest/java/com/isunican/proyectobase/FiltroTipoGasolinaUITest.java
         onView(withText(OK)).perform(click());
-=======
-        onView(withText("OK")).perform(click());
->>>>>>> develop:AndroidProject/app/src/androidTest/java/com/isunican/proyectobase/Views/FiltroTipoGasolinaUITest.java
         onView(withId(R.id.button_test_filtroTipoGasolina)).perform(click());
         onView(withText(CANCEL)).perform(click());
         assertTrue(true);
