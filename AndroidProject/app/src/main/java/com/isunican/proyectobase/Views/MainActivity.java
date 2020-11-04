@@ -46,6 +46,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+
 /*
 ------------------------------------------------------------------
     Vista principal
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //ActionBarDrawerToggle
     ActionBarDrawerToggle toggle;
+
     //Adapter para la listView
     ArrayAdapter<String> dataAdapter;
 
@@ -107,20 +109,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layout = findViewById(R.id.activity_precio_gasolina);
         layout.addView(progressBar, params);
 
-        /////////Posible imple
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         // Muestra el logo en el actionBar
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
-
 
         //ActionBarDrawerToggle
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 
-        drawerLayout.setDrawerListener(toggle);
+        drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+
         // Swipe and refresh
         // Al hacer swipe en la lista, lanza la tarea asíncrona de carga de datos
         mSwipeRefreshLayout = findViewById(R.id.swiperefresh);
@@ -171,10 +172,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (item.getItemId() == R.id.itemInfo) {
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
             MainActivity.this.startActivity(myIntent);
-        }else if(toggle.onOptionsItemSelected(item))
-        {
+        }else if(toggle.onOptionsItemSelected(item)) {
             return true;
-        }else if(item.getItemId() == R.id.action_filtro){
+        }else if(item.getItemId() == R.id.itemFiltroMarca){
             creaAlertDialogFiltroMarca();
         }
         return true;
@@ -191,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.filtroMarcaGasolinera:
                 creaAlertDialogFiltroMarca();
                 break;
-
             default:
                 Log.d("MIGUEL", "Default en switch");
         }
