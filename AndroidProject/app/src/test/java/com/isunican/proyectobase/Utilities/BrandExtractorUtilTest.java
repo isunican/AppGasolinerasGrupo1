@@ -42,6 +42,9 @@ public class BrandExtractorUtilTest {
 
         Assert.assertTrue(marcas.isEmpty());
 
+        //Caso de prueba 3: Lista de gasolineras nula
+        marcas = (ArrayList<String>) BrandExtractorUtil.extractBrands(null);
+        Assert.assertTrue(marcas.isEmpty());
 
     }
 
@@ -72,6 +75,9 @@ public class BrandExtractorUtilTest {
 
         //Caso de prueba 3: lista vacía
         Assert.assertTrue(BrandExtractorUtil.applyFilter("AVIA", new ArrayList<Gasolinera>()).isEmpty());
+
+        //Caso de prueba 4: lista nula
+        Assert.assertTrue(BrandExtractorUtil.applyFilter("AVIA", null).isEmpty());
 
     }
 }
