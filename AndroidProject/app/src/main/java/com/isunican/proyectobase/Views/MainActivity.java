@@ -127,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
         }
     }
+
     /**
      * Menú action bar
      *
@@ -400,7 +401,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera),
                             gasolinerasActuales.get(position));
                     MainActivity.this.startActivity(myIntent);
-
                 }
             });
         }
@@ -484,7 +484,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 tmp = view.findViewById(R.id.textViewGasolina95);
                 tmp.setTextSize(11);
             }
-
             return view;
         }
     }
