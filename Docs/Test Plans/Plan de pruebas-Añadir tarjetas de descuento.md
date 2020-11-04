@@ -26,7 +26,7 @@
 
 ​	1.- El usuario selecciona la opción de añadir tarjetas de descuento.
 
-​	2.- El sistema abre una nueva ventana que muestra al usuario el formulario  en el que puede introducir la 	información de la tarjeta de descuento. 
+​	2.- El sistema abre una nueva ventana que muestra al usuario el formulario  en el que puede introducir la información de la tarjeta de descuento. 
 
 ​	3.- El usuario rellena el formulario de la tarjeta de descuento y confirma el formulario.
 
@@ -52,13 +52,13 @@
 
 #### 1.1 Casos de uso
 
-En este caso, se derivaron dos casos de uso asociados a la historia de usuario: el caso de uso _"Añadir tarjeta de descuento por porcentaje"_ y el caso de uso _"Añadir tarjeta de descuento por céntimos por litro"_:  
+​	En este caso, se derivaron dos casos de uso asociados a la historia de usuario: el caso de uso _"Añadir tarjeta de descuento por porcentaje"_ y el caso de uso _"Añadir tarjeta de descuento por céntimos por litro"_:  
 
-- Caso de uso UC.1:  Añadir tarjeta de descuento por porcentaje con comentario
+- Caso de uso UC.1:  Añadir tarjeta de descuento por porcentaje
 
   - UC.1.a: Éxito
   - UC.1.b: Tarjeta no válida(Campo del formulario sin rellenar)
-  
+
   
 
 - Caso de uso UC.2: Añadir tarjeta de descuento por céntimos por litro
@@ -82,7 +82,7 @@ En este caso, se derivaron dos casos de uso asociados a la historia de usuario: 
 
 ## 2. Pruebas de interfaz
 
-​		En las pruebas de interfaz, que se realizarán con la ayuda de la librería de pruebas _"Espresso"_, se comprobará que las interfaces se comportan acorde a lo descrito en los casos de prueba de aceptación. Para ello se identifican los mismos casos de prueba que los casos de uso identificados en la sección 1, esta vez renombrados a **UIT.x.y**.
+​	En las pruebas de interfaz, que se realizarán con la ayuda de la librería de pruebas _"Espresso"_, se comprobará que las interfaces se comportan acorde a lo descrito en los casos de prueba de aceptación. Para ello se identifican los mismos casos de prueba que los casos de uso identificados en la sección 1, esta vez renombrados a **UIT.x.y**.
 
 | Identificador | Procedimiento                                                | Valor esperado                |
 | ------------- | ------------------------------------------------------------ | ----------------------------- |
@@ -91,7 +91,9 @@ En este caso, se derivaron dos casos de uso asociados a la historia de usuario: 
 | UIT.2.a       | Nombre="Tarjeta de prueba por litro", Marca="CAMPSA", Tipo Descuento= "cts/L" Descuento="7" Comentarios="Esto es una prueba" | "Tarjeta añadida con éxito"   |
 | UIT.2.b       | Nombre="Tarjeta de prueba por litro vacía", Marca="CAMPSA", Tipo Descuento= "cts/L" Descuento="" Comentarios="" | "Falta un campo por rellenar" |
 
+###### Tabla 2: Casos de prueba de la interfaz
 
+<div style="page-break-after: always;"></div>
 
 ## 3.  Pruebas unitarias
 
@@ -112,7 +114,7 @@ En este caso, se derivaron dos casos de uso asociados a la historia de usuario: 
   | UT.1.e        | nombre="TestCtsFail"descripcion="Test" marca="Cepsa" tipoTarjeta="cts/Litro" descuento="cuatro" | false          |
   | UT.1.f        | nombre="TestTipoFail"descripcion="Test" marca="Cepsa" tipoTarjeta="test" descuento="3" | false          |
 
-  ###### Tabla 2: Casos de prueba para el método _anhadirNuevaTarjeta()_
+  ###### Tabla 3: Casos de prueba para el método _anhadirNuevaTarjeta()_
 
   <div style="page-break-after: always;"></div>
 
@@ -120,14 +122,14 @@ En este caso, se derivaron dos casos de uso asociados a la historia de usuario: 
 
   | Identificador | Proceso                                                      | Valor esperado                                               |
   | ------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-  | UT.2.a | gasolineras = mezcla de gasolineras compatibles e incompatibles descuento="0%+0" | lista de gasolineras sin descuentos aplicados |
-  | UT.2.b       | gasolineras=1 gasolinera compatible descuento="5% + 2cts/Litro" | gasolinera con el descuento porcentual aplicado              |
-  | UT.2.c       | gasolineras=1 gasolinera incompatible descuento="5% + 2/ctsLitro" | gasolinera con el descuento sin aplicar                      |
-| UT.2.d       | gasolineras= mezcla de gasolineras compatibles e incompatibles descuento="5% + 2cts/Litro" | lista de gasolineras con los descuentos aplicados cuando corresponde |
-  | UT.2.e       | gasolineras= lista vacía descuento="5% + 2cts/Litro"         | lista vacía                                                  |
-  | UT.2.f      | gasolineras=null descuento="5% + 2cts/Litro"                 | lista vacía                                                  |
-  
-  ###### Tabla 3: Casos de prueba para el método _actualizarListaDePrecios()_
+  | UT.2.a        | gasolineras = mezcla de gasolineras compatibles e incompatibles descuento="0%+0" | lista de gasolineras sin descuentos aplicados                |
+  | UT.2.b        | gasolineras=1 gasolinera compatible descuento="5% + 2cts/Litro" | gasolinera con el descuento porcentual aplicado              |
+  | UT.2.c        | gasolineras=1 gasolinera incompatible descuento="5% + 2/ctsLitro" | gasolinera con el descuento sin aplicar                      |
+  | UT.2.d        | gasolineras= mezcla de gasolineras compatibles e incompatibles descuento="5% + 2cts/Litro" | lista de gasolineras con los descuentos aplicados cuando corresponde |
+  | UT.2.e        | gasolineras= lista vacía descuento="5% + 2cts/Litro"         | lista vacía                                                  |
+  | UT.2.f        | gasolineras=null descuento="5% + 2cts/Litro"                 | lista vacía                                                  |
+
+  ###### Tabla 4: Casos de prueba para el método _actualizarListaDePrecios()_
 
 
 
@@ -153,14 +155,14 @@ En este caso, se derivaron dos casos de uso asociados a la historia de usuario: 
 
 - El plan de pruebas (y por consiguiente el informe de pruebas) fue elaborado por Luis Cruz.
 - Las pruebas de interfaz fueron implementadas por Elena Romón.
-- Las pruebas unitarias fueron implementadas por Adrián Célis y Luis Cruz.
-- La revisión de este documento fue realizada por Adrián Célis y Elena Romón.
+- Las pruebas unitarias fueron implementadas por Adrián Celis y Luis Cruz.
+- La revisión de este documento fue realizada por Adrián Celis y Elena Romón.
 
 
 
 ## 2. Fallos detectados
 
-​		Tras la ejecución de las pruebas se detectaron algunos errores en el código. En el apartado de pruebas unitarias, se detectó un error en el caso de prueba UT.2.f, donde el código del _presenter_ causaba un _NullPointerException_ al recibir un elemento `null` en vez de una lista vacía. Una vez solucionado esto, el _presenter_ exhibió el comportamiento esperado.
+​	Tras la ejecución de las pruebas se detectaron algunos errores en el código. En el apartado de pruebas unitarias, se detectó un error en el caso de prueba UT.2.f, donde el código del _presenter_ causaba un _NullPointerException_ al recibir un elemento `null` en vez de una lista vacía. Una vez solucionado esto, el _presenter_ exhibió el comportamiento esperado.
 
 
 
