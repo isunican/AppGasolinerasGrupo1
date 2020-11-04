@@ -3,17 +3,13 @@ package com.isunican.proyectobase.Presenter;
 import android.content.Context;
 
 import com.isunican.proyectobase.Model.Gasolinera;
-import com.isunican.proyectobase.Model.TarjetaDescuento;
-import com.isunican.proyectobase.Model.TarjetaDescuentoPorcentaje;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -75,12 +71,14 @@ public class PresenterTarjetaDescuentoTest {
         sut.anhadirNuevaTarjeta("T2", "Tarjeta cts","CEPSA", "cts/Litro","2");
 
         //Caso 2: Gasolineras=1 gasolinera compatible descuento="5%+2" TODO: ESTE TEST NO LO PASA
-        Assert.assertEquals(sut.actualizarListaDePrecios(gasolineraCompatible).get(0).getGasoleoA(),0.95,0.001);
-        Assert.assertEquals(sut.actualizarListaDePrecios(gasolineraCompatible).get(0).getGasolina95(),0.95,0.001);
+        testGasolineras = (ArrayList<Gasolinera>) sut.actualizarListaDePrecios(gasolineraCompatible);
+        Assert.assertEquals(testGasolineras.get(0).getGasoleoA(),0.95,0.001);
+        Assert.assertEquals(testGasolineras.get(0).getGasolina95(),0.95,0.001);
 
         //Caso 3: Gasolineras=1 gasolinera incompatible descuento="5%+2"
-        Assert.assertEquals(sut.actualizarListaDePrecios(gasolineraIncompatible).get(0).getGasoleoA(),1.000,0.001);
-        Assert.assertEquals(sut.actualizarListaDePrecios(gasolineraIncompatible).get(0).getGasolina95(),1.000,0.001);
+        testGasolineras = (ArrayList<Gasolinera>) sut.actualizarListaDePrecios(gasolineraIncompatible);
+        Assert.assertEquals(testGasolineras.get(0).getGasoleoA(),1.000,0.001);
+        Assert.assertEquals(testGasolineras.get(0).getGasolina95(),1.000,0.001);
 
         //Caso 4: Gasolineras= lista de gasolineras mixta descuento="5%+2"
         testGasolineras = (ArrayList<Gasolinera>) sut.actualizarListaDePrecios(gasolineras);
