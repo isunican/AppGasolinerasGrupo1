@@ -12,5 +12,10 @@
     <item
         android:id="@+id/itemInfo"
         android:title="@string/menuInfo" />
+    <item
+        android:id="@+id/action_filtro"
+        android:icon="@drawable/filtro"
+        android:title="boton"
+        app:showAsAction="ifRoom"/>
 
 </menu>
