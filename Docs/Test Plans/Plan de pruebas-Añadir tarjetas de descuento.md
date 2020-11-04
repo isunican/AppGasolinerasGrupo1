@@ -22,7 +22,7 @@
 
  ​	En esta sección se definen las pruebas de aceptación extraídas de la entrevista con el _Product Owner_. 
 
-Prueba 0: Éxito
+- Prueba 0: Éxito
 
 ​	1.- El usuario selecciona la opción de añadir tarjetas de descuento.
 
@@ -38,7 +38,7 @@ Prueba 0: Éxito
 
 
 
-Prueba 1: Campo del formulario sin completar
+- Prueba 1: Campo del formulario sin completar
 
 ​	1.- El usuario selecciona la opción de añadir tarjetas de descuento.
 
@@ -52,7 +52,7 @@ Prueba 1: Campo del formulario sin completar
 
 #### 1.1 Casos de uso
 
-En este caso se derivaron dos casos de uso asociados a la historia de usuario, el caso de uso _"Añadir tarjeta de descuento por porcentaje"_ y el caso de uso _"Añadir tarjeta de descuento por céntimos por litro"_:  
+En este caso, se derivaron dos casos de uso asociados a la historia de usuario: el caso de uso _"Añadir tarjeta de descuento por porcentaje"_ y el caso de uso _"Añadir tarjeta de descuento por céntimos por litro"_:  
 
 - Caso de uso UC.1:  Añadir tarjeta de descuento por porcentaje con comentario
 
@@ -78,11 +78,18 @@ En este caso se derivaron dos casos de uso asociados a la historia de usuario, e
 
   ###### Tabla 1: Casos de prueba de aceptación
   
-  
+  <div style="page-break-after: always;"></div>
 
 ## 2. Pruebas de interfaz
 
 ​		En las pruebas de interfaz, que se realizarán con la ayuda de la librería de pruebas _"Espresso"_, se comprobará que las interfaces se comportan acorde a lo descrito en los casos de prueba de aceptación. Para ello se identifican los mismos casos de prueba que los casos de uso identificados en la sección 1, esta vez renombrados a **UIT.x.y**.
+
+| Identificador | Procedimiento                                                | Valor esperado                |
+| ------------- | ------------------------------------------------------------ | ----------------------------- |
+| UIT.1.a       | Nombre="Tarjeta de prueba porcentual", Marca="CAMPSA", Tipo Descuento= "Porcentual" Descuento="1.25" Comentarios="Esto es una prueba" | "Tarjeta añadida con éxito"   |
+| UIT.1.b       | Nombre="Tarjeta de prueba porcentual vacía", Marca="CAMPSA", Tipo Descuento= "Porcentual" Descuento="" Comentarios="" | "Falta un campo por rellenar" |
+| UIT.2.a       | Nombre="Tarjeta de prueba por litro", Marca="CAMPSA", Tipo Descuento= "cts/L" Descuento="7" Comentarios="Esto es una prueba" | "Tarjeta añadida con éxito"   |
+| UIT.2.b       | Nombre="Tarjeta de prueba por litro vacía", Marca="CAMPSA", Tipo Descuento= "cts/L" Descuento="" Comentarios="" | "Falta un campo por rellenar" |
 
 
 
@@ -107,7 +114,7 @@ En este caso se derivaron dos casos de uso asociados a la historia de usuario, e
 
   ###### Tabla 2: Casos de prueba para el método _anhadirNuevaTarjeta()_
 
-  
+  <div style="page-break-after: always;"></div>
 
 - Caso de prueba UT.2: actualizarListaDePrecios
 
@@ -138,14 +145,16 @@ En este caso se derivaron dos casos de uso asociados a la historia de usuario, e
 
 ​	Para el _presenter_ implementado, se crearon todos los casos de prueba especificados.
 
+
+
 ## 1. Distribución de trabajo
 
 ​	La distribución de trabajo fue la siguiente:
 
-- El plan de pruebas (y por consiguiente el informe de pruebas) fue elaborado por Luis Cruz
-- Las pruebas de interfaz fueron implementadas por Elena Romón
-- Las pruebas unitarias fueron implementadas por Adrián Célis y Luis Cruz
-- La revisión del documento fue realizada por Adrián Célis y Elena Romón
+- El plan de pruebas (y por consiguiente el informe de pruebas) fue elaborado por Luis Cruz.
+- Las pruebas de interfaz fueron implementadas por Elena Romón.
+- Las pruebas unitarias fueron implementadas por Adrián Célis y Luis Cruz.
+- La revisión de este documento fue realizada por Adrián Célis y Elena Romón.
 
 
 
@@ -155,4 +164,4 @@ En este caso se derivaron dos casos de uso asociados a la historia de usuario, e
 
 
 
-​	Además de esto,  en la interfaz se detectó: //Elena y sus errores
+​	Además de esto,  en la interfaz se detectaron varios fallos. El primero de ellos fue la imposibilidad de accionar el panel lateral usando _Espresso_ (ante la imposibilidad de resolver este fallo se decidió usar una estrategia alternativa). Asimismo, se detectó un fallo al intentar invocar la interfaz desde el menú auxiliar (accesible desde el botón de 3 puntos) en el que el menú se cerraba, pero la nueva interfaz no aparecía.
