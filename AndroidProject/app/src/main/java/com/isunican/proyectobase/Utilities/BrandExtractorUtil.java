@@ -8,8 +8,8 @@ import java.util.List;
 
 /**
  * -----------------------------------------------------
- * Clase que realiza extrae las maras de gasolineras,
- * además de filtrar dichas gasolineras por la marca
+ * Clase que extrae las maras de gasolineras,
+ * ademas de filtrar dichas gasolineras por la marca
  * escogida.
  * -----------------------------------------------------
  *
@@ -19,7 +19,7 @@ import java.util.List;
 public class BrandExtractorUtil {
 
     /**
-     * Extrae una lista de marcas (rótulos) de la lista de gasolineras pasada como parámetro
+     * Extrae una lista de marcas (rotulos) de la lista de gasolineras pasada como parametro
      * @param gasolineras de las que extraer las marcas
      * @return lista de las marcas de las gasolineras
      */
@@ -35,7 +35,7 @@ public class BrandExtractorUtil {
     }
 
     /**
-     * Aplica el filtro las gasolineras por la marca(rótulo) seleccionada.
+     * Filtra las gasolineras por la marca(rótulo) seleccionada.
      * @param marca escogida para filtrar
      * @param listaGasolineras lista de las gasolineras a filtrar
      * @return false si la marca no existe, true si la marca existe y la operacion se completa correctamente

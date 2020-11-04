@@ -15,7 +15,7 @@ import org.robolectric.annotation.Config;
 import java.util.ArrayList;
 
 /**
- * Prueba de integración del presenter del filtro de marcas con los datos de la BD y la utility de
+ * Prueba de integracion del presenter del filtro de marcas con los datos de la BD y la utility de
  * extracción de marcas
  */
 @RunWith(RobolectricTestRunner.class)
