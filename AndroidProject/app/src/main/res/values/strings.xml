@@ -35,4 +35,6 @@
     <string name="filtro_aplicado">Datos filtrados</string>
     <string name="campo_vacio">Campo vacío</string>
     <!-- El nombre de filtrar por marca de gasolinera no cabía en el panel lateral-->
+    <string name="navigation_drawer_open">Abrir drawer</string>
+    <string name="navigation_drawer_close">Cerrar drawer</string>
 </resources>

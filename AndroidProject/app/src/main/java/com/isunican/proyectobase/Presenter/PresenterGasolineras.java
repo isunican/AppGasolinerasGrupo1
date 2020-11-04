@@ -136,9 +136,10 @@ public class PresenterGasolineras {
         }
         List<Gasolinera>gasolinerasFiltradas=new ArrayList<Gasolinera>();
         for(Gasolinera g : lista) {
+            Log.d("filtro","gasolineraExterna: "+g);
             if (g.tiposGasolina().contains(tipo)) {
                 gasolinerasFiltradas.add(g);
-
+                Log.d("filtro","gasolinera: "+g);
             }
         }
         return gasolinerasFiltradas;

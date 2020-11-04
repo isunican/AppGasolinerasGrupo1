@@ -17,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -77,13 +78,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Swipe and refresh (para recargar la lista con un swipe)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    private static final int REQUEST_FILTRO_TIPO_GASOLINA=1999;
-
 
     // Sidebar
     DrawerLayout layout;
-    //DrawerLayout drawerLayout;
     NavigationView navigationView;
+    ActionBarDrawerToggle toggle;
 
     //Adapter para la listView
     ArrayAdapter<String> dataAdapter;
@@ -120,10 +119,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         layout.addView(progressBar,params);
         */
-        
+
         // Muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        toggle = new ActionBarDrawerToggle(this, layout,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        layout.setDrawerListener(toggle);
+        toggle.syncState();
 
         // Swipe and refresh
         // Al hacer swipe en la lista, lanza la tarea asíncrona de carga de datos
@@ -139,6 +144,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
+
+        // Tests
+        Button test_filtroTipoGasolina = findViewById(R.id.button_test_filtroTipoGasolina);
+        test_filtroTipoGasolina.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                creaVentanaFiltroTipoGasolina();
+            }
+        });
+
+
     }
 
     @Override
@@ -169,7 +185,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.itemActualizar) {
+        if(toggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        if(item.getItemId()==R.id.itemActualizar){
             mSwipeRefreshLayout.setRefreshing(true);
             new CargaDatosGasolinerasTask(this).execute();
         } else if (item.getItemId() == R.id.itemInfo) {
@@ -183,10 +202,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.filtroTipoGasolina:
-
-                Intent myIntent = new Intent(MainActivity.this, FiltrosActivity.class);
-                myIntent.putExtra("tipo",tipoGasolina);
-                startActivityForResult(myIntent,REQUEST_FILTRO_TIPO_GASOLINA);
+                creaVentanaFiltroTipoGasolina();
                 break;
 
             case R.id.filtroMarcaGasolinera:
@@ -354,31 +370,65 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         layout.closeDrawer(GravityCompat.START);
         return true;
     }
-    @Override
-    public void onActivityResult(int requestCode,int resultCode,Intent data) {
 
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            //Al acabar la actividad FiltrosActivity correctamente salta aqui
-            case REQUEST_FILTRO_TIPO_GASOLINA:
-                if (resultCode == Activity.RESULT_OK) {
-                    String tipoGasolina = data.getStringExtra("tipo");
-                    Log.d("Funciona y mando: ", tipoGasolina);
-                    List<Gasolinera> gasolinerasFiltradas = null;
-                    try {
+    /*
+     * Ventana de dialogo para filtrar por tipo de gasolina con un spinner
+     * para seleccionar el tipo
+     *
+     * author: Miguel Carbayo
+     */
+    public void creaVentanaFiltroTipoGasolina(){
 
-                        gasolinerasFiltradas = presenterGasolineras.filtraGasolinerasTipoCombustible(tipoGasolina, listaGasolinerasActual);
-                    } catch (NullPointerException e) {
-                        Toast.makeText(getApplicationContext(), "Lista nula, no se pudo aplicar filtro", Toast.LENGTH_LONG);
+        // Get the layout inflater
+        LayoutInflater inflater = this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.filtros_gasolinera, null);
+
+        // List elements
+        final Spinner tipoGasolinaSpinner = view.findViewById(R.id.spinner_tipoGasolina);
+
+        //Create alertDialog
+        final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
+                //.setView(view)
+                //Set to null. We override the onclick
+                .setPositiveButton(android.R.string.ok, null)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setTitle(getResources().getString(R.string.filtrar_tipoGasolina))
+                .create();
+
+        // Create list elements with an array adapter
+        String[] datos = new String[] {"Gasolina95", "Diesel"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, datos);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        tipoGasolinaSpinner.setAdapter(adapter);
+
+        //Positive button
+        alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button b = alertDialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String strTipoGasolina = tipoGasolinaSpinner.getSelectedItem().toString();
+                        List<Gasolinera> gasolinerasFiltradas=null;
+                        try{
+                            gasolinerasFiltradas = presenterGasolineras.filtraGasolinerasTipoCombustible(strTipoGasolina, listaGasolinerasActual);
+                        }catch(NullPointerException e){
+                            Toast.makeText(getApplicationContext(),"Error al al leer gasolineras",Toast.LENGTH_LONG);
+                        }
+
+                        refreshAdapter(gasolinerasFiltradas);
+                        Toast.makeText(getApplicationContext(), strTipoGasolina, Toast.LENGTH_LONG).show();
+                        alertDialogBuilder.dismiss();
                     }
-                    adapter.clear();
-                    adapter.addAll(gasolinerasFiltradas);
+                });
+            }
+        });
 
-                } else {
-                    Log.d("Error", "No se ha cargado el filtro");
-                }
-                break;
-        }
+        // Set elements in the dialog
+        alertDialogBuilder.setView(view);
+        alertDialogBuilder.show();
     }
     private void updateListWithNewDiscountCard(){
         //Esto tiene que cambiar cuando se haga la historia de ver tarjetas de descuento porque tenemos que usar solo una tarjeta de desucento al tiempo
@@ -389,7 +439,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         adapter.notifyDataSetChanged();
     }
 
-
+    private void refreshAdapter(List<Gasolinera>gasolinerasNuevas){
+        adapter.clear();
+        adapter.addAll(gasolinerasNuevas);
+    }
 
     /**
      * CargaDatosGasolinerasTask
@@ -569,21 +622,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             gasolina95.setText(" " + gasolinera.getGasolina95() + getResources().getString(R.string.moneda));
 
             // carga icono
-            {
-                String rotuleImageID = gasolinera.getRotulo().toLowerCase();
-
-                // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
-                // En ese caso getIdentifier devuelve esos digitos en vez de 0.
-                int imageID = context.getResources().getIdentifier(rotuleImageID,
-                        "drawable", context.getPackageName());
-
-                if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
-                    imageID = context.getResources().getIdentifier(getResources().getString(R.string.pordefecto),
-                            "drawable", context.getPackageName());
-                }
-                logo.setImageResource(imageID);
-            }
-
+            cargaIcono(gasolinera, logo);
 
             // Si las dimensiones de la pantalla son menores
             // reducimos el texto de las etiquetas para que se vea correctamente
@@ -603,6 +642,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
 
             return view;
+        }
+
+        private void cargaIcono(Gasolinera gasolinera, ImageView logo) {
+            String rotuleImageID = gasolinera.getRotulo().toLowerCase();
+
+            // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
+            // En ese caso getIdentifier devuelve esos digitos en vez de 0.
+            int imageID = context.getResources().getIdentifier(rotuleImageID,
+                    "drawable", context.getPackageName());
+
+            if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
+                imageID = context.getResources().getIdentifier(getResources().getString(R.string.pordefecto),
+                        "drawable", context.getPackageName());
+            }
+            logo.setImageResource(imageID);
         }
     }
 }
