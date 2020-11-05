@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onShow(DialogInterface dialog) {
 
-                Button b = alertDialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+                Button b = alertDialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE);
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -267,15 +267,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         marcaTxt.addTextChangedListener(new TextWatcher(){
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {dataAdapter.getFilter().filter(s);
-
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //No se implementa porque en este caso no se necesita.
             }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //No se implementa porque en este caso no se necesita.
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {dataAdapter.getFilter().filter(s); }
         });
         marcaListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
