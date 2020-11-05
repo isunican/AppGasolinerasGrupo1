@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * ---------------------------------------------------------------------------
- * Clase encargada de listar las marcas (rótulos) de gasolineras disponibles,
+ * Clase encargada de listar las marcas (rotulos) de gasolineras disponibles,
  * filtrar la lista de gasolineras por una marca escogida y devolver la lista
  * actualizada de gasolineras conteniendo solo las que concuerdan con la marca
  * especificada, si las hay
@@ -38,7 +38,7 @@ public class PresenterFiltroMarcas {
     }
 
     /**
-     * @return marcas(rótulos) de gasolineras
+     * @return marcas(rotulos) de gasolineras
      */
     public List<String> getMarcas() {
         return marcas;
