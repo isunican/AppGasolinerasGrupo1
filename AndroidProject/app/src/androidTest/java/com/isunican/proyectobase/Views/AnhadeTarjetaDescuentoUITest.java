@@ -1,9 +1,11 @@
-package com.isunican.proyectobase;
+package com.isunican.proyectobase.Views;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.Views.MainActivity;
 
 import org.junit.Rule;
@@ -14,6 +16,7 @@ import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
@@ -38,7 +41,7 @@ public class AnhadeTarjetaDescuentoUITest {
         //onView(withId(R.id.button_test_anhadeTarjetaDescuento)).perform(click());
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
         onView(withText("Añade tarjeta descuento")).perform(click());
-        onView(withId(R.id.txtNombreTarjeta)).check(matches(withText("Nombre:")));
+        onView(ViewMatchers.withId(R.id.txtNombreTarjeta)).check(matches(withText("Nombre:")));
         onView(withId(R.id.txtMarcaGasolinera)).check(matches(withText("Marca:")));
         onView(withId(R.id.txtTipoDescuento)).check(matches(withText("Tipo Descuento:")));
         onView(withId(R.id.txtDescuento)).check(matches(withText("Descuento:")));
@@ -48,13 +51,13 @@ public class AnhadeTarjetaDescuentoUITest {
         // Datos correctos para descuento porcentual
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
         onView(withText("Añade tarjeta descuento")).perform(click());
-        onView(withId(R.id.nombreTarjeta)).perform(typeText("Tarjeta CAMPSA"));
+        onView(withId(R.id.nombreTarjeta)).perform(typeText("Tarjeta CAMPSA"), closeSoftKeyboard());
         onView(withId(R.id.spnMarcas)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("CAMPSA"))).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.spnTipoDescuento)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Porcentual"))).inRoot(isPlatformPopup()).perform(click());
-        onView(withId(R.id.descuento)).perform(typeText("25"));
-        onView(withId(R.id.comentarios)).perform(typeText("Tarjeta de descuento CAMPSA con 25% de descuento."));
+        onView(withId(R.id.descuento)).perform(typeText("25"),closeSoftKeyboard());
+        onView(withId(R.id.comentarios)).perform(typeText("Tarjeta de descuento CAMPSA con 25% de descuento."),closeSoftKeyboard());
         onView(withText("GUARDAR")).perform(click());
     }
 

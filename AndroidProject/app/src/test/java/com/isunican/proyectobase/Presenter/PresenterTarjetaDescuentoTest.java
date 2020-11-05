@@ -72,23 +72,23 @@ public class PresenterTarjetaDescuentoTest {
 
         //Caso 2: Gasolineras=1 gasolinera compatible descuento="5%+2" TODO: ESTE TEST NO LO PASA
         testGasolineras = (ArrayList<Gasolinera>) sut.actualizarListaDePrecios(gasolineraCompatible);
-        Assert.assertEquals(testGasolineras.get(0).getGasoleoA(),0.95,0.001);
-        Assert.assertEquals(testGasolineras.get(0).getGasolina95(),0.95,0.001);
+        Assert.assertEquals(0.95, testGasolineras.get(0).getGasoleoA(),0.001);
+        Assert.assertEquals(0.95, testGasolineras.get(0).getGasolina95(),0.001);
 
         //Caso 3: Gasolineras=1 gasolinera incompatible descuento="5%+2"
         testGasolineras = (ArrayList<Gasolinera>) sut.actualizarListaDePrecios(gasolineraIncompatible);
-        Assert.assertEquals(testGasolineras.get(0).getGasoleoA(),1.000,0.001);
-        Assert.assertEquals(testGasolineras.get(0).getGasolina95(),1.000,0.001);
+        Assert.assertEquals(1.000, testGasolineras.get(0).getGasoleoA(),0.001);
+        Assert.assertEquals(1.000, testGasolineras.get(0).getGasolina95(),0.001);
 
         //Caso 4: Gasolineras= lista de gasolineras mixta descuento="5%+2"
         testGasolineras = (ArrayList<Gasolinera>) sut.actualizarListaDePrecios(gasolineras);
         for(Gasolinera g: testGasolineras){
             if(g.getRotulo().equals("CEPSA")) {
-                Assert.assertEquals(g.getGasolina95(), 0.95, 0.001);
-                Assert.assertEquals(g.getGasoleoA(), 0.95, 0.001);
+                Assert.assertEquals( 0.95, g.getGasolina95(),0.001);
+                Assert.assertEquals( 0.95, g.getGasoleoA(), 0.001);
             }else{
-                Assert.assertEquals(g.getGasoleoA(),1.000,0.001);
-                Assert.assertEquals(g.getGasolina95(),1.000,0.001);
+                Assert.assertEquals(1.000, g.getGasoleoA(),0.001);
+                Assert.assertEquals(1.000, g.getGasolina95(),0.001);
             }
         }
 
