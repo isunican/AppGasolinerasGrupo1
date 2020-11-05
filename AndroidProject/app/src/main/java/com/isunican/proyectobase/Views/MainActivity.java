@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
             MainActivity.this.startActivity(myIntent);
         }else if(toggle.onOptionsItemSelected(item)) {
-            return true;
+            return false;
         }else if(item.getItemId() == R.id.itemFiltroMarca){
             creaAlertDialogFiltroMarca();
         }
@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .create();
 
         // Create list elements with an array adapter
-        dataAdapter = new ArrayAdapter<String>(this,
+        dataAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, presenterFiltroMarcas.getMarcas());
 
         marcaListView.setAdapter(dataAdapter);
@@ -408,8 +408,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     /* Obtengo el elemento directamente de su posicion,
                      * ya que es la misma que ocupa en la lista
-                     * Alternativa 1: a partir de posicion obtener algun atributo int opcionSeleccionada = ((Gasolinera) a.getItemAtPosition(position)).getIdeess();
-                     * Alternativa 2: a partir de la vista obtener algun atributo String opcionSeleccionada = ((TextView)v.findViewById(R.id.textViewRotulo)).getText().toString();
                      */
                     Intent myIntent = new Intent(MainActivity.this, DetailActivity.class);
                     myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera),
@@ -450,7 +448,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Gasolinera gasolinera = listaGasolineras.get(position);
 
             // Indica el layout a usar en cada elemento de la lista
-            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.item_gasolinera, null);
 
             // Asocia las variables de dicho layout
