@@ -4,6 +4,7 @@ package com.isunican.proyectobase.Views;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.Views.MainActivity;
@@ -14,6 +15,7 @@ import org.junit.runner.RunWith;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.assertThat;
@@ -43,13 +45,15 @@ public class FiltroTipoGasolinaUITest {
 
     @Test
     public void filtroTipoGasolinaTest(){
-        onView(ViewMatchers.withId(R.id.button_test_filtroTipoGasolina)).perform(click());
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+        onView(withText("Filtrar por tipo de gasolina")).perform(click());
         onView(withId(R.id.spinner_tipoGasolina)).perform(click());
         onData(allOf(is(instanceOf(String.class)),is(FIRST_ITEM_TEXT))).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.spinner_tipoGasolina)).perform(click());
         onData(allOf(is(instanceOf(String.class)),is(SECOND_ITEM_TEXT))).inRoot(isPlatformPopup()).perform(click());
         onView(withText(OK)).perform(click());
-        onView(withId(R.id.button_test_filtroTipoGasolina)).perform(click());
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+        onView(withText("Filtrar por tipo de gasolina")).perform(click());
         onView(withText(CANCEL)).perform(click());
         assertTrue(true);
     }

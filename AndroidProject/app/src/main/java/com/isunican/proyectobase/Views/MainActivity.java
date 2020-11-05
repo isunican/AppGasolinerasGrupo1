@@ -197,6 +197,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return true;
         }else if(item.getItemId() == R.id.itemFiltroMarca){
             creaAlertDialogFiltroMarca();
+        }else if(item.getItemId() == R.id.button_test_filtroTipoGasolina){
+            creaVentanaFiltroTipoGasolina();
         }
         return true;
     }

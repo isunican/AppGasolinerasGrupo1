@@ -17,6 +17,10 @@
         android:id="@+id/itemFiltroMarca"
         android:title="@string/filtro_marca"
         />
+    <item
+        android:id="@+id/button_test_filtroTipoGasolina"
+        android:title="@string/filtrar_tipoGasolina"
+        />
 
 
 </menu>
