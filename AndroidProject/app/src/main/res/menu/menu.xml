@@ -22,5 +22,8 @@
         android:title="@string/filtrar_tipoGasolina"
         />
 
-
+    <!-- opcion para anhadir una tarjeta (para los test de interfaz) -->
+    <item
+        android:id="@+id/button_test_anhadeTarjetaDescuento"
+        android:title="Añade tarjeta descuento" />
 </menu>

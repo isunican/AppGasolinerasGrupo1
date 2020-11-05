@@ -6,6 +6,7 @@ import com.isunican.proyectobase.Model.TarjetaDescuentoPorLitro;
 import com.isunican.proyectobase.Model.TarjetaDescuentoPorcentaje;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 /**
  * -----------------------------------------------------
@@ -61,9 +62,9 @@ public class PresenterTarjetaDescuento {
         }catch (Exception e){
             return false;
         }
+        if (discount>100 || discount<0) return false;
+        if (discount>1) discount = discount/100;
         if (tipoTarjeta.equals("Porcentual")){
-            if (discount>100 || discount<0) return false;
-            if (discount>1) discount = discount/100;
             tarjetaNueva = new TarjetaDescuentoPorcentaje(nombre, descripcion, marca, discount);
         } else if (tipoTarjeta.equals("cts/Litro")) {
             tarjetaNueva = new TarjetaDescuentoPorLitro(nombre, descripcion, marca, discount);
@@ -81,6 +82,10 @@ public class PresenterTarjetaDescuento {
      * @return listado de gasolineras con precios actualizados
      */
     public List<Gasolinera> actualizarListaDePrecios(List<Gasolinera> gasolineras){
+        if (gasolineras == null)
+        {
+            return Collections.emptyList();
+        }
         for (Gasolinera g: gasolineras) {
             cambioPrecios(g);
         }

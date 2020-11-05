@@ -18,8 +18,8 @@
     <string name="marca">Marca</string>
     <string name="tipoGasolina">Tipo de Gasolina</string>
     <string name="filtrar_tipoGasolina">Filtrar por tipo de gasolina</string>
-    <string name="guardar">Guardar</string>
-    <string name="cancelar">Cancelar</string>
+    <string name="guardar">GUARDAR</string>
+    <string name="cancelar">CANCELAR</string>
     <string name="complete_nombre">El campo Nombre es obligatorio</string>
     <string name="complete_marca">La marca se encuentra sin seleccionar</string>
     <string name="complete_descuento">El campo Descuento es obligatorio</string>

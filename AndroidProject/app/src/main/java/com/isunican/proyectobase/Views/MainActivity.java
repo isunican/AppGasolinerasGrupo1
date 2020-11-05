@@ -40,7 +40,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -191,6 +190,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }else if(item.getItemId() == R.id.button_test_filtroTipoGasolina){
             creaVentanaFiltroTipoGasolina();
         }
+        else if(item.getItemId()==R.id.button_test_anhadeTarjetaDescuento){
+            creaVentanaAnhadirTarjetaDescuento();
+        }
         return true;
     }
     
@@ -204,92 +206,99 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.filtroMarcaGasolinera:
                 creaAlertDialogFiltroMarca();
                 break;
-
-                case R.id.itemNuevaTarjetaDescuento:
-                LayoutInflater inflater;
-                View view;
-                // Creacion alertDialog
-                final AlertDialog alertDialogBuilderNewCardDiscount = new AlertDialog.Builder(this)
-                        .setPositiveButton(android.R.string.ok, null)
-                        .setNegativeButton(android.R.string.cancel, null)
-                        .create();
-
-                inflater = this.getLayoutInflater();
-                view = inflater.inflate(R.layout.activity_nueva_tarjeta_descuento, null);
-
-                // Elementos del formulario
-                final TextView nombre = view.findViewById(R.id.nombreTarjeta);
-                final Spinner spnMarca = view.findViewById(R.id.spnMarcas);
-                final Spinner spnTipoDescuento = view.findViewById(R.id.spnTipoDescuento);
-                final TextView descuento = view.findViewById(R.id.descuento);
-                final TextView comentarios = view.findViewById(R.id.comentarios);
-
-                // Datos spinner de tipo descuento
-                String[] datosTipoDescuento = new String[] {getResources().getString(R.string.default_type_discount_card),getResources().getString(R.string.porcentual),
-                        getResources().getString(R.string.cts_litro)};
-                ArrayAdapter<String> adapterNav = new ArrayAdapter<>(this,
-                        android.R.layout.simple_spinner_item, datosTipoDescuento);
-                adapterNav.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spnTipoDescuento.setAdapter(adapterNav);
-
-                // Datos spinner de marcas
-                List<String> datosMarcas = BrandExtractorUtil.extractBrands(presenterGasolineras.getGasolineras());
-                datosMarcas.add(0,getResources().getString(R.string.default_brand));
-                ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this,
-                        android.R.layout.simple_spinner_item, CommonUtils.sortStringList(datosMarcas));
-                adapterNav.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spnMarca.setAdapter(adapter2);
-
-                // Definicion positive button ("guardar")
-                alertDialogBuilderNewCardDiscount.setOnShowListener(new DialogInterface.OnShowListener() {
-                    @Override
-                    public void onShow(DialogInterface dialog) {
-                        Button b = alertDialogBuilderNewCardDiscount.getButton(BTN_POSITIVO);
-                        b.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View view) {
-                                // lee y almacena datos
-                                String strNombre = nombre.getText().toString();
-                                String strMarca = spnMarca.getSelectedItem().toString();
-                                String strTipoDescuento = spnTipoDescuento.getSelectedItem().toString();
-                                String strDescuento = descuento.getText().toString();
-                                String strComentario = comentarios.getText().toString();
-
-                                // Si hay algun campo sin rellenar, salta un aviso al usuario
-                                if (strNombre.equals("")) {
-                                    nombre.setError(getResources().getString(R.string.complete_nombre));
-                                } else if (strMarca.equals(getResources().getString(R.string.default_brand))) {
-                                    TextView errorText = (TextView)spnMarca.getSelectedView();
-                                    errorText.setError("");
-                                    errorText.setTextColor(Color.RED);
-                                } else if (strTipoDescuento.equals(getResources().getString(R.string.default_type_discount_card))) {
-                                    TextView errorText = (TextView)spnTipoDescuento.getSelectedView();
-                                    errorText.setError("");
-                                    errorText.setTextColor(Color.RED);
-                                } else if (strDescuento.equals("")) {
-                                    descuento.setError(getResources().getString(R.string.complete_descuento));
-                                } else {
-                                    if (presenterTarjetaDescuento.anhadirNuevaTarjeta(strNombre, strComentario, strMarca, strTipoDescuento, strDescuento)) {
-                                        Toast toast = Toast.makeText(getApplicationContext(),
-                                                getResources().getString(R.string.tarjeta_descuento_guardada), Toast.LENGTH_LONG);
-                                        toast.show();
-                                        updateListWithNewDiscountCard();
-                                        alertDialogBuilderNewCardDiscount.dismiss();
-                                    }
-                                }
-                            }
-                        });
-                    }
-                });
-                alertDialogBuilderNewCardDiscount.setView(view);
-                alertDialogBuilderNewCardDiscount.show();
+            case R.id.itemNuevaTarjetaDescuento:
+                creaVentanaAnhadirTarjetaDescuento();
                 break;
-                
+
             default:
-                Log.d("MIGUEL", "Ningún ítem seleccionado");
+                Log.d("MIGUEL", "Default en switch");
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return false;
+    }
+
+    /*
+     * Ventana de dialogo con un formulario para anhadir una tarjeta
+     * de descuento.
+     */
+    public void creaVentanaAnhadirTarjetaDescuento(){
+
+        // Creacion alertDialog
+        final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
+                .setPositiveButton(getResources().getString(R.string.guardar),null)
+                .setNegativeButton(getResources().getString(R.string.cancelar), null)
+                .create();
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View view = inflater.inflate(R.layout.activity_nueva_tarjeta_descuento, null);
+
+        // Elementos del formulario
+        final TextView nombre = view.findViewById(R.id.nombreTarjeta);
+        final Spinner spnMarca = view.findViewById(R.id.spnMarcas);
+        final Spinner spnTipoDescuento = view.findViewById(R.id.spnTipoDescuento);
+        final TextView descuento = view.findViewById(R.id.descuento);
+        final TextView comentarios = view.findViewById(R.id.comentarios);
+
+        // Datos spinner de tipo descuento
+        String[] datosTipoDescuento = new String[] {getResources().getString(R.string.default_type_discount_card),getResources().getString(R.string.porcentual),
+                getResources().getString(R.string.cts_litro)};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, datosTipoDescuento);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnTipoDescuento.setAdapter(adapter);
+
+        // Datos spinner de marcas
+        List<String> datosMarcas = BrandExtractorUtil.extractBrands((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
+        datosMarcas = CommonUtils.sortStringList(datosMarcas);
+        datosMarcas.add(0,getResources().getString(R.string.default_brand));
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, datosMarcas);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnMarca.setAdapter(adapter2);
+
+        // Definicion positive button ("guardar")
+        alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button b = alertDialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        // lee y almacena datos
+                        String strNombre = nombre.getText().toString();
+                        String strMarca = spnMarca.getSelectedItem().toString();
+                        String strTipoDescuento = spnTipoDescuento.getSelectedItem().toString();
+                        String strDescuento = descuento.getText().toString();
+                        String strComentario = comentarios.getText().toString();
+
+                        // Si hay algun campo sin rellenar, salta un aviso al usuario
+                        if (strNombre.equals("")) {
+                            nombre.setError(getResources().getString(R.string.complete_nombre));
+                        } else if (strMarca.equals(getResources().getString(R.string.default_brand))) {
+                            TextView errorText = (TextView)spnMarca.getSelectedView();
+                            errorText.setError("");
+                            errorText.setTextColor(Color.RED);
+                        } else if (strTipoDescuento.equals(getResources().getString(R.string.default_type_discount_card))) {
+                            TextView errorText = (TextView)spnTipoDescuento.getSelectedView();
+                            errorText.setError("");
+                            errorText.setTextColor(Color.RED);
+                        } else if (strDescuento.equals("")) {
+                            descuento.setError(getResources().getString(R.string.complete_descuento));
+                        } else {
+                            if (presenterTarjetaDescuento.anhadirNuevaTarjeta(strNombre, strComentario, strMarca, strTipoDescuento, strDescuento)) {
+                                Toast toast = Toast.makeText(getApplicationContext(),
+                                        getResources().getString(R.string.tarjeta_descuento_guardada), Toast.LENGTH_LONG);
+                                toast.show();
+                                updateListWithNewDiscountCard();
+                                alertDialogBuilder.dismiss();
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        alertDialogBuilder.setView(view);
+        alertDialogBuilder.show();
     }
 
 
@@ -580,7 +589,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera),
                             listaGasolinerasActual.get(position));
                     MainActivity.this.startActivity(myIntent);
-
                 }
             });
         }
@@ -650,7 +658,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 tmp = view.findViewById(R.id.textViewGasolina95);
                 tmp.setTextSize(11);
             }
-
             return view;
         }
 
