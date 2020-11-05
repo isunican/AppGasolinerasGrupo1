@@ -3,6 +3,6 @@
   <component name="SonarLintProjectSettings">
     <option name="bindingEnabled" value="true" />
     <option name="projectKey" value="AppGasolinerasGrupo1" />
-    <option name="serverId" value="Unican-Proyecto integrado" />
+    <option name="serverId" value="Unican" />
   </component>
 </project>

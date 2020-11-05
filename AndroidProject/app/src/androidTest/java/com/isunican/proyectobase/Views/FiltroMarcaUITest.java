@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
@@ -38,7 +39,7 @@ public class FiltroMarcaUITest {
         //Caso IVF.1.a: campo con la marca correcta
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
         onView(withText("Filtro marca")).perform(click());
-        onView(ViewMatchers.withId(R.id.txtMarca)).perform(typeText("CEPSA"));
+        onView(ViewMatchers.withId(R.id.txtMarca)).perform(typeText("CEPSA"),closeSoftKeyboard());
         onView(withText("OK")).perform(click());
 
         //Caso IVF.1.b: campo vacio
@@ -52,7 +53,7 @@ public class FiltroMarcaUITest {
         //Caso IVF.1.c: campo con marca invalida
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
         onView(withText("Filtro marca")).perform(click());
-        onView(withId(R.id.txtMarca)).perform(typeText("Cep"));
+        onView(withId(R.id.txtMarca)).perform(typeText("Cep"), closeSoftKeyboard());
         onView(withText("OK")).perform(click());
         onView(withId(R.id.txtMarca)).check(matches(hasErrorText("Marca inválida")));
         onView(withText("CANCEL")).perform(click());
