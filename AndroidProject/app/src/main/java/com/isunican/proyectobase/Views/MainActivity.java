@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Ventana de dialogo para filtrar por tipo de gasolina con un spinner
      * para seleccionar el tipo
      *
-     * author: Miguel Carbayo
+     * author: Miguel Carbayo Fernández
      */
     public void creaVentanaFiltroTipoGasolina(){
 
