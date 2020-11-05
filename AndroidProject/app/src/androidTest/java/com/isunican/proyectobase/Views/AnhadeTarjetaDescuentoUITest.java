@@ -1,9 +1,11 @@
-package com.isunican.proyectobase;
+package com.isunican.proyectobase.Views;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.Views.MainActivity;
 
 import org.junit.Rule;
@@ -38,7 +40,7 @@ public class AnhadeTarjetaDescuentoUITest {
         //onView(withId(R.id.button_test_anhadeTarjetaDescuento)).perform(click());
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
         onView(withText("Añade tarjeta descuento")).perform(click());
-        onView(withId(R.id.txtNombreTarjeta)).check(matches(withText("Nombre:")));
+        onView(ViewMatchers.withId(R.id.txtNombreTarjeta)).check(matches(withText("Nombre:")));
         onView(withId(R.id.txtMarcaGasolinera)).check(matches(withText("Marca:")));
         onView(withId(R.id.txtTipoDescuento)).check(matches(withText("Tipo Descuento:")));
         onView(withId(R.id.txtDescuento)).check(matches(withText("Descuento:")));
