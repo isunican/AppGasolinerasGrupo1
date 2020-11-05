@@ -1,10 +1,12 @@
-package com.isunican.proyectobase;
+package com.isunican.proyectobase.Views;
 
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.Views.MainActivity;
 
 import org.junit.Rule;
@@ -36,7 +38,7 @@ public class FiltroMarcaUITest {
         //Caso IVF.1.a: campo con la marca correcta
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
         onView(withText("Filtro marca")).perform(click());
-        onView(withId(R.id.txtMarca)).perform(typeText("CEPSA"));
+        onView(ViewMatchers.withId(R.id.txtMarca)).perform(typeText("CEPSA"));
         onView(withText("OK")).perform(click());
 
         //Caso IVF.1.b: campo vacio

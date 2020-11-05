@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //Filtro
     String tipoGasolina;
-    private static final int btn_positivo = DialogInterface.BUTTON_POSITIVE;
+    private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
 
     /**
      * onCreate
@@ -144,15 +144,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
 
-        // Tests
-        Button testFiltroTipoGasolina = findViewById(R.id.button_test_filtroTipoGasolina);
-        testFiltroTipoGasolina.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-              //  creaVentanaFiltroTipoGasolina();
-            }
-        });
-
 
     }
 
@@ -194,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
             MainActivity.this.startActivity(myIntent);
         }else if(toggle.onOptionsItemSelected(item)) {
-            return true;
+            return false;
         }else if(item.getItemId() == R.id.itemFiltroMarca){
             creaAlertDialogFiltroMarca();
         }else if(item.getItemId() == R.id.button_test_filtroTipoGasolina){
@@ -236,24 +227,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Datos spinner de tipo descuento
                 String[] datosTipoDescuento = new String[] {getResources().getString(R.string.default_type_discount_card),getResources().getString(R.string.porcentual),
                         getResources().getString(R.string.cts_litro)};
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                ArrayAdapter<String> adapterNav = new ArrayAdapter<>(this,
                         android.R.layout.simple_spinner_item, datosTipoDescuento);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spnTipoDescuento.setAdapter(adapter);
+                adapterNav.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spnTipoDescuento.setAdapter(adapterNav);
 
                 // Datos spinner de marcas
-                List<String> datosMarcas = BrandExtractorUtil.extractBrands((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
+                List<String> datosMarcas = BrandExtractorUtil.extractBrands(presenterGasolineras.getGasolineras());
                 datosMarcas.add(0,getResources().getString(R.string.default_brand));
-                ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,
+                ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this,
                         android.R.layout.simple_spinner_item, CommonUtils.sortStringList(datosMarcas));
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                adapterNav.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                 spnMarca.setAdapter(adapter2);
 
                 // Definicion positive button ("guardar")
                 alertDialogBuilderNewCardDiscount.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
                     public void onShow(DialogInterface dialog) {
-                        Button b = alertDialogBuilderNewCardDiscount.getButton(btn_positivo);
+                        Button b = alertDialogBuilderNewCardDiscount.getButton(BTN_POSITIVO);
                         b.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
@@ -301,11 +292,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
-    /*private void setNavigationViewListener() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-    }*/
-
 
     /**
      * Crea el alertDialog del filtrar gasolinera por marca
@@ -328,7 +314,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .create();
 
         // Create list elements with an array adapter
-        dataAdapter = new ArrayAdapter<String>(this,
+        dataAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, presenterFiltroMarcas.getMarcas());
 
         marcaListView.setAdapter(dataAdapter);
@@ -338,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onShow(DialogInterface dialog) {
 
-                Button b = alertDialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+                Button b = alertDialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE);
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -370,10 +356,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         marcaTxt.addTextChangedListener(new TextWatcher(){
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //No se implementa porque en este caso no se necesita.
+            }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //No se implementa porque en este caso no se necesita.
+            }
 
 
             @Override
@@ -420,16 +410,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Create list elements with an array adapter
         String[] datos = new String[] {"Gasolina95", "Diesel"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapterFiltroGasolina = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, datos);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        tipoGasolinaSpinner.setAdapter(adapter);
+        adapterFiltroGasolina.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        tipoGasolinaSpinner.setAdapter(adapterFiltroGasolina);
 
         //Positive button
         alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
-                Button b = alertDialogBuilder.getButton(btn_positivo);
+                Button b = alertDialogBuilder.getButton(BTN_POSITIVO);
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -543,11 +533,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mSwipeRefreshLayout.setRefreshing(false);
 
             // Si se ha obtenido resultado en la tarea en segundo plano
-            if (res) {
+            if ( Boolean.TRUE.equals(res)) {
                 // Definimos el array adapter
-                adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>) presenterGasolineras.getGasolineras() );
+                adapter = new GasolineraArrayAdapter(activity, 0, presenterGasolineras.getGasolineras() );
 
-                adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>)listaGasolinerasActual);
+                adapter = new GasolineraArrayAdapter(activity, 0, listaGasolinerasActual);
 
                 // Obtenemos la vista de la lista
                 listViewGasolineras = findViewById(R.id.listViewGasolineras);
@@ -585,8 +575,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                     /* Obtengo el elemento directamente de su posicion,
                      * ya que es la misma que ocupa en la lista
-                     * Alternativa 1: a partir de posicion obtener algun atributo int opcionSeleccionada = ((Gasolinera) a.getItemAtPosition(position)).getIdeess();
-                     * Alternativa 2: a partir de la vista obtener algun atributo String opcionSeleccionada = ((TextView)v.findViewById(R.id.textViewRotulo)).getText().toString();
                      */
                     Intent myIntent = new Intent(MainActivity.this, DetailActivity.class);
                     myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera),
