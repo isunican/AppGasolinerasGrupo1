@@ -4,12 +4,15 @@ import com.google.android.material.navigation.NavigationView;
 import com.isunican.proyectobase.Presenter.*;
 import com.isunican.proyectobase.Model.*;
 import com.isunican.proyectobase.R;
+import com.isunican.proyectobase.Utilities.BrandExtractorUtil;
+import com.isunican.proyectobase.Utilities.CommonUtils;
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -42,6 +45,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,9 +62,11 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     PresenterGasolineras presenterGasolineras;
+    PresenterTarjetaDescuento presenterTarjetaDescuento;
     //Codigo sucio
     PresenterFiltroMarcas presenterFiltroMarcas;
 
+    List<Gasolinera>listaGasolinerasActual;
     //Lista con el filtro aplicado
     ArrayList<Gasolinera> currentList;
 
@@ -75,14 +81,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     SwipeRefreshLayout mSwipeRefreshLayout;
 
     // Sidebar
-    RelativeLayout layout;
-    DrawerLayout drawerLayout;
+    NavigationView navigationView;
 
     //ActionBarDrawerToggle
     ActionBarDrawerToggle toggle;
 
+    DrawerLayout drawerLayout;
+
     //Adapter para la listView
     ArrayAdapter<String> dataAdapter;
+
+    //Filtro
+    String tipoGasolina;
+    private static final int btn_positivo = DialogInterface.BUTTON_POSITIVE;
 
     /**
      * onCreate
@@ -95,19 +106,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setNavigationViewListener();
+        navigationView = findViewById(R.id.nav_view_main);
+        navigationView.setNavigationItemSelectedListener(this);
         drawerLayout = findViewById(R.id.activity_precio_gasolina_drawer);
 
         currentList = new ArrayList<>();
 
         this.presenterGasolineras = new PresenterGasolineras();
-        // Barra de progreso
-        // https://materialdoc.com/components/progress/
-        progressBar = new ProgressBar(MainActivity.this, null, android.R.attr.progressBarStyleLarge);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
-        params.addRule(RelativeLayout.CENTER_IN_PARENT);
-        layout = findViewById(R.id.activity_precio_gasolina);
-        layout.addView(progressBar, params);
+        this.presenterTarjetaDescuento = new PresenterTarjetaDescuento();
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -115,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Muestra el logo en el actionBar
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //ActionBarDrawerToggle
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -136,12 +143,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
+
+        // Tests
+        Button testFiltroTipoGasolina = findViewById(R.id.button_test_filtroTipoGasolina);
+        testFiltroTipoGasolina.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              //  creaVentanaFiltroTipoGasolina();
+            }
+        });
+
+
     }
 
     @Override
     public void onBackPressed() {
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
+           drawerLayout.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -166,7 +184,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.itemActualizar) {
+        if(toggle.onOptionsItemSelected(item)){
+            return true;
+        }
+        if(item.getItemId()==R.id.itemActualizar){
             mSwipeRefreshLayout.setRefreshing(true);
             new CargaDatosGasolinerasTask(this).execute();
         } else if (item.getItemId() == R.id.itemInfo) {
@@ -176,32 +197,114 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             return false;
         }else if(item.getItemId() == R.id.itemFiltroMarca){
             creaAlertDialogFiltroMarca();
+        }else if(item.getItemId() == R.id.button_test_filtroTipoGasolina){
+            creaVentanaFiltroTipoGasolina();
         }
         return true;
     }
-
+    
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case R.id.filtroTipoGasolina:
-                FiltrosActivity filtro = new FiltrosActivity();
-                filtro.show(getSupportFragmentManager(), "Dialog");
+                creaVentanaFiltroTipoGasolina();
                 break;
 
             case R.id.filtroMarcaGasolinera:
                 creaAlertDialogFiltroMarca();
                 break;
+
+                case R.id.itemNuevaTarjetaDescuento:
+                LayoutInflater inflater;
+                View view;
+                // Creacion alertDialog
+                final AlertDialog alertDialogBuilderNewCardDiscount = new AlertDialog.Builder(this)
+                        .setPositiveButton(android.R.string.ok, null)
+                        .setNegativeButton(android.R.string.cancel, null)
+                        .create();
+
+                inflater = this.getLayoutInflater();
+                view = inflater.inflate(R.layout.activity_nueva_tarjeta_descuento, null);
+
+                // Elementos del formulario
+                final TextView nombre = view.findViewById(R.id.nombreTarjeta);
+                final Spinner spnMarca = view.findViewById(R.id.spnMarcas);
+                final Spinner spnTipoDescuento = view.findViewById(R.id.spnTipoDescuento);
+                final TextView descuento = view.findViewById(R.id.descuento);
+                final TextView comentarios = view.findViewById(R.id.comentarios);
+
+                // Datos spinner de tipo descuento
+                String[] datosTipoDescuento = new String[] {getResources().getString(R.string.default_type_discount_card),getResources().getString(R.string.porcentual),
+                        getResources().getString(R.string.cts_litro)};
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                        android.R.layout.simple_spinner_item, datosTipoDescuento);
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spnTipoDescuento.setAdapter(adapter);
+
+                // Datos spinner de marcas
+                List<String> datosMarcas = BrandExtractorUtil.extractBrands((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
+                datosMarcas.add(0,getResources().getString(R.string.default_brand));
+                ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,
+                        android.R.layout.simple_spinner_item, CommonUtils.sortStringList(datosMarcas));
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spnMarca.setAdapter(adapter2);
+
+                // Definicion positive button ("guardar")
+                alertDialogBuilderNewCardDiscount.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        Button b = alertDialogBuilderNewCardDiscount.getButton(btn_positivo);
+                        b.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                // lee y almacena datos
+                                String strNombre = nombre.getText().toString();
+                                String strMarca = spnMarca.getSelectedItem().toString();
+                                String strTipoDescuento = spnTipoDescuento.getSelectedItem().toString();
+                                String strDescuento = descuento.getText().toString();
+                                String strComentario = comentarios.getText().toString();
+
+                                // Si hay algun campo sin rellenar, salta un aviso al usuario
+                                if (strNombre.equals("")) {
+                                    nombre.setError(getResources().getString(R.string.complete_nombre));
+                                } else if (strMarca.equals(getResources().getString(R.string.default_brand))) {
+                                    TextView errorText = (TextView)spnMarca.getSelectedView();
+                                    errorText.setError("");
+                                    errorText.setTextColor(Color.RED);
+                                } else if (strTipoDescuento.equals(getResources().getString(R.string.default_type_discount_card))) {
+                                    TextView errorText = (TextView)spnTipoDescuento.getSelectedView();
+                                    errorText.setError("");
+                                    errorText.setTextColor(Color.RED);
+                                } else if (strDescuento.equals("")) {
+                                    descuento.setError(getResources().getString(R.string.complete_descuento));
+                                } else {
+                                    if (presenterTarjetaDescuento.anhadirNuevaTarjeta(strNombre, strComentario, strMarca, strTipoDescuento, strDescuento)) {
+                                        Toast toast = Toast.makeText(getApplicationContext(),
+                                                getResources().getString(R.string.tarjeta_descuento_guardada), Toast.LENGTH_LONG);
+                                        toast.show();
+                                        updateListWithNewDiscountCard();
+                                        alertDialogBuilderNewCardDiscount.dismiss();
+                                    }
+                                }
+                            }
+                        });
+                    }
+                });
+                alertDialogBuilderNewCardDiscount.setView(view);
+                alertDialogBuilderNewCardDiscount.show();
+                break;
+                
             default:
-                Log.d("MIGUEL", "Default en switch");
+                Log.d("MIGUEL", "Ningún ítem seleccionado");
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return false;
     }
 
-    private void setNavigationViewListener() {
+    /*private void setNavigationViewListener() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-    }
+    }*/
 
 
     /**
@@ -276,8 +379,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //No se implementa porque en este caso no se necesita.
             }
 
+
             @Override
-            public void afterTextChanged(Editable s) {dataAdapter.getFilter().filter(s); }
+            public void afterTextChanged(Editable s) {dataAdapter.getFilter().filter(s);
+                     }
         });
         marcaListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
@@ -286,11 +391,87 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        // Set elements in the dialog
+                // Set elements in the dialog
         alertDialogBuilder.setView(view);
         alertDialogBuilder.show();
 
     }
+
+    /*
+     * Ventana de dialogo para filtrar por tipo de gasolina con un spinner
+     * para seleccionar el tipo
+     *
+     * author: Miguel Carbayo
+     */
+
+    public void creaVentanaFiltroTipoGasolina(){
+
+        // Get the layout inflater
+        LayoutInflater inflater = this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.filtros_gasolinera, null);
+
+        // List elements
+        final Spinner tipoGasolinaSpinner = view.findViewById(R.id.spinner_tipoGasolina);
+
+        //Create alertDialog
+        final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
+                //.setView(view)
+                //Set to null. We override the onclick
+                .setPositiveButton(android.R.string.ok, null)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setTitle(getResources().getString(R.string.filtrar_tipoGasolina))
+                .create();
+
+        // Create list elements with an array adapter
+        String[] datos = new String[] {"Gasolina95", "Diesel"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, datos);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        tipoGasolinaSpinner.setAdapter(adapter);
+
+        //Positive button
+        alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button b = alertDialogBuilder.getButton(btn_positivo);
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String strTipoGasolina = tipoGasolinaSpinner.getSelectedItem().toString();
+                        List<Gasolinera> gasolinerasFiltradas=null;
+                        try{
+                            gasolinerasFiltradas = presenterGasolineras.filtraGasolinerasTipoCombustible(strTipoGasolina, listaGasolinerasActual);
+                        }catch(NullPointerException e){
+                            Toast.makeText(getApplicationContext(),"Error al al leer gasolineras",Toast.LENGTH_LONG);
+                        }
+
+                        refreshAdapter(gasolinerasFiltradas);
+                        Toast.makeText(getApplicationContext(), strTipoGasolina, Toast.LENGTH_LONG).show();
+                        alertDialogBuilder.dismiss();
+                    }
+                });
+            }
+        });
+
+        // Set elements in the dialog
+        alertDialogBuilder.setView(view);
+        alertDialogBuilder.show();
+    }
+
+    private void refreshAdapter(List<Gasolinera> gasolinerasNuevas){
+        adapter.clear();
+        adapter.addAll(gasolinerasNuevas);
+    }
+
+    private void updateListWithNewDiscountCard(){
+        //Esto tiene que cambiar cuando se haga la historia de ver tarjetas de descuento porque tenemos que usar solo una tarjeta de desucento al tiempo
+        List<Gasolinera> gasolinerasActualesActualizadas = presenterTarjetaDescuento.actualizarListaDePrecios(presenterGasolineras.getGasolineras());
+        adapter.clear();
+        listaGasolinerasActual = gasolinerasActualesActualizadas;
+        adapter.addAll(listaGasolinerasActual);
+        adapter.notifyDataSetChanged();
+    }
+   
 
     /**
      * CargaDatosGasolinerasTask
@@ -328,7 +509,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          */
         @Override
         protected void onPreExecute() {
-            progressBar.setVisibility(View.VISIBLE);  //To show ProgressBar
+            // Nada que hacer
         }
 
         /**
@@ -360,10 +541,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          */
         @Override
         protected void onPostExecute(Boolean res) {
+            listaGasolinerasActual=presenterGasolineras.getGasolineras();
             Toast toast;
-
-            // Si el progressDialog estaba activado, lo oculta
-            progressBar.setVisibility(View.GONE);     // To Hide ProgressBar
 
             mSwipeRefreshLayout.setRefreshing(false);
 
@@ -372,11 +551,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Definimos el array adapter
                 adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>) presenterGasolineras.getGasolineras() );
 
+                adapter = new GasolineraArrayAdapter(activity, 0, (ArrayList<Gasolinera>)listaGasolinerasActual);
+
                 // Obtenemos la vista de la lista
                 listViewGasolineras = findViewById(R.id.listViewGasolineras);
 
                 // Cargamos los datos en la lista
-                if (!presenterGasolineras.getGasolineras().isEmpty()) {
+                if (!listaGasolinerasActual.isEmpty()) {
                     // datos obtenidos con exito
                     listViewGasolineras.setAdapter(adapter);
                     toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_exito), Toast.LENGTH_LONG);
@@ -411,7 +592,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                      */
                     Intent myIntent = new Intent(MainActivity.this, DetailActivity.class);
                     myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera),
-                            presenterGasolineras.getGasolineras().get(position));
+                            listaGasolinerasActual.get(position));
                     MainActivity.this.startActivity(myIntent);
 
                 }
@@ -465,21 +646,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             gasolina95.setText(" " + gasolinera.getGasolina95() + getResources().getString(R.string.moneda));
 
             // carga icono
-            {
-                String rotuleImageID = gasolinera.getRotulo().toLowerCase();
-
-                // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
-                // En ese caso getIdentifier devuelve esos digitos en vez de 0.
-                int imageID = context.getResources().getIdentifier(rotuleImageID,
-                        "drawable", context.getPackageName());
-
-                if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
-                    imageID = context.getResources().getIdentifier(getResources().getString(R.string.pordefecto),
-                            "drawable", context.getPackageName());
-                }
-                logo.setImageResource(imageID);
-            }
-
+            cargaIcono(gasolinera, logo);
 
             // Si las dimensiones de la pantalla son menores
             // reducimos el texto de las etiquetas para que se vea correctamente
@@ -500,6 +667,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             return view;
         }
-    }
 
+        private void cargaIcono(Gasolinera gasolinera, ImageView logo) {
+            String rotuleImageID = gasolinera.getRotulo().toLowerCase();
+
+            // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
+            // En ese caso getIdentifier devuelve esos digitos en vez de 0.
+            int imageID = context.getResources().getIdentifier(rotuleImageID,
+                    "drawable", context.getPackageName());
+
+            if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
+                imageID = context.getResources().getIdentifier(getResources().getString(R.string.pordefecto),
+                        "drawable", context.getPackageName());
+            }
+            logo.setImageResource(imageID);
+        }
+    }
 }

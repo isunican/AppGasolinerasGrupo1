@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8a6d69d8-cb2c-46da-8b36-1de89a06f335" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/AndroidProject/.idea/codeStyles/Project.xml" beforeDir="false" afterPath="$PROJECT_DIR$/AndroidProject/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/AndroidProject/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/AndroidProject/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/AndroidProject/app/src/main/java/com/isunican/proyectobase/Views/NuevaTarjetaDescuentoActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/AndroidProject/app/src/main/java/com/isunican/proyectobase/Views/NuevaTarjetaDescuentoActivity.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,7 +18,7 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="1jVdN6hYhEWIQUU2luJrBD4PaH1" />
+  <component name="ProjectId" id="1jBn1bbI7ywi8enA4B3Bfm2kzeb" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -28,7 +27,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/AndroidProject" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="android.sdk-updates" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>

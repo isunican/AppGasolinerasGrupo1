@@ -1,59 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.drawerlayout.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_precio_gasolina_drawer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/activity_precio_gasolina"
+    android:fitsSystemWindows="true"
     >
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <ListView
+            android:id="@+id/listViewGasolineras"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
 
-    <androidx.drawerlayout.widget.DrawerLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/activity_precio_gasolina_drawer"
+        </ListView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
+        android:gravity="right"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button_test_filtroTipoGasolina"
+            android:layout_width="12dp"
+            android:layout_height="9dp"
+            android:ellipsize="none"
+            android:gravity="right"
+            android:text="b"
+            android:visibility="visible" />
+    </LinearLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view_main"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="start"
-        tools:context=".Views.MainActivity">
-        <!--
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
-        -->
-
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/swiperefresh"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/header_sidebar"
+        app:menu="@menu/slide_menu" />
 
 
-            <ListView
-                android:id="@+id/listViewGasolineras"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                >
-
-            </ListView>
+</androidx.drawerlayout.widget.DrawerLayout>
 
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-        <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/nav_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:fitsSystemWindows="true"
-            app:menu="@menu/slide_menu"
-            app:headerLayout="@layout/header_sidebar"/>
-
-
-    </androidx.drawerlayout.widget.DrawerLayout>
-
-
-</RelativeLayout>
 
