@@ -29,9 +29,9 @@ public class PresenterFiltroMarcas {
      * Constructor de la clase presenter
      * @param lista ArrayList: lista de gasolineras disponibles
      */
-    public PresenterFiltroMarcas(ArrayList<Gasolinera> lista){
+    public PresenterFiltroMarcas(List<Gasolinera> lista){
         this.listaActualizada = new ArrayList<>();
-        this.listaGasolineras = lista;
+        this.listaGasolineras = new ArrayList<>(lista);
         marcas = (ArrayList<String>) BrandExtractorUtil.extractBrands(listaGasolineras);
         Collections.sort(marcas);
         marcas.add(0,"(Ninguno)");

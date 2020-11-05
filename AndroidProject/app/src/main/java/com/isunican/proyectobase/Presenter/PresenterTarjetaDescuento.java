@@ -39,7 +39,7 @@ public class PresenterTarjetaDescuento {
      * Establece la lista de tarjetas de descuento
      * @param listaDeTarjetasDelUsuario lista de tarjetas a establecer
      */
-    public void setListaDeTarjetasDelUsuario(ArrayList<TarjetaDescuento> listaDeTarjetasDelUsuario) {
+    public void setListaDeTarjetasDelUsuario(List<TarjetaDescuento> listaDeTarjetasDelUsuario) {
         this.listaTarjetasDescuento = listaDeTarjetasDelUsuario;
     }
 
