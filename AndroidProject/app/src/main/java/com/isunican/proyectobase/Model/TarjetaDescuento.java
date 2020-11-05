@@ -16,7 +16,7 @@ public abstract class TarjetaDescuento implements Parcelable{
     /**
      * Constructor de la clase
      */
-    public TarjetaDescuento (String nombre, String descripcion, String marca){
+    protected TarjetaDescuento (String nombre, String descripcion, String marca){
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.marca = marca;
@@ -26,7 +26,7 @@ public abstract class TarjetaDescuento implements Parcelable{
      * Constructor vacio. Necesario para la implementacion de la
      * interfaz Parcelable en las clases hijas
      */
-    public TarjetaDescuento() {
+    protected TarjetaDescuento() {
     }
 
     /**
@@ -65,7 +65,7 @@ public abstract class TarjetaDescuento implements Parcelable{
 
         @Override
         public TarjetaDescuento[] newArray(int size) {
-            return null;
+            return new TarjetaDescuento[0];
         }
     };
 }

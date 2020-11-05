@@ -1,0 +1,23 @@
+
+W
+java:S1128":Remove this unused import 'android.widget.SpinnerAdapter'.(›¹ÈÚ8»ÅÍ³×.
+C	java:S131@""Add a default case to this switch.(×“¾ñùÿÿÿÿ8»ÅÍ³×.
+V
+java:S1128"4Remove this unused import 'android.app.AlertDialog'.(ª½øşüÿÿÿÿ8»ÅÍ³×.
+X	java:S110"<This class has 9 parents which is greater than 5 authorized.(Ÿâğ¬8»ÅÍ³×.
+{
+java:S22936"YReplace the type specification in this constructor call with the diamond operator ("<>").(ËÖ«ùÿÿÿÿ8»ÅÍ³×.
+O
+java:S1874,"2Remove this use of "getMetrics"; it is deprecated.(ÊÇÃ¼8»ÅÍ³×.
+U
+java:S1128
+"8Remove this unused import 'android.view.LayoutInflater'.(À¯ÑÇ8»ÅÍ³×.
+m
+java:S1301@"KReplace this "switch" statement by "if" statements to increase readability.(×“¾ñùÿÿÿÿ8»ÅÍ³×.
+Q
+java:S1128"/Remove this unused import 'android.app.Dialog'.(·‚Àúÿÿÿÿ8»ÅÍ³×.
+O
+java:S1128	"-Remove this unused import 'android.util.Log'.(Ô¦Ø²øÿÿÿÿ8»ÅÍ³×.
+v	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(“„Ú8»ÅÍ³×.
+V
+java:S1874,"9Remove this use of "getDefaultDisplay"; it is deprecated.(ÊÇÃ¼8»ÅÍ³×.
