@@ -243,10 +243,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Datos spinner de tipo descuento
         String[] datosTipoDescuento = new String[] {getResources().getString(R.string.default_type_discount_card),getResources().getString(R.string.porcentual),
                 getResources().getString(R.string.cts_litro)};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapterTipoDescuento = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, datosTipoDescuento);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnTipoDescuento.setAdapter(adapter);
+        adapterTipoDescuento.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnTipoDescuento.setAdapter(adapterTipoDescuento);
 
         // Datos spinner de marcas
         List<String> datosMarcas = BrandExtractorUtil.extractBrands((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
@@ -261,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
-                Button b = alertDialogBuilder.getButton(AlertDialog.BUTTON_POSITIVE);
+                Button b = alertDialogBuilder.getButton(BTN_POSITIVO);
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -334,7 +334,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             @Override
             public void onShow(DialogInterface dialog) {
 
-                Button b = alertDialogBuilder.getButton(DialogInterface.BUTTON_POSITIVE);
+                Button b = alertDialogBuilder.getButton(BTN_POSITIVO);
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

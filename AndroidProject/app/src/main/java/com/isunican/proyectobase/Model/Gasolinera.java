@@ -2,7 +2,6 @@ package com.isunican.proyectobase.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 
 /*
