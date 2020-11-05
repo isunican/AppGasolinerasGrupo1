@@ -12,5 +12,18 @@
     <item
         android:id="@+id/itemInfo"
         android:title="@string/menuInfo" />
+    <!-- opcion auxiliar filtro por marca -->
+    <item
+        android:id="@+id/itemFiltroMarca"
+        android:title="@string/filtro_marca"
+        />
+    <item
+        android:id="@+id/button_test_filtroTipoGasolina"
+        android:title="@string/filtrar_tipoGasolina"
+        />
 
+    <!-- opcion para anhadir una tarjeta (para los test de interfaz) -->
+    <item
+        android:id="@+id/button_test_anhadeTarjetaDescuento"
+        android:title="Añade tarjeta descuento" />
 </menu>

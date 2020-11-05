@@ -129,4 +129,23 @@ public class Gasolinera implements Parcelable {
             return new Gasolinera[size];
         }
     };
+
+    /**
+     * Author: Jaime López-Agudo Higuera
+     * hasTipoGasolina
+     *
+     * Determina si la gasolinera tiene gasolina95 o gasoleo
+     * @return String ("Gasolina95 ") si tiene gasolina 95, ("Gasoleo ") y
+     * si tiene gasoleo, ("Gasoleo Gasolina95 ") si ambos
+     */
+    public String tiposGasolina(){
+        String tiposGasolina="";
+        if(gasoleoA!=0.0){
+            tiposGasolina+="Diesel ";
+        }
+        if(gasolina95!=0.0) {
+            tiposGasolina += "Gasolina95 ";
+        }
+        return tiposGasolina;
+    }
 }

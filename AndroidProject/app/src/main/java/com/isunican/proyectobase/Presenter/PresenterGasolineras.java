@@ -41,6 +41,7 @@ public class PresenterGasolineras {
         return gasolineras;
     }
 
+
     public void setGasolineras(List<Gasolinera> l) {
         this.gasolineras = l;
     }
@@ -74,10 +75,10 @@ public class PresenterGasolineras {
      */
     public boolean cargaDatosDummy(){
         this.gasolineras.add(new Gasolinera(1000,SANTANDER,SANTANDER, "Av Valdecilla", 1.299,1.359,"AVIA"));
-        this.gasolineras.add(new Gasolinera(1053,SANTANDER,SANTANDER, "Plaza Matias Montero", 1.270,1.349,"CAMPSA"));
-        this.gasolineras.add(new Gasolinera(420,SANTANDER,SANTANDER, "Area Arrabal Puerto de Raos", 1.249,1.279,"E.E.S.S. MAS, S.L."));
-        this.gasolineras.add(new Gasolinera(9564,SANTANDER,SANTANDER, "Av Parayas", 1.189,1.269,"EASYGAS"));
-        this.gasolineras.add(new Gasolinera(1025,SANTANDER,SANTANDER, "Calle el Empalme", 1.259,1.319,"CARREFOUR"));
+        this.gasolineras.add(new Gasolinera(1053,SANTANDER,SANTANDER, "Plaza Matias Montero", 0,1.349,"CAMPSA"));
+        this.gasolineras.add(new Gasolinera(420,SANTANDER,SANTANDER, "Area Arrabal Puerto de Raos", 0,1.279,"E.E.S.S. MAS, S.L."));
+        this.gasolineras.add(new Gasolinera(9564,SANTANDER,SANTANDER, "Av Parayas", 1.189,0,"EASYGAS"));
+        this.gasolineras.add(new Gasolinera(1025,SANTANDER,SANTANDER, "Calle el Empalme", 1.259,0,"CARREFOUR"));
         return true;
     }
 
@@ -108,7 +109,7 @@ public class PresenterGasolineras {
      * @param String Dirección URL del JSON con los datos
      * @return boolean Devuelve true si se han podido cargar los datos
      */
-    public boolean cargaDatosRemotos(String direccion){
+    public boolean cargaDatosRemotos(String direccion) {
         try {
             BufferedInputStream buffer = RemoteFetch.cargaBufferDesdeURL(direccion);
             gasolineras = ParserJSONGasolineras.parseaArrayGasolineras(buffer);
@@ -119,4 +120,30 @@ public class PresenterGasolineras {
             return false;
         }
     }
+
+
+    /**
+     * Author: Jaime López-Agudo Higuera
+     * Filtro de gasolineras por tipo de combustible, filtra las gasolineras mostradas en funcion de @param.
+     * Hace uso de hasTipoGasolina() para determinar los tipos de gasolina de la gasolinera
+     *
+     * @param tipo Tipo de gasolina buscada
+     * @return boolean
+     */
+    public List<Gasolinera> filtraGasolinerasTipoCombustible(String tipo,List<Gasolinera>lista) throws NullPointerException{
+        if(lista==null){
+            throw new NullPointerException();
+        }
+        List<Gasolinera>gasolinerasFiltradas=new ArrayList<Gasolinera>();
+        for(Gasolinera g : lista) {
+
+            if (g.tiposGasolina().contains(tipo)) {
+                gasolinerasFiltradas.add(g);
+            }
+        }
+        return gasolinerasFiltradas;
+    }
+
+
+
 }
