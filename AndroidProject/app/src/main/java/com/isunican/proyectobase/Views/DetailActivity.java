@@ -3,13 +3,20 @@ package com.isunican.proyectobase.Views;
 import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.Model.*;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.TextUtils;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /*
 ------------------------------------------------------------------
@@ -22,6 +29,12 @@ import android.widget.TextView;
 ------------------------------------------------------------------
 */
 public class DetailActivity extends AppCompatActivity {
+
+    ImageButton favButton;
+    TextView comentario;
+    boolean gasolineraEsFavorita = false;
+
+    private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
 
     /**
      * onCreate
@@ -47,6 +60,7 @@ public class DetailActivity extends AppCompatActivity {
         TextView precioGasoleoA = findViewById(R.id.precioGasoleoAText);
         TextView precioGasoleo95 = findViewById(R.id.precioGasoleo95Text);
         ImageView logo = findViewById(R.id.gasolineraIcon);
+        comentario = findViewById(R.id.comentarioText);
         Gasolinera g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
         String rotuleImageID = g.getRotulo().toLowerCase();
 
@@ -64,9 +78,80 @@ public class DetailActivity extends AppCompatActivity {
 
         // cajas de texto
         nombreGasolinera.setText(g.getRotulo());
-        direccion.setText("Dirección:\n"+g.getDireccion());
-        precioGasoleoA.setText("Gasoleo A: "+g.getGasoleoA()+"€");
-        precioGasoleo95.setText("Gasoleo 95: "+g.getGasolina95()+"€");
+        direccion.setText("Dirección:\n" + g.getDireccion());
+        precioGasoleoA.setText("Gasoleo A: " + g.getGasoleoA() + "€");
+        precioGasoleo95.setText("Gasoleo 95: " + g.getGasolina95() + "€");
+
+        favButton = findViewById(R.id.favButton);
+        // TODO para cuando la gasolinear tenga atributo favorita
+        /*
+        if(g.esFavorita()){
+            favButton.setImageResource(R.drawable.favorito_activado); // icono favorito activado
+            gasolineraEsFavorita = true;
+        }else{
+            favButton.setImageResource(R.drawable.favorito_desactivado; // icono favorito desactivado
+            gasolineraEsFavorita = false;
+        }
+        */
+        favButton.setImageResource(R.drawable.favorito_desactivado); // icono favorito desactivado TODO quitar
+        favButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Abre ventana para añadir comentario
+                creaVentanaAnhadeComentario();
+            }
+        });
+
+        // TODO para cuando haya comentario guardado en gasolinera
+        /*
+        if(!g.getComentario().equals("")){
+            comentario.setText("Comentario:\n" + g.getComentario());
+        }else{
+            comentario.setText("");
+        }
+        */
+    }
+
+    public void creaVentanaAnhadeComentario(){
+        // Creacion alertDialog
+        final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
+                .setPositiveButton(getResources().getString(R.string.guardar),null)
+                .setNegativeButton(getResources().getString(R.string.cancelar), null)
+                .create();
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View view = inflater.inflate(R.layout.anhade_comentario_favorito, null);
+
+        final TextView comentarioEditText = view.findViewById(R.id.textBox_anhadeComentario);
+
+        if(!gasolineraEsFavorita){
+            // Definicion positive button ("guardar")
+            alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    Button b = alertDialogBuilder.getButton(BTN_POSITIVO);
+                    b.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // TODO Anhade gasolinera a favoritas
+                            // TODO Anhade comentario a gasolinera
+                            Toast.makeText(getApplicationContext(), "Gasolinera favorita añadida con comentario: "+
+                                    comentario.getText(), Toast.LENGTH_LONG).show();
+                            comentario.setText("Comentario:\n"+comentarioEditText.getText());
+                            favButton.setImageResource(R.drawable.favorito_activado);
+                            gasolineraEsFavorita = true;
+                            alertDialogBuilder.dismiss();
+                        }
+                    });
+                }
+            });
+            alertDialogBuilder.setView(view);
+            alertDialogBuilder.show();
+        }else{
+            // TODO Eliminar gasolinera de favoritos
+            favButton.setImageResource(R.drawable.favorito_desactivado);
+            gasolineraEsFavorita = false;
+        }
 
     }
 }
