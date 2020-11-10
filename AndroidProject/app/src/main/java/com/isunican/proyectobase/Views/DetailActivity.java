@@ -32,9 +32,11 @@ public class DetailActivity extends AppCompatActivity {
 
     ImageButton favButton;
     TextView comentario;
+    TextView nombreGasolinera;
     boolean gasolineraEsFavorita = false;
 
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
+    private static final int BTN_NEGATIVO = DialogInterface.BUTTON_NEGATIVE;
 
     /**
      * onCreate
@@ -55,7 +57,7 @@ public class DetailActivity extends AppCompatActivity {
         // captura el TextView
         // obtiene el objeto Gasolinera a mostrar
         // y lo introduce en el TextView convertido a cadena de texto
-        TextView nombreGasolinera = findViewById(R.id.nombreGasolineraText);
+        nombreGasolinera = findViewById(R.id.nombreGasolineraText);
         TextView direccion = findViewById(R.id.direccionText);
         TextView precioGasoleoA = findViewById(R.id.precioGasoleoAText);
         TextView precioGasoleo95 = findViewById(R.id.precioGasoleo95Text);
@@ -94,11 +96,12 @@ public class DetailActivity extends AppCompatActivity {
         }
         */
         favButton.setImageResource(R.drawable.favorito_desactivado); // icono favorito desactivado TODO quitar
+        Toast.makeText(getApplicationContext(),"estado de boton es: "+favButton.isActivated(), Toast.LENGTH_LONG);
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // Abre ventana para añadir comentario
-                creaVentanaAnhadeComentario();
+                    creaVentanaAnhadeComentario();
             }
         });
 
@@ -112,20 +115,47 @@ public class DetailActivity extends AppCompatActivity {
         */
     }
 
+
+    public void creaVentanaConfirmacion(){
+        final AlertDialog alertDialogConfirmacion=new AlertDialog.Builder(this)
+                .setPositiveButton(getResources().getString(R.string.aplicar),null)
+                .setNegativeButton(getResources().getString(R.string.cancelar),null)
+                .setTitle("titulo")
+                .create();
+        LayoutInflater inflater=this.getLayoutInflater();
+        final View view=inflater.inflate(R.layout.confirmacion_elimina_favorito,null);
+        final TextView txt_confirmacion=view.findViewById(R.id.txt_confirmacion);
+        txt_confirmacion.setText("¿Está seguro de que quiere eliminar la gasolinera "+nombreGasolinera.getText()+" de su lista de favoritos?");
+        alertDialogConfirmacion.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button btn=alertDialogConfirmacion.getButton(BTN_POSITIVO);
+                btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        favButton.setImageResource(R.drawable.favorito_desactivado);
+                        gasolineraEsFavorita = false;
+                        Toast.makeText(getApplicationContext(),"gasolinera eliminada",Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
+        alertDialogConfirmacion.setView(view);
+        alertDialogConfirmacion.show();
+    }
+
     public void creaVentanaAnhadeComentario(){
         // Creacion alertDialog
-        final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
-                .setPositiveButton(getResources().getString(R.string.guardar),null)
-                .setNegativeButton(getResources().getString(R.string.cancelar), null)
-                .create();
-
         LayoutInflater inflater = this.getLayoutInflater();
-        final View view = inflater.inflate(R.layout.anhade_comentario_favorito, null);
-
-        final TextView comentarioEditText = view.findViewById(R.id.textBox_anhadeComentario);
-
         if(!gasolineraEsFavorita){
             // Definicion positive button ("guardar")
+            final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
+                    .setPositiveButton(getResources().getString(R.string.guardar),null)
+                    .setNegativeButton(getResources().getString(R.string.cancelar), null)
+                    .create();
+            final View view = inflater.inflate(R.layout.anhade_comentario_favorito, null);
+
+            final TextView comentarioEditText = view.findViewById(R.id.textBox_anhadeComentario);
             alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
                 @Override
                 public void onShow(DialogInterface dialog) {
@@ -148,9 +178,47 @@ public class DetailActivity extends AppCompatActivity {
             alertDialogBuilder.setView(view);
             alertDialogBuilder.show();
         }else{
-            // TODO Eliminar gasolinera de favoritos
-            favButton.setImageResource(R.drawable.favorito_desactivado);
-            gasolineraEsFavorita = false;
+            final AlertDialog alertDialogConfirmacion=new AlertDialog.Builder(this)
+                    .setPositiveButton(getResources().getString(R.string.aplicar),null)
+                    .setNegativeButton(getResources().getString(R.string.cancelar),null)
+                    .setTitle("titulo")
+                    .create();
+            final View view1=inflater.inflate(R.layout.confirmacion_elimina_favorito,null);
+            final TextView txt_confirmacion=view1.findViewById(R.id.txt_confirmacion);
+            txt_confirmacion.setText("¿Está seguro de que quiere eliminar la gasolinera "+nombreGasolinera.getText()+" de su lista de favoritos?");
+            alertDialogConfirmacion.setOnShowListener(new DialogInterface.OnShowListener() {
+                @Override
+                public void onShow(DialogInterface dialog) {
+                    Button btnAceptar=alertDialogConfirmacion.getButton(BTN_POSITIVO);
+                    btnAceptar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            favButton.setImageResource(R.drawable.favorito_desactivado);
+                            gasolineraEsFavorita = false;
+                            Toast.makeText(getApplicationContext(),"gasolinera eliminada",Toast.LENGTH_LONG).show();
+                            comentario.setText("");
+                            alertDialogConfirmacion.dismiss();
+                        }
+
+                    });
+                    Button btnCancelar =alertDialogConfirmacion.getButton(BTN_NEGATIVO);
+                    btnCancelar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialogConfirmacion.dismiss();
+                        }
+
+                    });
+                }
+            });
+            alertDialogConfirmacion.setView(view1);
+            alertDialogConfirmacion.show();
+
+
+
+
+
+
         }
 
     }
