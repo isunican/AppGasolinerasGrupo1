@@ -10,6 +10,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -62,6 +63,13 @@ public class DetailActivity extends AppCompatActivity {
         ImageView logo = findViewById(R.id.gasolineraIcon);
         comentario = findViewById(R.id.comentarioText);
         Gasolinera g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
+        // TODO GasolineraFavorita gFavorita = listaGasolinerasFavoritas.get(g.getIdeess());
+        /*
+        if(gFavorita == null)
+            gasolineraEsFavorita = false;
+        else
+            gasolineraEsFavorita = true;
+        */
         String rotuleImageID = g.getRotulo().toLowerCase();
 
         // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
@@ -85,7 +93,7 @@ public class DetailActivity extends AppCompatActivity {
         favButton = findViewById(R.id.favButton);
         // TODO para cuando la gasolinear tenga atributo favorita
         /*
-        if(g.esFavorita()){
+        if(gasolineraEsFavorita)){
             favButton.setImageResource(R.drawable.favorito_activado); // icono favorito activado
             gasolineraEsFavorita = true;
         }else{
@@ -104,7 +112,7 @@ public class DetailActivity extends AppCompatActivity {
 
         // TODO para cuando haya comentario guardado en gasolinera
         /*
-        if(!g.getComentario().equals("")){
+        if(!gFavorita.getComentario().equals("")){
             comentario.setText("Comentario:\n" + g.getComentario());
         }else{
             comentario.setText("");
