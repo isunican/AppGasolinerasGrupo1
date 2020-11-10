@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case R.id.filtarGasolinerasFavoritas:
                 Intent favIntent = new Intent(MainActivity.this, FiltroFavoritosActivity.class);
-                MainActivity.this.startActivity(favIntent);
+                startActivity(favIntent);
                 break;
             default:
                 Log.d("MIGUEL", "Default en switch");

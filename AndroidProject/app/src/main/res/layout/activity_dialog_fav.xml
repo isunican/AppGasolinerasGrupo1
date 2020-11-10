@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <EditText
+        android:id="@+id/textMarca"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="20dp"
+        android:hint="Marca"
+        android:imeOptions="actionSend"
+        android:inputType="textCapSentences|textAutoCorrect"
+        android:textSize="12dp" />
+
+    <ListView
+        android:id="@+id/listaMarcasFav"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="70dp" />
+
+    <EditText
+        android:id="@+id/textLocalidad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginRight="20dp"
+        android:hint="Localidad"
+        android:imeOptions="actionSend"
+        android:inputType="textCapSentences|textAutoCorrect"
+        android:textSize="12dp" />
+
+    <ListView
+        android:id="@+id/listaLocalidadesFav"
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="70dp" />
+</LinearLayout>
