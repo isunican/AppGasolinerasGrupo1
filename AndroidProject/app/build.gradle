@@ -81,6 +81,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-inline:3.4.0'
     testImplementation 'org.robolectric:robolectric:4.3'
+    testImplementation 'androidx.test:core:1.2.0'
 
 
 
