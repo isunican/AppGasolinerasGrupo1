@@ -74,5 +74,8 @@ public class GasolineraDAOTest   {
         Gasolinera sut = new Gasolinera(3, "Santander", "Cantabria", "Los Castros Nº1", 1.00, 1.00, "CEPSA");
         int preInsert = gasolineraDao.getAll().size();
         gasolineraDao.insertOne(sut);
+        List<Gasolinera> lista = gasolineraDao.getAll();
+        Assert.assertTrue((lista.size()-preInsert) == 1);
+        Assert.assertTrue(lista.get(lista.size()-1).equals(sut));
     }
 }
