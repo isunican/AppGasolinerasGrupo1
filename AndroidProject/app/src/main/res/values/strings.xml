@@ -36,6 +36,7 @@
     <string name="campo_vacio">Campo vacío</string>
     <string name="marca_invalida">Marca inválida</string>
     <string name="filtro_marca">Filtro marca</string>
+    <string name="filtrar_favoritos">Filtrar favoritos</string>
     <!-- El nombre de filtrar por marca de gasolinera no cabía en el panel lateral-->
     <string name="navigation_drawer_open">Abrir drawer</string>
     <string name="navigation_drawer_close">Cerrar drawer</string>
