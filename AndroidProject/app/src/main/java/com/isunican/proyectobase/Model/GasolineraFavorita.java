@@ -1,14 +1,12 @@
 package com.isunican.proyectobase.Model;
 
 import androidx.room.ColumnInfo;
-import androidx.room.Embedded;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 import com.isunican.proyectobase.Converters.DateConverter;
 
-import java.time.OffsetDateTime;
 import java.util.Date;
 import java.util.Objects;
 
