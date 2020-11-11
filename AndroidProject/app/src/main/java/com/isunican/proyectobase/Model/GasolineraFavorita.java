@@ -57,4 +57,15 @@ public class GasolineraFavorita {
     public int hashCode() {
         return Objects.hash(date, comentario, idGasolinera);
     }
+
+    @Override
+    public String toString(){
+        String textoGasolinerasFavorita = "";
+        textoGasolinerasFavorita +=
+                "autoID: "+getId()+"\n"+
+                "Date: "+getDate()+"\n"+
+                "Comentario: "+getComentario();
+
+        return textoGasolinerasFavorita;
+    }
 }

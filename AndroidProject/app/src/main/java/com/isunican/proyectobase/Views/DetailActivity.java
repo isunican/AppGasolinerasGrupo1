@@ -1,5 +1,6 @@
 package com.isunican.proyectobase.Views;
 
+import com.isunican.proyectobase.Presenter.PresenterGasolinerasFavoritas;
 import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.Model.*;
 
@@ -19,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Arrays;
+
 /*
 ------------------------------------------------------------------
     Vista de detalle
@@ -34,9 +37,11 @@ public class DetailActivity extends AppCompatActivity {
     ImageButton favButton;
     TextView comentario;
     boolean gasolineraEsFavorita = false;
+    PresenterGasolinerasFavoritas gasolinerasFavoritas=new PresenterGasolinerasFavoritas();
 
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
 
+    Gasolinera g;
     /**
      * onCreate
      *
@@ -62,7 +67,7 @@ public class DetailActivity extends AppCompatActivity {
         TextView precioGasoleo95 = findViewById(R.id.precioGasoleo95Text);
         ImageView logo = findViewById(R.id.gasolineraIcon);
         comentario = findViewById(R.id.comentarioText);
-        Gasolinera g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
+        g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
         // TODO GasolineraFavorita gFavorita = listaGasolinerasFavoritas.get(g.getIdeess());
         /*
         if(gFavorita == null)
@@ -148,6 +153,8 @@ public class DetailActivity extends AppCompatActivity {
                             comentario.setText("Comentario:\n"+comentarioEditText.getText());
                             favButton.setImageResource(R.drawable.favorito_activado);
                             gasolineraEsFavorita = true;
+                            ThreadAnhadirGasolineras thread=new ThreadAnhadirGasolineras();
+                            new Thread(thread).start();
                             alertDialogBuilder.dismiss();
                         }
                     });
@@ -159,6 +166,17 @@ public class DetailActivity extends AppCompatActivity {
             // TODO Eliminar gasolinera de favoritos
             favButton.setImageResource(R.drawable.favorito_desactivado);
             gasolineraEsFavorita = false;
+        }
+
+    }
+
+    public class ThreadAnhadirGasolineras implements Runnable{
+        public ThreadAnhadirGasolineras(){
+        }
+        public void run(){
+            gasolinerasFavoritas.getListaGasolinerasFavoritas();
+            Log.d("Añado Gaso","anhadoGAsol");
+            gasolinerasFavoritas.anhadirGasolineraFavorita(g.getIdeess(),comentario.getText().toString(),getApplicationContext());
         }
 
     }
