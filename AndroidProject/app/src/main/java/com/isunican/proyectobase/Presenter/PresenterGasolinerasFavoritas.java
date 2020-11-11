@@ -1,6 +1,7 @@
 package com.isunican.proyectobase.Presenter;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.isunican.proyectobase.Database.AppDatabase;
 import com.isunican.proyectobase.Model.Gasolinera;
@@ -31,6 +32,16 @@ public class PresenterGasolinerasFavoritas {
     public GasolineraFavorita anhadirGasolineraFavorita(int idGasolinera, String comentario, Context contexto){
         GasolineraFavorita favorito=new GasolineraFavorita(comentario,idGasolinera);
         AppDatabase.getInstance(contexto).gasolineraFavoritaDAO().insertOne(favorito);
+        Log.d("Gas añadida",favorito.toString());
+        gasolineraFavoritaList.add(favorito);
         return favorito;
+    }
+    public GasolineraFavorita modificarGasolineraFavorita(int idGasolinera,String comentario, Context contexto){
+        List<GasolineraFavorita> gF=AppDatabase.getInstance(contexto).gasolineraFavoritaDAO().findByGasolineraId(idGasolinera);
+        gasolineraFavoritaList.remove(gF.get(0));
+        gF.get(0).setComentario(comentario);
+        AppDatabase.getInstance(contexto).gasolineraFavoritaDAO().update(gF.get(0));
+        gasolineraFavoritaList.add(gF.get(0));
+        return gF.get(0);
     }
 }
