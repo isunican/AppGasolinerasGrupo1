@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -165,10 +166,26 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         adapterListLocalidades = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, presenterGasolinerasFavoritas.getLocalidadesFavoritas());
 
 
-        //Pasamos el adapter a las listView
-        //TODO: Descomentar las dos siguientes lineas cuando se hayan pasado los elementos los adapters en las lineas 125 y 126
+        // Pasamos el adapter a las listView
         listViewMarcasFavDialog.setAdapter(adapterListMarcas);
         listViewLocalidadFavDialog.setAdapter(adapterListLocalidades);
+
+
+        // ClickListener sobre la lista de marcas
+        listViewMarcasFavDialog.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                String marca = listViewMarcasFavDialog.getItemAtPosition(position).toString();
+                textMarcaFavDialog.setText(marca);
+            }
+        });
+
+        // ClickListener sobre la lista de marcas
+        listViewLocalidadFavDialog.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+                String localidad = listViewLocalidadFavDialog.getItemAtPosition(position).toString();
+                textLocalidadFavDialog.setText(localidad);
+            }
+        });
 
         // Insertar elementos en el dialogo
         alertDialogBuilder.setView(view);
