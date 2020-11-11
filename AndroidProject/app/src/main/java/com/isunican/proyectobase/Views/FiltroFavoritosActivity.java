@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.isunican.proyectobase.Presenter.PresenterFiltroMarcas;
+import com.isunican.proyectobase.Presenter.PresenterGasolineras;
+import com.isunican.proyectobase.Presenter.PresenterGasolinerasFavoritas;
 import com.isunican.proyectobase.R;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,7 +24,7 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
 
     // Vista de lista y adaptador para cargar datos en ella
     ListView listViewFav;
-
+    PresenterGasolinerasFavoritas presenterGasolinerasFavoritas;
     //ArrayAdapter<Gasolinera> adapter;
 
 
@@ -39,6 +42,10 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_fav);
         //Titulo en el actionBar
         this.setTitle(R.string.title_fav);
+
+        presenterGasolinerasFavoritas = new PresenterGasolinerasFavoritas(this.getApplicationContext());
+        FetcherThread hilo = new FetcherThread(presenterGasolinerasFavoritas);
+        new Thread(hilo).start();
 
         // muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -105,5 +112,18 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         // Insertar elementos en el dialogo
         alertDialogBuilder.setView(view);
         alertDialogBuilder.show();
+    }
+}
+class FetcherThread implements Runnable{
+
+    private PresenterGasolinerasFavoritas presenterGasolinerasFavoritas;
+    public FetcherThread(PresenterGasolinerasFavoritas presenter){
+
+        this.presenterGasolinerasFavoritas = presenter;
+    }
+
+    @Override
+    public void run() {
+        presenterGasolinerasFavoritas.cargaGasolineras();
     }
 }

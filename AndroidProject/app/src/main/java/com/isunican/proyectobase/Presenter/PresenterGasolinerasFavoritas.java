@@ -1,6 +1,10 @@
 package com.isunican.proyectobase.Presenter;
 
+import android.content.Context;
+
+import com.isunican.proyectobase.Database.AppDatabase;
 import com.isunican.proyectobase.Model.Gasolinera;
+import com.isunican.proyectobase.Model.GasolineraFavorita;
 import com.isunican.proyectobase.Utilities.BrandExtractorUtil;
 import com.isunican.proyectobase.Utilities.ExtractorLocalidadUtil;
 
@@ -12,11 +16,23 @@ import static com.isunican.proyectobase.Presenter.PresenterGasolineras.SANTANDER
 public class PresenterGasolinerasFavoritas {
 
     private ArrayList<Gasolinera> gasolineras;
+    Context context;
 
-    public PresenterGasolinerasFavoritas(){
+    public PresenterGasolinerasFavoritas(Context contexto){
         gasolineras= new ArrayList<>();
         //Cargar datos de la BD
-        gasolinerasDummy();
+
+        this.context = contexto;
+
+        //gasolinerasDummy();
+    }
+
+    public void cargaGasolineras(){
+        ArrayList<GasolineraFavorita> favoritas = (ArrayList<GasolineraFavorita>) AppDatabase.getInstance(context).gasolineraFavoritaDAO().getAll();
+        for(GasolineraFavorita g: favoritas){
+            gasolineras.add(AppDatabase.getInstance(context).gasolineraDAO().findById(g.getIdGasolinera()).get(0));
+        }
+        System.out.println("Gasolineras cargadas "+ favoritas.size());
     }
 
 
@@ -53,5 +69,4 @@ public class PresenterGasolinerasFavoritas {
         this.gasolineras.add(new Gasolinera(9564,SANTANDER,SANTANDER, "Av Parayas", 1.189,0,"EASYGAS"));
         this.gasolineras.add(new Gasolinera(1025,SANTANDER,SANTANDER, "Calle el Empalme", 1.259,0,"CARREFOUR"));
     }
-
 }
