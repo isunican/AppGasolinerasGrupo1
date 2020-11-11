@@ -1,33 +1,36 @@
 package com.isunican.proyectobase.Presenter;
 
+import android.content.Context;
+
+import com.isunican.proyectobase.Database.AppDatabase;
 import com.isunican.proyectobase.Model.Gasolinera;
+import com.isunican.proyectobase.Model.GasolineraFavorita;
+import com.isunican.proyectobase.Model.TarjetaDescuento;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PresenterGasolinerasFavoritas {
 
-    List<Gasolinera> gasolinerasFavoritas;
+    private List<GasolineraFavorita> gasolineraFavoritaList;
 
     public PresenterGasolinerasFavoritas(){
-        this.gasolinerasFavoritas = new ArrayList<>();
+        this.gasolineraFavoritaList = new ArrayList<GasolineraFavorita>();
     }
 
-    public Gasolinera eliminaGasolineraFavorita(int idGasolinera){
+    public List<GasolineraFavorita> getListaGasolinerasFavoritas() { return gasolineraFavoritaList; }
+    public void setListaGasolinerasFavoritas(List<GasolineraFavorita> gasolineraFavoritaListM) {
+        this.gasolineraFavoritaList = gasolineraFavoritaList;
+    }
 
-        Gasolinera gasolineraEliminar = null;
+    public Gasolinera eliminaGasolineraFavorita(Gasolinera gasolinera){
 
-        for (int i = 0; i<gasolinerasFavoritas.size(); i++){
-            if (gasolinerasFavoritas.get(i).getIdeess() == idGasolinera){
-                gasolineraEliminar = gasolinerasFavoritas.get(i);
-                gasolinerasFavoritas.remove(i);
-            }
-        }
-
-        // TODO: Quitar gasolinera de la lista de la BD
-
-        // TODO: Añadir mensaje toast en caso de éxito y de fallo
-        
-        return gasolineraEliminar;
+        // hago cosas
+        return gasolinera;
+    }
+    public GasolineraFavorita anhadirGasolineraFavorita(int idGasolinera, String comentario, Context contexto){
+        GasolineraFavorita favorito=new GasolineraFavorita(comentario,idGasolinera);
+        AppDatabase.getInstance(contexto).gasolineraFavoritaDAO().insertOne(favorito);
+        return favorito;
     }
 }

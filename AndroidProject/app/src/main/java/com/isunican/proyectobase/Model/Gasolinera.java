@@ -3,6 +3,10 @@ package com.isunican.proyectobase.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 
 /*
 ------------------------------------------------------------------
@@ -11,14 +15,21 @@ import android.os.Parcelable;
     pasar objetos de este tipo entre activities a traves de una llamada intent
 ------------------------------------------------------------------
 */
-
+@Entity(tableName = "gasolinera")
 public class Gasolinera implements Parcelable {
+    @PrimaryKey
     private int ideess;
+    @ColumnInfo
     private String localidad;
+    @ColumnInfo
     private String provincia;
+    @ColumnInfo
     private String direccion;
+    @ColumnInfo
     private double gasoleoA;
+    @ColumnInfo
     private double gasolina95;
+    @ColumnInfo
     private String rotulo;
 
 
@@ -36,7 +47,6 @@ public class Gasolinera implements Parcelable {
     }
 
     public int getIdeess() { return ideess; }
-    public void setIdeess(int ideess) { this.ideess = ideess; }
 
     public String getLocalidad() { return localidad; }
     public void setLocalidad(String localidad) { this.localidad = localidad; }
