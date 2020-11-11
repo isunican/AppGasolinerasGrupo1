@@ -319,8 +319,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Create alertDialog
         final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
                 //Set to null. We override the onclick
-                .setPositiveButton(android.R.string.ok, null)
-                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(getResources().getString(R.string.aceptar), null)
+                .setNegativeButton(getResources().getString(R.string.cancelar), null)
                 .create();
 
         // Create list elements with an array adapter
@@ -413,8 +413,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
                 //.setView(view)
                 //Set to null. We override the onclick
-                .setPositiveButton(android.R.string.ok, null)
-                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(getResources().getString(R.string.aceptar), null)
+                .setNegativeButton(getResources().getString(R.string.cancelar), null)
                 .setTitle(getResources().getString(R.string.filtrar_tipoGasolina))
                 .create();
 
