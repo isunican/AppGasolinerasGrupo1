@@ -32,7 +32,6 @@ public class PresenterGasolinerasFavoritasTest {
     @Before
     public void setUp(){
         sut = new PresenterGasolinerasFavoritas();
-
         gasolinera1 = new Gasolinera(1,"localidad1","provincia1",
                 "direccion1",1.0,1.0,"gasolinera1");
         gasolinera2 = new Gasolinera(2,"localidad2","provincia2",
@@ -57,11 +56,11 @@ public class PresenterGasolinerasFavoritasTest {
         sut.setListaGasolinerasFavoritas(new ArrayList<GasolineraFavorita>());
         // UT.2.a: En lista vacia de gasolineras favoritas TODO revisar que el identificador es correcto
         gasolineraFavorita1 = new GasolineraFavorita(COMENTARIO3, gasolinera1.getIdeess());
-        Assert.assertEquals(sut.modificarGasolineraFavorita(gasolinera1.getIdeess(), COMENTARIO3, null),
-                gasolineraFavorita1);
+        Assert.assertEquals(sut.modificarGasolineraFavorita(gasolinera1.getIdeess(), COMENTARIO3,
+                ApplicationProvider.getApplicationContext()), gasolineraFavorita1);
         // UT.2.a: En lista con una gasolinera favorita TODO revisar que el identificador es correcto
         gasolineraFavorita2 = new GasolineraFavorita(COMENTARIO3, gasolinera2.getIdeess());
-        Assert.assertEquals(sut.modificarGasolineraFavorita(gasolinera2.getIdeess(), COMENTARIO4, null),
-                gasolineraFavorita2);
+        Assert.assertEquals(sut.modificarGasolineraFavorita(gasolinera2.getIdeess(), COMENTARIO4,
+                ApplicationProvider.getApplicationContext()), gasolineraFavorita2);
     }
 }
