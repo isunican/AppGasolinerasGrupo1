@@ -351,7 +351,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         else{
                             //Actualiza la lista actual para solo contener las gasolineras con la marca seleccionada
                             currentList= (ArrayList<Gasolinera>) presenterFiltroMarcas.filtraGasolineras(marcaTxt.getText().toString());
-                            adapter=new GasolineraArrayAdapter(MainActivity.this, 0, currentList);
+                            adapter = new GasolineraArrayAdapter(MainActivity.this, 0, currentList);
                             listViewGasolineras = findViewById(R.id.listViewGasolineras);
                             listViewGasolineras.setAdapter(adapter);
 
