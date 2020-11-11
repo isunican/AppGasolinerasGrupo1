@@ -1,7 +1,6 @@
 package com.isunican.proyectobase.Views;
 
 import com.google.android.material.navigation.NavigationView;
-import com.isunican.proyectobase.Database.AppDatabase;
 import com.isunican.proyectobase.Presenter.*;
 import com.isunican.proyectobase.Model.*;
 import com.isunican.proyectobase.R;
@@ -92,9 +91,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Adapter para la listView
     ArrayAdapter<String> dataAdapter;
 
-    //TODO: remove before integrating
-    Context contexto;
-
     //Filtro
     String tipoGasolina;
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
@@ -115,8 +111,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout = findViewById(R.id.activity_precio_gasolina_drawer);
 
         currentList = new ArrayList<>();
-
-        contexto = this.getApplicationContext();//TODO: Remove
 
         this.presenterGasolineras = new PresenterGasolineras();
         this.presenterTarjetaDescuento = new PresenterTarjetaDescuento();
@@ -549,10 +543,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             listaGasolinerasActual=presenterGasolineras.getGasolineras();
             Toast toast;
 
-            //TODO: Remove this
-            TestAdder testAdder = new TestAdder(listaGasolinerasActual.get(0), contexto);
-            new Thread(testAdder).start();
-
             mSwipeRefreshLayout.setRefreshing(false);
 
             // Si se ha obtenido resultado en la tarea en segundo plano
@@ -689,31 +679,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             logo.setImageResource(imageID);
         }
-    }
-}
-
-/**
- * Clase para probar que la lista de favoritos muestra algo por pantalla
- * TODO. Remove this
- */
-class TestAdder implements Runnable{
-
-    GasolineraFavorita g;
-    Gasolinera g1;
-    Context context;
-
-    public TestAdder (Gasolinera g, Context context){
-        this.g = new GasolineraFavorita("Comentario", g.getIdeess());
-        this.g1=g;
-        this.context = context;
-    }
-    @Override
-    public void run() {
-
-        if(AppDatabase.getInstance(context).gasolineraDAO().findById(g1.getIdeess()).isEmpty()) {
-            AppDatabase.getInstance(context).gasolineraDAO().insertOne(g1);
-            AppDatabase.getInstance(context).gasolineraFavoritaDAO().insertOne(g);
-        }
-
     }
 }
