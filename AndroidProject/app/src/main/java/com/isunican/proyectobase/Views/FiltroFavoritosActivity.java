@@ -27,7 +27,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
     Presenta los datos de las gasolineras favoritas en formato lista.
     Dispone de una ventana flotante al que se accede mediante un boton
-    con un icono de lupa. La ventana flotante muestra dos listas
+    con el icono de lupa. La ventana flotante muestra dos listas
     (marcas y localidades) y dos cajas de texto.
 
     @author Carolay Corales
@@ -62,7 +62,6 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
      * onCreate
      *
      * Crea los elementos que conforman la actividad
-     * Author:
      * @param savedInstanceState
      */
     @Override
@@ -117,7 +116,7 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
 
 
     /**
-     *  Ventana flotante para filtrar marca y localidad
+     *  Ventana flotante para filtrar marca y localidad.
      */
     public void creaDialogoFiltroFav(){
         // Definidos Inflater y View
