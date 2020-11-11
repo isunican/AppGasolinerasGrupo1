@@ -36,7 +36,7 @@ public class PresenterGasolinerasFavoritas {
         gasolineraFavoritaList.add(favorito);
         return favorito;
     }
-    public GasolineraFavorita modificaGasolinera(int idGasolinera,String comentario, Context contexto){
+    public GasolineraFavorita modificarGasolineraFavorita(int idGasolinera,String comentario, Context contexto){
         List<GasolineraFavorita> gF=AppDatabase.getInstance(contexto).gasolineraFavoritaDAO().findByGasolineraId(idGasolinera);
         gasolineraFavoritaList.remove(gF.get(0));
         gF.get(0).setComentario(comentario);
