@@ -69,7 +69,7 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fav);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         //Titulo en el actionBar
         this.setTitle(R.string.title_fav);
 
@@ -90,6 +90,7 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         listViewFav.setAdapter(adapterFavoritas);
 
     }
+
 
     /**
      * Menú action bar
@@ -112,6 +113,10 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.action_favorite){
             creaDialogoFiltroFav();
+        }
+        // Respond to the action bar's Up/Home button
+        if(item.getItemId() == android.R.id.home){
+            onBackPressed();
         }
         return true;
     }
@@ -147,8 +152,6 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
-                        //TODO: comportamiento que se ejecuta cuando se da al boton de aceptar
 
                         //Mensaje de datos filtrados
                         Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.toast_filtro_aplicado), Toast.LENGTH_LONG);
