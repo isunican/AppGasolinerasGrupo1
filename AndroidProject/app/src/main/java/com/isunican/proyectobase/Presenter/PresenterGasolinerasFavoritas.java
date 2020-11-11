@@ -36,4 +36,10 @@ public class PresenterGasolinerasFavoritas {
         gasolineraFavoritaList.add(favorito);
         return favorito;
     }
+    public GasolineraFavorita modificaGasolinera(int idGasolinera,String comentario, Context contexto){
+        GasolineraFavorita gF=AppDatabase.getInstance(contexto).gasolineraFavoritaDAO().findByGasolineraId(idGasolinera);
+        gF.setComentario(comentario);
+        AppDatabase.getInstance(contexto).gasolineraFavoritaDAO().update(gF);
+        return gF;
+    }
 }

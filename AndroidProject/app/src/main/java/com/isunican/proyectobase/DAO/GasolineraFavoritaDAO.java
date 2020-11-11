@@ -15,7 +15,7 @@ public interface GasolineraFavoritaDAO {
     List<GasolineraFavorita> getAll();
 
     @Query("SELECT * FROM gasolinera_favorita WHERE id_gasolinera LIKE :idess ")
-    List<GasolineraFavorita> findByGasolineraId(int idess);
+    GasolineraFavorita findByGasolineraId(int idess);
 
     @Insert
     void insertOne(GasolineraFavorita e);
