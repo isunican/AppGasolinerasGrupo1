@@ -4,7 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- Usamos un diseño igual al activity principal, hacemos esto sobretodo para poder seguir
-      usando la ventana lateral -->
-   <include layout="@layout/activity_main"></include>
+    <ListView
+        android:id="@+id/listFavGasolineras"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+    </ListView>
 </RelativeLayout>
