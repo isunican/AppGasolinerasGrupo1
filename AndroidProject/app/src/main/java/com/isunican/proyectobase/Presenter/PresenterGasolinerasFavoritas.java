@@ -64,6 +64,7 @@ public class PresenterGasolinerasFavoritas {
      * @return Devuelve la lista de gasolineras favoritas
      */
     public List<Gasolinera> getGasolinerasFavoritas(){
+        System.out.println("Gasolineras pasadas");
         return gasolineras;
     }
 

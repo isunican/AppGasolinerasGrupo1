@@ -14,7 +14,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 
-
+import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.Presenter.PresenterGasolinerasFavoritas;
 import com.isunican.proyectobase.R;
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,7 +55,7 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
     ArrayAdapter<String> adapterListLocalidades;
 
     //Adapter para la lista de gasolineras favoritas
-    //"definir tipo" adapterFavoritas;
+    ArrayAdapter<Gasolinera> adapterFavoritas;
 
 
     /**
@@ -75,17 +75,18 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         presenterGasolinerasFavoritas = new PresenterGasolinerasFavoritas(this.getApplicationContext());
         FetcherThread hilo = new FetcherThread(presenterGasolinerasFavoritas);
         new Thread(hilo).start();
+        //presenterGasolinerasFavoritas.cargaGasolineras();
 
         // muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
 
         //Adapter al que se le pasa la lista de gasolineras favoritas
-        // adapterFavoritas = //Insertar lista de gasolineras favoritas
+        adapterFavoritas = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, presenterGasolinerasFavoritas.getGasolinerasFavoritas());
 
         //Inserta lista de gasolineras favoritas en la listView
-        // listViewFav = findViewById(R.id.listFavGasolineras);
-        // listViewFav.setAdapter(adapterMarcas);
+        listViewFav = findViewById(R.id.listFavGasolineras);
+        listViewFav.setAdapter(adapterFavoritas);
 
     }
 
@@ -160,14 +161,14 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
 
 
         //Adapters al que se les pasa la lista de marcas y localidades
-        //adapterListMarcas = new ArrayAdapter<>(this,  android.R.layout.simple_dropdown_item_1line, //insertar lista de marcas);
-        //adapterListLocalidades = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, //insertar lista de localidades);
+        adapterListMarcas = new ArrayAdapter<>(this,  android.R.layout.simple_dropdown_item_1line, presenterGasolinerasFavoritas.getMarcasFavoritas());
+        adapterListLocalidades = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, presenterGasolinerasFavoritas.getLocalidadesFavoritas());
 
 
         //Pasamos el adapter a las listView
         //TODO: Descomentar las dos siguientes lineas cuando se hayan pasado los elementos los adapters en las lineas 125 y 126
-        //listViewMarcasFavDialog.setAdapter(adapterListMarcas);
-        //listViewLocalidadFavDialog.setAdapter(adapterListLocalidades);
+        listViewMarcasFavDialog.setAdapter(adapterListMarcas);
+        listViewLocalidadFavDialog.setAdapter(adapterListLocalidades);
 
         // Insertar elementos en el dialogo
         alertDialogBuilder.setView(view);
@@ -176,6 +177,9 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
     }
 }
 
+/**
+*Clase que carga los datos de las gasolineras
+ */
 class FetcherThread implements Runnable{
 
     private PresenterGasolinerasFavoritas presenterGasolinerasFavoritas;
