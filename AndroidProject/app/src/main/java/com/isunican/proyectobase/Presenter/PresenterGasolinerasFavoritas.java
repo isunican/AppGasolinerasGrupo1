@@ -1,6 +1,7 @@
 package com.isunican.proyectobase.Presenter;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.isunican.proyectobase.Database.AppDatabase;
 import com.isunican.proyectobase.Model.Gasolinera;
@@ -31,6 +32,8 @@ public class PresenterGasolinerasFavoritas {
     public GasolineraFavorita anhadirGasolineraFavorita(int idGasolinera, String comentario, Context contexto){
         GasolineraFavorita favorito=new GasolineraFavorita(comentario,idGasolinera);
         AppDatabase.getInstance(contexto).gasolineraFavoritaDAO().insertOne(favorito);
+        Log.d("Gas añadida",favorito.toString());
+        gasolineraFavoritaList.add(favorito);
         return favorito;
     }
 }
