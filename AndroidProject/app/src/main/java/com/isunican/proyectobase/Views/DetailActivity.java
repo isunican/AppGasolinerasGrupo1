@@ -1,5 +1,6 @@
 package com.isunican.proyectobase.Views;
 
+import com.isunican.proyectobase.Presenter.PresenterGasolinerasFavoritas;
 import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.Model.*;
 
@@ -10,6 +11,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -17,6 +19,8 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.Arrays;
 
 /*
 ------------------------------------------------------------------
@@ -33,9 +37,11 @@ public class DetailActivity extends AppCompatActivity {
     ImageButton favButton;
     TextView comentario;
     boolean gasolineraEsFavorita = false;
+    PresenterGasolinerasFavoritas gasolinerasFavoritas=new PresenterGasolinerasFavoritas();
 
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
 
+    Gasolinera g;
     /**
      * onCreate
      *
@@ -61,7 +67,14 @@ public class DetailActivity extends AppCompatActivity {
         TextView precioGasoleo95 = findViewById(R.id.precioGasoleo95Text);
         ImageView logo = findViewById(R.id.gasolineraIcon);
         comentario = findViewById(R.id.comentarioText);
-        Gasolinera g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
+        g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
+        // TODO GasolineraFavorita gFavorita = listaGasolinerasFavoritas.get(g.getIdeess());
+        /*
+        if(gFavorita == null)
+            gasolineraEsFavorita = false;
+        else
+            gasolineraEsFavorita = true;
+        */
         String rotuleImageID = g.getRotulo().toLowerCase();
 
         // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
@@ -85,7 +98,7 @@ public class DetailActivity extends AppCompatActivity {
         favButton = findViewById(R.id.favButton);
         // TODO para cuando la gasolinear tenga atributo favorita
         /*
-        if(g.esFavorita()){
+        if(gasolineraEsFavorita)){
             favButton.setImageResource(R.drawable.favorito_activado); // icono favorito activado
             gasolineraEsFavorita = true;
         }else{
@@ -104,7 +117,7 @@ public class DetailActivity extends AppCompatActivity {
 
         // TODO para cuando haya comentario guardado en gasolinera
         /*
-        if(!g.getComentario().equals("")){
+        if(!gFavorita.getComentario().equals("")){
             comentario.setText("Comentario:\n" + g.getComentario());
         }else{
             comentario.setText("");
@@ -140,6 +153,8 @@ public class DetailActivity extends AppCompatActivity {
                             comentario.setText("Comentario:\n"+comentarioEditText.getText());
                             favButton.setImageResource(R.drawable.favorito_activado);
                             gasolineraEsFavorita = true;
+                            ThreadAnhadirGasolineras thread=new ThreadAnhadirGasolineras();
+                            new Thread(thread).start();
                             alertDialogBuilder.dismiss();
                         }
                     });
@@ -151,6 +166,17 @@ public class DetailActivity extends AppCompatActivity {
             // TODO Eliminar gasolinera de favoritos
             favButton.setImageResource(R.drawable.favorito_desactivado);
             gasolineraEsFavorita = false;
+        }
+
+    }
+
+    public class ThreadAnhadirGasolineras implements Runnable{
+        public ThreadAnhadirGasolineras(){
+        }
+        public void run(){
+            gasolinerasFavoritas.getListaGasolinerasFavoritas();
+            Log.d("Añado Gaso","anhadoGAsol");
+            gasolinerasFavoritas.anhadirGasolineraFavorita(g.getIdeess(),comentario.getText().toString(),getApplicationContext());
         }
 
     }
