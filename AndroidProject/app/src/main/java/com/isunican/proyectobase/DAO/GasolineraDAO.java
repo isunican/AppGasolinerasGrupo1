@@ -14,8 +14,8 @@ public interface GasolineraDAO {
     @Query("SELECT * FROM gasolinera")
     List<Gasolinera> getAll();
 
-    @Query("SELECT * FROM gasolinera WHERE ideess LIKE :id_gasolinera ")
-    List<Gasolinera> findById(int id_gasolinera);
+    @Query("SELECT * FROM gasolinera WHERE ideess LIKE :id ")
+    List<Gasolinera> findById(int id);
 
     @Insert
     void insertOne(Gasolinera e);
@@ -28,4 +28,8 @@ public interface GasolineraDAO {
 
     @Update
     void update(Gasolinera e);
+
+    @Query("DELETE FROM gasolinera")
+    void nuke();
+
 }
