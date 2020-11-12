@@ -38,7 +38,7 @@ public class PresenterGasolinerasFavoritas {
         return favorito;
     }
     public GasolineraFavorita modificarGasolineraFavorita(int idGasolinera, String comentario, GasolineraFavoritaDAO gasolineraFavoritaDAO){
-        List<GasolineraFavorita> gF=gasolineraFavoritaDAO.findByGasolineraId(idGasolinera);
+        List<GasolineraFavorita> gF=gasolineraFavoritaDAO.findById(idGasolinera);
         gasolineraFavoritaList.remove(gF.get(0));
         gF.get(0).setComentario(comentario);
         gasolineraFavoritaDAO.update(gF.get(0));
