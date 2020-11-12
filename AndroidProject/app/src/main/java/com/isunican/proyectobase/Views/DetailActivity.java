@@ -37,7 +37,7 @@ public class DetailActivity extends AppCompatActivity {
     ImageButton favButton;
     TextView comentario;
     boolean gasolineraEsFavorita = false;
-    PresenterGasolinerasFavoritas gasolinerasFavoritas=new PresenterGasolinerasFavoritas();
+    PresenterGasolinerasFavoritas gasolinerasFavoritas;
 
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
 
@@ -53,6 +53,7 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+         gasolinerasFavoritas = new PresenterGasolinerasFavoritas(this.getApplicationContext());
 
         // muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
