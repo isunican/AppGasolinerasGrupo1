@@ -172,6 +172,7 @@ public class DetailActivity extends AppCompatActivity {
 
     public class ThreadAnhadirGasolineras implements Runnable{
         public ThreadAnhadirGasolineras(){
+            // Constructor vacio para la creacion de la Task
         }
         public void run(){
             gasolinerasFavoritas.getListaGasolinerasFavoritas();

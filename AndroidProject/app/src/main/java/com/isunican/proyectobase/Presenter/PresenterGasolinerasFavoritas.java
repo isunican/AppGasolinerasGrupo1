@@ -20,7 +20,7 @@ public class PresenterGasolinerasFavoritas {
     }
 
     public List<GasolineraFavorita> getListaGasolinerasFavoritas() { return gasolineraFavoritaList; }
-    public void setListaGasolinerasFavoritas(List<GasolineraFavorita> gasolineraFavoritaListM) {
+    public void setListaGasolinerasFavoritas(List<GasolineraFavorita> gasolineraFavoritaList) {
         this.gasolineraFavoritaList = gasolineraFavoritaList;
     }
 
