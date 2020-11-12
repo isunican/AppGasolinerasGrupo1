@@ -1,5 +1,6 @@
 package com.isunican.proyectobase.Views;
 
+import com.isunican.proyectobase.Database.AppDatabase;
 import com.isunican.proyectobase.Presenter.PresenterGasolinerasFavoritas;
 import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.Model.*;
@@ -177,7 +178,8 @@ public class DetailActivity extends AppCompatActivity {
         public void run(){
             gasolinerasFavoritas.getListaGasolinerasFavoritas();
             Log.d("Añado Gaso","anhadoGAsol");
-            gasolinerasFavoritas.anhadirGasolineraFavorita(g.getIdeess(),comentario.getText().toString(),getApplicationContext());
+            gasolinerasFavoritas.anhadirGasolineraFavorita(g.getIdeess(),comentario.getText().toString(),
+                    AppDatabase.getInstance(getApplicationContext()).gasolineraFavoritaDAO());
         }
 
     }
