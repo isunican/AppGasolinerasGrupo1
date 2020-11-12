@@ -118,7 +118,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.presenterTarjetaDescuento = new PresenterTarjetaDescuento();
 
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         // Muestra el logo en el actionBar
@@ -145,6 +144,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
+
+
+
 
 
     }
@@ -183,17 +185,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(item.getItemId()==R.id.itemActualizar){
             mSwipeRefreshLayout.setRefreshing(true);
             new CargaDatosGasolinerasTask(this).execute();
-        } else if (item.getItemId() == R.id.itemInfo) {
+        }else if(item.getItemId() == R.id.itemInfo) {
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
             MainActivity.this.startActivity(myIntent);
         }else if(toggle.onOptionsItemSelected(item)) {
             return false;
-        }else if(item.getItemId() == R.id.itemFiltroMarca){
+        }else if(item.getItemId() == R.id.button_test_filtroMarca){
             creaAlertDialogFiltroMarca();
         }else if(item.getItemId() == R.id.button_test_filtroTipoGasolina){
             creaVentanaFiltroTipoGasolina();
-        }
-        else if(item.getItemId()==R.id.button_test_anhadeTarjetaDescuento){
+        }else if(item.getItemId()==R.id.button_test_anhadeTarjetaDescuento){
             creaVentanaAnhadirTarjetaDescuento();
         }
         return true;
@@ -205,14 +206,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.filtroTipoGasolina:
                 creaVentanaFiltroTipoGasolina();
                 break;
-
             case R.id.filtroMarcaGasolinera:
                 creaAlertDialogFiltroMarca();
                 break;
             case R.id.itemNuevaTarjetaDescuento:
                 creaVentanaAnhadirTarjetaDescuento();
                 break;
-
+            case R.id.filtarGasolinerasFavoritas:
+                Intent favIntent = new Intent(MainActivity.this, FiltroFavoritosActivity.class);
+                startActivity(favIntent);
+                break;
             default:
                 Log.d("MIGUEL", "Default en switch");
         }
@@ -305,8 +308,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    /**
-     * Crea el alertDialog del filtrar gasolinera por marca
+    /*
+     * Ventana de dialogo para filtrar gasolineras por marca
      */
     public void creaAlertDialogFiltroMarca(){
         presenterFiltroMarcas = new PresenterFiltroMarcas((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
@@ -353,7 +356,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         else{
                             //Actualiza la lista actual para solo contener las gasolineras con la marca seleccionada
                             currentList= (ArrayList<Gasolinera>) presenterFiltroMarcas.filtraGasolineras(marcaTxt.getText().toString());
-                            adapter=new GasolineraArrayAdapter(MainActivity.this, 0, currentList);
+                            adapter = new GasolineraArrayAdapter(MainActivity.this, 0, currentList);
                             listViewGasolineras = findViewById(R.id.listViewGasolineras);
                             listViewGasolineras.setAdapter(adapter);
 

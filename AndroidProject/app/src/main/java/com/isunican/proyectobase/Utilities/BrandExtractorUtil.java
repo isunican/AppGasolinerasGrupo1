@@ -39,7 +39,7 @@ public class BrandExtractorUtil {
      * Filtra las gasolineras por la marca(rótulo) seleccionada.
      * @param marca escogida para filtrar
      * @param listaGasolineras lista de las gasolineras a filtrar
-     * @return false si la marca no existe, true si la marca existe y la operacion se completa correctamente
+     * @return lista de gasolineras filtradas
      */
     public static List<Gasolinera> applyFilter(String marca, List<Gasolinera> listaGasolineras){
         if(listaGasolineras == null) return new ArrayList<>();
