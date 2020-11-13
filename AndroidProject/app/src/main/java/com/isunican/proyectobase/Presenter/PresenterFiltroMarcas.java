@@ -2,7 +2,7 @@ package com.isunican.proyectobase.Presenter;
 
 
 import com.isunican.proyectobase.Model.Gasolinera;
-import com.isunican.proyectobase.Utilities.BrandExtractorUtil;
+import com.isunican.proyectobase.Utilities.ExtractorMarcasUtil;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +32,7 @@ public class PresenterFiltroMarcas {
     public PresenterFiltroMarcas(List<Gasolinera> lista){
         this.listaActualizada = new ArrayList<>();
         this.listaGasolineras = new ArrayList<>(lista);
-        marcas = (ArrayList<String>) BrandExtractorUtil.extractBrands(listaGasolineras);
+        marcas = (ArrayList<String>) ExtractorMarcasUtil.extraeMarcas(listaGasolineras);
         Collections.sort(marcas);
         marcas.add(0,"(Ninguno)");
     }
@@ -52,7 +52,7 @@ public class PresenterFiltroMarcas {
      * @return lista actualizada de gasolineras si la operacion se completa correctamente
      */
     public List<Gasolinera> filtraGasolineras(String marca){
-        listaActualizada = (ArrayList<Gasolinera>) BrandExtractorUtil.applyFilter(marca,listaGasolineras);
+        listaActualizada = (ArrayList<Gasolinera>) ExtractorMarcasUtil.aplicaFiltro(marca,listaGasolineras);
         if(listaActualizada.isEmpty()) return listaGasolineras;
         return listaActualizada;
     }

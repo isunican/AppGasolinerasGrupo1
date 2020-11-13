@@ -4,7 +4,7 @@ import com.google.android.material.navigation.NavigationView;
 import com.isunican.proyectobase.Presenter.*;
 import com.isunican.proyectobase.Model.*;
 import com.isunican.proyectobase.R;
-import com.isunican.proyectobase.Utilities.BrandExtractorUtil;
+import com.isunican.proyectobase.Utilities.ExtractorMarcasUtil;
 import com.isunican.proyectobase.Utilities.CommonUtils;
 
 import android.app.Activity;
@@ -252,7 +252,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         spnTipoDescuento.setAdapter(adapterTipoDescuento);
 
         // Datos spinner de marcas
-        List<String> datosMarcas = BrandExtractorUtil.extractBrands((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
+        List<String> datosMarcas = ExtractorMarcasUtil.extraeMarcas((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
         datosMarcas = CommonUtils.sortStringList(datosMarcas);
         datosMarcas.add(0,getResources().getString(R.string.default_brand));
         ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,
