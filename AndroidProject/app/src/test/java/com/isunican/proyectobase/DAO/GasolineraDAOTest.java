@@ -141,4 +141,27 @@ public class GasolineraDAOTest   {
         long rest = db.gasolineraDAO().insertOne(sut);
         Assert.assertTrue(rest == 1);
     }
+
+    @Test
+    public void findByIdEESSTest(){
+        // Caso 1: No existente
+        Gasolinera sut = new Gasolinera(1, "Santander", "Cantabria", "Los Castros Nº1", 1.00, 1.00, "CEPSA");
+        db.gasolineraDAO().insertOne(sut);
+        db.gasolineraDAO().findByIdEESS(2);
+        // Caso 2: Correcto con 1 elemento en tabla
+        List<Gasolinera> lista = db.gasolineraDAO().findByIdEESS(1);
+        Assert.assertTrue(lista.size()==1);
+        Assert.assertTrue(lista.get(0).equals(sut));
+        // Caso 3: Correcto con 2 o mas elementos en tabla
+        Gasolinera sut2 = new Gasolinera(2, "Torrelavega", "Cantabria", "La inmobiliaria", 1.50, 1.39, "CEPSA");
+        Gasolinera sut3 = new Gasolinera(3, "Reinosa", "Cantabria", "Sin nombre", 1.30, 1.35, "CEPSA");
+        db.gasolineraDAO().insertOne(sut2);
+        db.gasolineraDAO().insertOne(sut3);
+        lista = db.gasolineraDAO().findByIdEESS(2);
+        Assert.assertTrue(lista.size()==1);
+        Assert.assertTrue(lista.get(0).equals(sut2));
+        lista = db.gasolineraDAO().findByIdEESS(3);
+        Assert.assertTrue(lista.size()==1);
+        Assert.assertTrue(lista.get(0).equals(sut3));
+    }
 }
