@@ -41,8 +41,8 @@ public class PresenterGasolinerasFavoritas {
      * @param contexto de la aplicación (Necesario para la BD)
      */
     public PresenterGasolinerasFavoritas(Context contexto){
-        gasolineras= new ArrayList<>();
-        //Cargar datos de la BD
+        gasolineras= new ArrayList<>();        //Cargar datos de la BD
+        gasolineraFavoritaList = new ArrayList<>();
 
         this.contexto = contexto;
 
@@ -55,7 +55,6 @@ public class PresenterGasolinerasFavoritas {
     }
 
     public GasolineraFavorita getGasolineraFavoritaPorId(int id, GasolineraFavoritaDAO gasolineraFavoritaDAO){
-
         for (GasolineraFavorita gF: gasolineraFavoritaDAO.getAll()) {
             if(gF.getIdGasolinera() == id)
                 return gF;

@@ -40,7 +40,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView comentario;
     TextView comentarioEditText;
     boolean gasolineraEsFavorita = false;
-    PresenterGasolinerasFavoritas gasolinerasFavoritas=new PresenterGasolinerasFavoritas();
+    PresenterGasolinerasFavoritas gasolinerasFavoritas;
     PresenterGasolineras presenterGasolineras = new PresenterGasolineras();
 
 
