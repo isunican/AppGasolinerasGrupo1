@@ -3,6 +3,7 @@ package com.isunican.proyectobase.Views;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -105,13 +106,29 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
 
+
+        currentList = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.getGasolinerasFavoritas();
         //Adapter al que se le pasa la lista de gasolineras favoritas
-        adapterFavoritas = new GasolineraArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, presenterGasolinerasFavoritas.getGasolinerasFavoritas());
+        adapterFavoritas = new GasolineraArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, currentList);
         //adapterFavoritas.notifyDataSetChanged();
 
         //Inserta lista de gasolineras favoritas en la listView
         listViewFav = findViewById(R.id.listFavGasolineras);
         listViewFav.setAdapter(adapterFavoritas);
+
+
+        listViewFav.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+
+                /* Obtengo el elemento directamente de su posicion,
+                 * ya que es la misma que ocupa en la lista
+                 */
+                Intent myIntent = new Intent(FiltroFavoritosActivity.this, DetailActivity.class);
+                myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera),
+                        currentList.get(position));
+                FiltroFavoritosActivity.this.startActivity(myIntent);
+            }
+        });
 
     }
 
