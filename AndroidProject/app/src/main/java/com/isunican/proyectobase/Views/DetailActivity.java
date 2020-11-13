@@ -1,5 +1,7 @@
 package com.isunican.proyectobase.Views;
 
+import com.isunican.proyectobase.Database.AppDatabase;
+import com.isunican.proyectobase.Presenter.PresenterGasolineras;
 import com.isunican.proyectobase.Presenter.PresenterGasolinerasFavoritas;
 import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.Model.*;
@@ -36,8 +38,11 @@ public class DetailActivity extends AppCompatActivity {
 
     ImageButton favButton;
     TextView comentario;
+    TextView comentarioEditText;
     boolean gasolineraEsFavorita = false;
-    PresenterGasolinerasFavoritas gasolinerasFavoritas;
+    PresenterGasolinerasFavoritas gasolinerasFavoritas=new PresenterGasolinerasFavoritas();
+    PresenterGasolineras presenterGasolineras = new PresenterGasolineras();
+
 
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
 
@@ -69,13 +74,36 @@ public class DetailActivity extends AppCompatActivity {
         ImageView logo = findViewById(R.id.gasolineraIcon);
         comentario = findViewById(R.id.comentarioText);
         g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
-        // TODO GasolineraFavorita gFavorita = listaGasolinerasFavoritas.get(g.getIdeess());
-        /*
-        if(gFavorita == null)
-            gasolineraEsFavorita = false;
-        else
+
+        favButton = findViewById(R.id.favButton);
+
+        // Buscamos la gasolinera para ver si es favorita
+        Gasolinera gDAO = presenterGasolineras.getGasolineraPorIdess(g.getIdeess(),
+                AppDatabase.getInstance(getApplicationContext()).gasolineraDAO());
+        if(gDAO != null)
+        {
+            // existe la gasolinera favorita
+            GasolineraFavorita gFavorita = gasolinerasFavoritas.getGasolineraFavoritaPorId(gDAO.getId(),
+                    AppDatabase.getInstance(getApplicationContext()).gasolineraFavoritaDAO());
+            favButton.setImageResource(R.drawable.favorito_activado); // icono favorito activado
             gasolineraEsFavorita = true;
-        */
+            comentario.setText("Comentario:\n"+gFavorita.getComentario());
+        }
+        else
+        {
+            // no existe la gasolinera favorita
+            favButton.setImageResource(R.drawable.favorito_desactivado); // icono favorito activado
+            gasolineraEsFavorita = false;
+        }
+
+        favButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Abre ventana para añadir comentario
+                creaVentanaAnhadeComentario();
+            }
+        });
+
         String rotuleImageID = g.getRotulo().toLowerCase();
 
         // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
@@ -95,35 +123,6 @@ public class DetailActivity extends AppCompatActivity {
         direccion.setText("Dirección:\n" + g.getDireccion());
         precioGasoleoA.setText("Gasoleo A: " + g.getGasoleoA() + "€");
         precioGasoleo95.setText("Gasoleo 95: " + g.getGasolina95() + "€");
-
-        favButton = findViewById(R.id.favButton);
-        // TODO para cuando la gasolinear tenga atributo favorita
-        /*
-        if(gasolineraEsFavorita)){
-            favButton.setImageResource(R.drawable.favorito_activado); // icono favorito activado
-            gasolineraEsFavorita = true;
-        }else{
-            favButton.setImageResource(R.drawable.favorito_desactivado; // icono favorito desactivado
-            gasolineraEsFavorita = false;
-        }
-        */
-        favButton.setImageResource(R.drawable.favorito_desactivado); // icono favorito desactivado TODO quitar
-        favButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Abre ventana para añadir comentario
-                creaVentanaAnhadeComentario();
-            }
-        });
-
-        // TODO para cuando haya comentario guardado en gasolinera
-        /*
-        if(!gFavorita.getComentario().equals("")){
-            comentario.setText("Comentario:\n" + g.getComentario());
-        }else{
-            comentario.setText("");
-        }
-        */
     }
 
     public void creaVentanaAnhadeComentario(){
@@ -136,7 +135,7 @@ public class DetailActivity extends AppCompatActivity {
         LayoutInflater inflater = this.getLayoutInflater();
         final View view = inflater.inflate(R.layout.anhade_comentario_favorito, null);
 
-        final TextView comentarioEditText = view.findViewById(R.id.textBox_anhadeComentario);
+        comentarioEditText = view.findViewById(R.id.textBox_anhadeComentario);
 
         if(!gasolineraEsFavorita){
             // Definicion positive button ("guardar")
@@ -147,8 +146,6 @@ public class DetailActivity extends AppCompatActivity {
                     b.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            // TODO Anhade gasolinera a favoritas
-                            // TODO Anhade comentario a gasolinera
                             Toast.makeText(getApplicationContext(), "Gasolinera favorita añadida con comentario: "+
                                     comentario.getText(), Toast.LENGTH_LONG).show();
                             comentario.setText("Comentario:\n"+comentarioEditText.getText());
@@ -173,11 +170,12 @@ public class DetailActivity extends AppCompatActivity {
 
     public class ThreadAnhadirGasolineras implements Runnable{
         public ThreadAnhadirGasolineras(){
+            // Constructor vacio para la creacion de la Task
         }
         public void run(){
-            gasolinerasFavoritas.getListaGasolinerasFavoritas();
-            Log.d("Añado Gaso","anhadoGAsol");
-            gasolinerasFavoritas.anhadirGasolineraFavorita(g.getIdeess(),comentario.getText().toString(),getApplicationContext());
+            int id = presenterGasolineras.anhadeGasolinera(g, AppDatabase.getInstance(getApplicationContext()).gasolineraDAO());
+            gasolinerasFavoritas.anhadirGasolineraFavorita(id,comentarioEditText.getText().toString(),
+                    AppDatabase.getInstance(getApplicationContext()).gasolineraFavoritaDAO());
         }
 
     }
