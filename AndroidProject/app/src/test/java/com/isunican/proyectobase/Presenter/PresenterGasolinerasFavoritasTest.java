@@ -1,13 +1,9 @@
 package com.isunican.proyectobase.Presenter;
 
-import android.app.Application;
-import android.content.Context;
+import android.os.Build;
 
 import androidx.test.core.app.ApplicationProvider;
 
-import com.isunican.proyectobase.DAO.GasolineraDAO;
-import com.isunican.proyectobase.DAO.GasolineraFavoritaDAO;
-import com.isunican.proyectobase.Database.AppDatabase;
 import com.isunican.proyectobase.Database.AppDatabaseTest;
 import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.Model.GasolineraFavorita;
@@ -18,10 +14,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@RunWith(RobolectricTestRunner.class)
+@Config(sdk = {Build.VERSION_CODES.O_MR1})
 public class PresenterGasolinerasFavoritasTest {
 
     private Gasolinera gasolinera1;
