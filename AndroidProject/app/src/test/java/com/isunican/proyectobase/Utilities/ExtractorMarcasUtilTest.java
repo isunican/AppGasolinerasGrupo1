@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * @author Luis Cruz
  * @version 0.0.2
  */
-public class BrandExtractorUtilTest {
+public class ExtractorMarcasUtilTest {
 
     static ArrayList<Gasolinera> gasolineras;
     static ArrayList<Gasolinera> filtradas;
@@ -41,17 +41,17 @@ public class BrandExtractorUtilTest {
     public void testExtractBrands(){
         //Caso de prueba 1: funcionamiento normal
         String[] brands = new String[]{"AVIA","CAMPSA","EASYGAS","CARREFOUR"};
-        ArrayList<String> marcas = (ArrayList<String>) BrandExtractorUtil.extractBrands(gasolineras);
+        ArrayList<String> marcas = (ArrayList<String>) ExtractorMarcasUtil.extraeMarcas(gasolineras);
 
         Assert.assertArrayEquals(brands, marcas.toArray());
 
         //Caso de prueba 2: Lista de gasolineras vacía
-        marcas = (ArrayList<String>) BrandExtractorUtil.extractBrands(new ArrayList<Gasolinera>());
+        marcas = (ArrayList<String>) ExtractorMarcasUtil.extraeMarcas(new ArrayList<Gasolinera>());
 
         Assert.assertTrue(marcas.isEmpty());
 
         //Caso de prueba 3: Lista de gasolineras nula
-        marcas = (ArrayList<String>) BrandExtractorUtil.extractBrands(null);
+        marcas = (ArrayList<String>) ExtractorMarcasUtil.extraeMarcas(null);
         Assert.assertTrue(marcas.isEmpty());
 
     }
@@ -62,26 +62,26 @@ public class BrandExtractorUtilTest {
     @Test
     public void testApplyFilter(){
         //Caso de prueba 1: funcionamiento normal
-        ArrayList<Gasolinera> filtered = (ArrayList<Gasolinera>) BrandExtractorUtil.applyFilter("CAMPSA", gasolineras);
+        ArrayList<Gasolinera> filtered = (ArrayList<Gasolinera>) ExtractorMarcasUtil.aplicaFiltro("CAMPSA", gasolineras);
         Assert.assertArrayEquals(filtered.toArray(),filtradas.toArray());
 
-        filtered = (ArrayList<Gasolinera>) BrandExtractorUtil.applyFilter("campsa", gasolineras);
+        filtered = (ArrayList<Gasolinera>) ExtractorMarcasUtil.aplicaFiltro("campsa", gasolineras);
         Assert.assertArrayEquals(filtered.toArray(),filtradas.toArray());
 
-        filtered = (ArrayList<Gasolinera>) BrandExtractorUtil.applyFilter("Campsa", gasolineras);
+        filtered = (ArrayList<Gasolinera>) ExtractorMarcasUtil.aplicaFiltro("Campsa", gasolineras);
         Assert.assertArrayEquals(filtered.toArray(),filtradas.toArray());
 
         //Caso de prueba 2: marca no existente
 
-        Assert.assertTrue(BrandExtractorUtil.applyFilter("REPSOL",gasolineras).isEmpty());
-        Assert.assertTrue(BrandExtractorUtil.applyFilter("repsol",gasolineras).isEmpty());
-        Assert.assertTrue(BrandExtractorUtil.applyFilter("Repsol",gasolineras).isEmpty());
+        Assert.assertTrue(ExtractorMarcasUtil.aplicaFiltro("REPSOL",gasolineras).isEmpty());
+        Assert.assertTrue(ExtractorMarcasUtil.aplicaFiltro("repsol",gasolineras).isEmpty());
+        Assert.assertTrue(ExtractorMarcasUtil.aplicaFiltro("Repsol",gasolineras).isEmpty());
 
         //Caso de prueba 3: lista vacía
-        Assert.assertTrue(BrandExtractorUtil.applyFilter("AVIA", new ArrayList<Gasolinera>()).isEmpty());
+        Assert.assertTrue(ExtractorMarcasUtil.aplicaFiltro("AVIA", new ArrayList<Gasolinera>()).isEmpty());
 
         //Caso de prueba 4: lista nula
-        Assert.assertTrue(BrandExtractorUtil.applyFilter("AVIA", null).isEmpty());
+        Assert.assertTrue(ExtractorMarcasUtil.aplicaFiltro("AVIA", null).isEmpty());
 
     }
 }
