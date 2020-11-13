@@ -2,6 +2,7 @@ package com.isunican.proyectobase.Model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
@@ -10,14 +11,14 @@ import com.isunican.proyectobase.Converters.DateConverter;
 import java.util.Date;
 import java.util.Objects;
 
-@Entity(tableName = "gasolinera_favorita")
+@Entity(tableName = "gasolinera_favorita", indices = @Index(value = {"id_gasolinera"}, unique = true))
 public class GasolineraFavorita {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
     @ColumnInfo
     private String comentario;
-    @ColumnInfo(index = true, name = "id_gasolinera")
+    @ColumnInfo(name = "id_gasolinera")
     private int idGasolinera;
 
     public GasolineraFavorita(String comentario, int idGasolinera){

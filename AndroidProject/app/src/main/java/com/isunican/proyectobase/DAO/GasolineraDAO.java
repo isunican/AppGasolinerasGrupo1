@@ -18,6 +18,9 @@ public interface GasolineraDAO {
     @Query("SELECT * FROM gasolinera WHERE id LIKE :id ")
     List<Gasolinera> findById(int id);
 
+    @Query("SELECT * FROM gasolinera WHERE ideess LIKE :id ")
+    List<Gasolinera> findByIdEESS(int id);
+
     @Insert
     long insertOne(Gasolinera e);
 
