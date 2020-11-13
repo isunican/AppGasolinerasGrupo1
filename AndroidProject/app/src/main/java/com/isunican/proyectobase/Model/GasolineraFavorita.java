@@ -2,6 +2,7 @@ package com.isunican.proyectobase.Model;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
@@ -19,6 +20,7 @@ public class GasolineraFavorita {
     @ColumnInfo
     private String comentario;
     @ColumnInfo(name = "id_gasolinera")
+    @ForeignKey(entity = Gasolinera.class, parentColumns = "id", childColumns = "idGasolinera")
     private int idGasolinera;
 
     public GasolineraFavorita(String comentario, int idGasolinera){
