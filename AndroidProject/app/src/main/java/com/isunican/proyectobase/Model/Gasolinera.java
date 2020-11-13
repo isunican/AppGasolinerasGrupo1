@@ -173,8 +173,6 @@ public class Gasolinera implements Parcelable {
         if (o == null || getClass() != o.getClass()) return false;
         Gasolinera that = (Gasolinera) o;
         return ideess == that.ideess &&
-                Double.compare(that.gasoleoA, gasoleoA) == 0 &&
-                Double.compare(that.gasolina95, gasolina95) == 0 &&
                 Objects.equals(localidad, that.localidad) &&
                 Objects.equals(provincia, that.provincia) &&
                 Objects.equals(direccion, that.direccion) &&
