@@ -64,7 +64,6 @@ public class GasolinaFavoritaDAOTest {
         //Caso3: Dos o mas elementos en Tabla
         GasolineraFavorita sut2 = new GasolineraFavorita("Gasolinera en la entrada de Santander", 5);
         res = db.gasolineraFavoritaDAO().getIdFromRowId(db.gasolineraFavoritaDAO().insertOne(sut2));
-        System.out.println(res);
         lista = db.gasolineraFavoritaDAO().findById(res);
         Assert.assertTrue(lista.size() == 1);
         Assert.assertTrue(lista.get(0).equals(sut2));
@@ -72,6 +71,7 @@ public class GasolinaFavoritaDAOTest {
 
     @Test
     public void insertOneTest(){
+
         // Caso 1: Objeto nulo
         try{
             db.gasolineraFavoritaDAO().insertOne(null);
@@ -80,6 +80,7 @@ public class GasolinaFavoritaDAOTest {
         {
             Assert.assertTrue(db.gasolineraFavoritaDAO().getAll().size()==0);
         }
+
         // Caso 2: Objeto correcto
         GasolineraFavorita sut = new GasolineraFavorita("Gasolinera cercana a casa y de pago rapido", 1);
         int preInsert = db.gasolineraFavoritaDAO().getAll().size();
@@ -91,6 +92,7 @@ public class GasolinaFavoritaDAOTest {
 
     @Test
     public void deleteTest(){
+
         //Caso 1: Eliminar nulo
         try{
             db.gasolineraFavoritaDAO().delete(null);
@@ -99,6 +101,7 @@ public class GasolinaFavoritaDAOTest {
         {
             Assert.assertTrue(db.gasolineraFavoritaDAO().getAll().size()==0);
         }
+
         //Caso 2: Eliminar objeto no existente
         GasolineraFavorita sut = new GasolineraFavorita("Gasolinera cercana a casa y de pago rapido", 1);
         db.gasolineraFavoritaDAO().delete(sut);
@@ -113,6 +116,7 @@ public class GasolinaFavoritaDAOTest {
 
     @Test
     public void nukeTest(){
+
         // Caso 1: Tabla vacia
         db.gasolineraFavoritaDAO().nuke();
         Assert.assertTrue(db.gasolineraFavoritaDAO().getAll().size() == 0);
@@ -121,6 +125,7 @@ public class GasolinaFavoritaDAOTest {
         db.gasolineraFavoritaDAO().insertOne(sut);
         db.gasolineraFavoritaDAO().nuke();
         Assert.assertTrue(db.gasolineraFavoritaDAO().getAll().size() == 0);
+
         // Caso 3: Tabla con 2 o mas elementos
         GasolineraFavorita sut2 = new GasolineraFavorita("Gasolinera en la entrada de Santander", 5);
         GasolineraFavorita sut3 = new GasolineraFavorita("A medio camino de Bilbao", 8);
@@ -133,12 +138,50 @@ public class GasolinaFavoritaDAOTest {
 
     @Test
     public void getIdFromRowIdTest(){
+
         // Caso 1: No existente (Puedo poner el ID que quiera debido a que la tabla se encuentra vacia)
         long res = db.gasolineraFavoritaDAO().getIdFromRowId(27);
         Assert.assertTrue(res == 0);
+
         // Caso 2: Correcto
         GasolineraFavorita sut = new GasolineraFavorita("Gasolinera cercana a casa y de pago rapido", 1);
         res = db.gasolineraFavoritaDAO().insertOne(sut);
         Assert.assertTrue(res == 1);
+    }
+
+    @Test
+    public void updateTest(){
+        // Caso 1: Nulo
+        try {
+            db.gasolineraFavoritaDAO().update(null);
+            Assert.fail();
+        } catch ( Exception e )
+        {
+            Assert.assertTrue(true);
+        }
+
+        // Caso 2: Intentar actualizar una dupla que no existe en la base de datos
+        GasolineraFavorita sut = new GasolineraFavorita("Gasolinera cercana a casa y de pago rapido", 1);
+        db.gasolineraFavoritaDAO().update(sut);
+        Assert.assertTrue(db.gasolineraFavoritaDAO().getAll().size() == 0);
+        // Caso 3: Tabla con 1 elemento
+        long rowid = db.gasolineraFavoritaDAO().insertOne(sut);
+        sut.setId(db.gasolineraFavoritaDAO().getIdFromRowId(rowid));
+        sut.setComentario("Pues al final no estaba tan cerca de casa pero esta bien");
+        db.gasolineraFavoritaDAO().update(sut);
+        List<GasolineraFavorita> lista = db.gasolineraFavoritaDAO().getAll();
+        Assert.assertTrue(lista.size() == 1);
+        Assert.assertTrue(lista.get(0).equals(sut));
+
+        // Caso 3: Tabla con 2 o mas elementos
+        GasolineraFavorita sut2 = new GasolineraFavorita("Gasolinera en la entrada de Santander", 5);
+        GasolineraFavorita sut3 = new GasolineraFavorita("A medio camino de Bilbao", 8);
+        db.gasolineraFavoritaDAO().insertOne(sut2);
+        rowid = db.gasolineraFavoritaDAO().insertOne(sut3);
+        sut3.setId(db.gasolineraFavoritaDAO().getIdFromRowId(rowid));
+        sut3.setComentario("No esta a medio camino, esta casi en Castro, pero esta genial!!!");
+        db.gasolineraFavoritaDAO().update(sut3);
+        Assert.assertTrue(db.gasolineraFavoritaDAO().getAll().size() == 3);
+        Assert.assertTrue(db.gasolineraFavoritaDAO().findById(db.gasolineraFavoritaDAO().getIdFromRowId(rowid)).get(0).equals(sut3));
     }
 }

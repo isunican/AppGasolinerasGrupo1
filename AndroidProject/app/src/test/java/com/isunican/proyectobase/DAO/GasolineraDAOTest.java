@@ -7,6 +7,7 @@ import androidx.test.core.app.ApplicationProvider;
 
 import com.isunican.proyectobase.Database.AppDatabaseTest;
 import com.isunican.proyectobase.Model.Gasolinera;
+import com.isunican.proyectobase.Model.GasolineraFavorita;
 
 import org.junit.After;
 import org.junit.Assert;;
@@ -64,7 +65,6 @@ public class GasolineraDAOTest   {
         //Caso3: Dos o mas elementos en Tabla
         Gasolinera sut2 = new Gasolinera(2, "Torrelavega", "Cantabria", "La inmobiliaria", 1.50, 1.39, "CEPSA");
         res = db.gasolineraDAO().getIdFromRowId(db.gasolineraDAO().insertOne(sut2));
-        System.out.println(res);
         lista = db.gasolineraDAO().findById(res);
         Assert.assertTrue(lista.size() == 1);
         Assert.assertTrue(lista.get(0).equals(sut2));
@@ -163,5 +163,41 @@ public class GasolineraDAOTest   {
         lista = db.gasolineraDAO().findByIdEESS(3);
         Assert.assertTrue(lista.size()==1);
         Assert.assertTrue(lista.get(0).equals(sut3));
+    }
+
+    @Test
+    public void updateTest(){
+        // Caso 1: Nulo
+        try {
+            db.gasolineraDAO().update(null);
+            Assert.fail();
+        } catch ( Exception e )
+        {
+            Assert.assertTrue(true);
+        }
+
+        // Caso 2: Intentar actualizar una dupla que no existe en la base de datos
+        Gasolinera sut = new Gasolinera(1, "Santander", "Cantabria", "Los Castros Nº1", 1.00, 1.00, "CEPSA");
+        db.gasolineraDAO().update(sut);
+        Assert.assertTrue(db.gasolineraDAO().getAll().size() == 0);
+        // Caso 3: Tabla con 1 elemento
+        long rowid = db.gasolineraDAO().insertOne(sut);
+        sut.setId(db.gasolineraDAO().getIdFromRowId(rowid));
+        sut.setDireccion("Pues al final no estaba tan cerca de casa pero esta bien");
+        db.gasolineraDAO().update(sut);
+        List<Gasolinera> lista = db.gasolineraDAO().getAll();
+        Assert.assertTrue(lista.size() == 1);
+        Assert.assertTrue(lista.get(0).equals(sut));
+
+        // Caso 3: Tabla con 2 o mas elementos
+        Gasolinera sut2 = new Gasolinera(2, "Torrelavega", "Cantabria", "La inmobiliaria", 1.50, 1.39, "CEPSA");
+        Gasolinera sut3 = new Gasolinera(3, "Reinosa", "Cantabria", "Sin nombre", 1.30, 1.35, "CEPSA");
+        db.gasolineraDAO().insertOne(sut2);
+        rowid = db.gasolineraDAO().insertOne(sut3);
+        sut3.setId(db.gasolineraDAO().getIdFromRowId(rowid));
+        sut3.setLocalidad("No esta a medio camino, esta casi en Castro, pero esta genial!!!");
+        db.gasolineraDAO().update(sut3);
+        Assert.assertTrue(db.gasolineraDAO().getAll().size() == 3);
+        Assert.assertTrue(db.gasolineraDAO().findById(db.gasolineraDAO().getIdFromRowId(rowid)).get(0).equals(sut3));
     }
 }
