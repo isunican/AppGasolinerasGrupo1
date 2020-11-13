@@ -69,13 +69,10 @@ public class DetailActivity extends AppCompatActivity {
         ImageView logo = findViewById(R.id.gasolineraIcon);
         comentario = findViewById(R.id.comentarioText);
         g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
-        // TODO GasolineraFavorita gFavorita = listaGasolinerasFavoritas.get(g.getIdeess());
-        /*
-        if(gFavorita == null)
-            gasolineraEsFavorita = false;
-        else
-            gasolineraEsFavorita = true;
-        */
+
+        GasolineraFavorita gFavorita = gasolinerasFavoritas.getListaGasolinerasFavoritas().get(g.getIdeess());
+        gasolineraEsFavorita = (gFavorita == null);
+
         String rotuleImageID = g.getRotulo().toLowerCase();
 
         // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
@@ -97,16 +94,14 @@ public class DetailActivity extends AppCompatActivity {
         precioGasoleo95.setText("Gasoleo 95: " + g.getGasolina95() + "€");
 
         favButton = findViewById(R.id.favButton);
-        // TODO para cuando la gasolinear tenga atributo favorita
-        /*
-        if(gasolineraEsFavorita)){
+
+        if(gasolineraEsFavorita){
             favButton.setImageResource(R.drawable.favorito_activado); // icono favorito activado
             gasolineraEsFavorita = true;
         }else{
-            favButton.setImageResource(R.drawable.favorito_desactivado; // icono favorito desactivado
+            favButton.setImageResource(R.drawable.favorito_desactivado); // icono favorito desactivado
             gasolineraEsFavorita = false;
         }
-        */
         favButton.setImageResource(R.drawable.favorito_desactivado); // icono favorito desactivado TODO quitar
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,14 +111,11 @@ public class DetailActivity extends AppCompatActivity {
             }
         });
 
-        // TODO para cuando haya comentario guardado en gasolinera
-        /*
         if(!gFavorita.getComentario().equals("")){
-            comentario.setText("Comentario:\n" + g.getComentario());
+            comentario.setText("Comentario:\n" + gFavorita.getComentario());
         }else{
             comentario.setText("");
         }
-        */
     }
 
     public void creaVentanaAnhadeComentario(){
