@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.util.Objects;
@@ -17,7 +18,7 @@ import java.util.Objects;
     pasar objetos de este tipo entre activities a traves de una llamada intent
 ------------------------------------------------------------------
 */
-@Entity(tableName = "gasolinera")
+@Entity(tableName = "gasolinera", indices = @Index(value = {"ideess"}, unique = true))
 public class Gasolinera implements Parcelable {
     @PrimaryKey(autoGenerate = true)
     private int id;
