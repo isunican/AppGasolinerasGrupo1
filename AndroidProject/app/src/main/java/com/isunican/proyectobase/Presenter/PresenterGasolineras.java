@@ -2,6 +2,7 @@ package com.isunican.proyectobase.Presenter;
 
 import android.util.Log;
 
+import com.isunican.proyectobase.DAO.GasolineraDAO;
 import com.isunican.proyectobase.Database.AppDatabase;
 import com.isunican.proyectobase.Model.*;
 import com.isunican.proyectobase.Utilities.ParserJSONGasolineras;
@@ -45,6 +46,18 @@ public class PresenterGasolineras {
 
     public void setGasolineras(List<Gasolinera> l) {
         this.gasolineras = l;
+    }
+
+    public Gasolinera getGasolineraPorIdess(int idess, GasolineraDAO gasolineraDAO){
+        List<Gasolinera> lista = gasolineraDAO.findByIdEESS(idess);
+        if (lista.size()==0)
+            return null;
+        return lista.get(0);
+    }
+
+    public int anhadeGasolinera(Gasolinera gasolinera, GasolineraDAO gasolineraDAO){
+        long id = gasolineraDAO.insertOne(gasolinera);
+        return gasolineraDAO.getIdFromRowId(id);
     }
 
     /**

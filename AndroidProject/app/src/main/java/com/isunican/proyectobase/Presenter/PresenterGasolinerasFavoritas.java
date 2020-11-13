@@ -3,6 +3,7 @@ package com.isunican.proyectobase.Presenter;
 import android.content.Context;
 import android.util.Log;
 
+import com.isunican.proyectobase.DAO.GasolineraDAO;
 import com.isunican.proyectobase.DAO.GasolineraFavoritaDAO;
 import com.isunican.proyectobase.Database.AppDatabase;
 import com.isunican.proyectobase.Model.Gasolinera;
@@ -10,6 +11,7 @@ import com.isunican.proyectobase.Model.GasolineraFavorita;
 import com.isunican.proyectobase.Model.TarjetaDescuento;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class PresenterGasolinerasFavoritas {
@@ -25,6 +27,15 @@ public class PresenterGasolinerasFavoritas {
         this.gasolineraFavoritaList = gasolineraFavoritaList;
     }
 
+    public GasolineraFavorita getGasolineraFavoritaPorId(int id, GasolineraFavoritaDAO gasolineraFavoritaDAO){
+
+        for (GasolineraFavorita gF: gasolineraFavoritaDAO.getAll()) {
+            if(gF.getIdGasolinera() == id)
+                return gF;
+        }
+        return null;
+    }
+
     public Gasolinera eliminaGasolineraFavorita(Gasolinera gasolinera){
 
         // hago cosas
@@ -33,7 +44,6 @@ public class PresenterGasolinerasFavoritas {
     public GasolineraFavorita anhadirGasolineraFavorita(int idGasolinera, String comentario, GasolineraFavoritaDAO gasolineraFavoritaDAO){
         GasolineraFavorita favorito=new GasolineraFavorita(comentario,idGasolinera);
         gasolineraFavoritaDAO.insertOne(favorito);
-        Log.d("Gas añadida",favorito.toString());
         gasolineraFavoritaList.add(favorito);
         return favorito;
     }
