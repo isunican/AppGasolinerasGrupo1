@@ -38,9 +38,11 @@ public class DetailActivity extends AppCompatActivity {
 
     ImageButton favButton;
     TextView comentario;
+    TextView comentarioEditText;
     boolean gasolineraEsFavorita = false;
     PresenterGasolinerasFavoritas gasolinerasFavoritas=new PresenterGasolinerasFavoritas();
     PresenterGasolineras presenterGasolineras = new PresenterGasolineras();
+
 
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
 
@@ -84,7 +86,7 @@ public class DetailActivity extends AppCompatActivity {
                     AppDatabase.getInstance(getApplicationContext()).gasolineraFavoritaDAO());
             favButton.setImageResource(R.drawable.favorito_activado); // icono favorito activado
             gasolineraEsFavorita = true;
-            comentario.setText(gFavorita.getComentario());
+            comentario.setText("Comentario:\n"+gFavorita.getComentario());
         }
         else
         {
@@ -132,7 +134,7 @@ public class DetailActivity extends AppCompatActivity {
         LayoutInflater inflater = this.getLayoutInflater();
         final View view = inflater.inflate(R.layout.anhade_comentario_favorito, null);
 
-        final TextView comentarioEditText = view.findViewById(R.id.textBox_anhadeComentario);
+        comentarioEditText = view.findViewById(R.id.textBox_anhadeComentario);
 
         if(!gasolineraEsFavorita){
             // Definicion positive button ("guardar")
@@ -171,7 +173,7 @@ public class DetailActivity extends AppCompatActivity {
         }
         public void run(){
             int id = presenterGasolineras.anhadeGasolinera(g, AppDatabase.getInstance(getApplicationContext()).gasolineraDAO());
-            gasolinerasFavoritas.anhadirGasolineraFavorita(id,comentario.getText().toString(),
+            gasolinerasFavoritas.anhadirGasolineraFavorita(id,comentarioEditText.getText().toString(),
                     AppDatabase.getInstance(getApplicationContext()).gasolineraFavoritaDAO());
         }
 
