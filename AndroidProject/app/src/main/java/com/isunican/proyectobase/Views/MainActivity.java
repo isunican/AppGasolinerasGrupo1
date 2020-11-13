@@ -541,6 +541,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         protected void onPostExecute(Boolean res) {
             listaGasolinerasActual=presenterGasolineras.getGasolineras();
+            currentList = (ArrayList<Gasolinera>) presenterGasolineras.getGasolineras();
             Toast toast;
 
             mSwipeRefreshLayout.setRefreshing(false);
@@ -591,7 +592,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                      */
                     Intent myIntent = new Intent(MainActivity.this, DetailActivity.class);
                     myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera),
-                            listaGasolinerasActual.get(position));
+                            currentList.get(position));
                     MainActivity.this.startActivity(myIntent);
                 }
             });
