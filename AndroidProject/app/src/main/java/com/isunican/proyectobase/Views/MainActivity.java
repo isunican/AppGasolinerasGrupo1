@@ -246,16 +246,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Datos spinner de tipo descuento
         String[] datosTipoDescuento = new String[] {getResources().getString(R.string.default_type_discount_card),getResources().getString(R.string.porcentual),
                 getResources().getString(R.string.cts_litro)};
-        ArrayAdapter<String> adapterTipoDescuento = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapterTipoDescuento = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, datosTipoDescuento);
         adapterTipoDescuento.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnTipoDescuento.setAdapter(adapterTipoDescuento);
 
         // Datos spinner de marcas
-        List<String> datosMarcas = ExtractorMarcasUtil.extraeMarcas((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
+        List<String> datosMarcas = ExtractorMarcasUtil.extraeMarcas(presenterGasolineras.getGasolineras());
         datosMarcas = CommonUtils.sortStringList(datosMarcas);
         datosMarcas.add(0,getResources().getString(R.string.default_brand));
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, datosMarcas);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnMarca.setAdapter(adapter2);
@@ -310,7 +310,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Ventana de dialogo para filtrar gasolineras por marca
      */
     public void creaAlertDialogFiltroMarca(){
-        presenterFiltroMarcas = new PresenterFiltroMarcas((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
+        presenterFiltroMarcas = new PresenterFiltroMarcas(presenterGasolineras.getGasolineras());
         // Get the layout inflater
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.activity_filtro_marca_acivity, null);
