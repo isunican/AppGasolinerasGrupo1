@@ -1,6 +1,10 @@
 package com.isunican.proyectobase.Views;
 
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
@@ -40,13 +44,8 @@ public class FiltroFavoritosActivityUITest {
         onView(withId(R.id.action_favorite)).perform(click());
         //Cogemos la primera marca
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listViewMarcasFavDialog)).atPosition(0).perform(click());
-        /*
-        ListView marcas = activityRule.getActivity().findViewById(R.id.listViewMarcasFavDialog);
-        String marcaSeleccionada = (String) marcas.getAdapter().getItem(0);
-        System.out.println(marcaSeleccionada);
-        onView(withId(R.id.textMarcaFavDialog)).check(matches(withText(marcaSeleccionada)));
-        *TODO: Solucionar el null pointer que tira aquí
-         */
+        //Cogemos la marca
+        String marca =activityRule.getActivity().textMarcaFavDialog.getText().toString();
         //Aplicamos el filtro
         onView(withText("OK")).perform(click());
         ListView newlistaFav = activityRule.getActivity().findViewById(R.id.listFavGasolineras);
@@ -56,7 +55,8 @@ public class FiltroFavoritosActivityUITest {
         Assert.assertTrue(favoritos >= newFavoritos);
         //Comprobamos que la marca de la gasolinera se corresponde con el filtro
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listFavGasolineras)).atPosition(0).perform(click());
-        onView(withId(R.id.nombreGasolineraText)).check(matches(withText("AVIA"))); //TODO: Conseguir la marca y compararla aquí
+        //Comprobamos que la marca de la gasolinera coincide con la seleccionada
+        onView(withId(R.id.nombreGasolineraText)).check(matches(withText(marca)));
 
         Espresso.pressBack(); //Volvemos a la vista anterior para los siguientes casos de prueba
 
@@ -87,7 +87,6 @@ public class FiltroFavoritosActivityUITest {
     @Test
     public void filtroFavoritosLocalidadTest(){
 
-
         //Caso 1: filtramos por una localidad cualquiera
         ListView listaFav = activityRule.getActivity().findViewById(R.id.listFavGasolineras);
         //Contamos la cantidad de favoritos antes de filtrar
@@ -96,13 +95,68 @@ public class FiltroFavoritosActivityUITest {
         onView(withId(R.id.action_favorite)).perform(click());
         //Cogemos la primera localidad
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listViewLocalidadesFavDialog)).atPosition(0).perform(click());
-        /*
-        ListView localidades = activityRule.getActivity().findViewById(R.id.listViewLocalidadesFavDialog);
-        String localidadSeleccionada = (String) localidades.getAdapter().getItem(0);
-        System.out.println(localidadSeleccionada);
-        onView(withId(R.id.textLocalidadFavDialog)).check(matches(withText(localidadSeleccionada)));
-        //TODO: Solucionar el null pointer que tira aquí
-        */
+        //Cogemos la localidad seleccionada
+        String localidad = activityRule.getActivity().textLocalidadFavDialog.getText().toString();
+        //Aplicamos el filtro
+        onView(withText("OK")).perform(click());
+
+        ListView newlistaFav = activityRule.getActivity().findViewById(R.id.listFavGasolineras);
+        //Volvemos a contar los favoritos
+        int newFavoritos = newlistaFav.getAdapter().getCount();
+        //Comprobamos que el número de favoritos ha cambiado
+        Assert.assertTrue(favoritos >= newFavoritos);
+
+        //Comprobamos que la localidad de la gasolinera se corresponde con el filtro
+        onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listFavGasolineras)).atPosition(0).perform(click());
+        ListView listView = activityRule.getActivity().findViewById(R.id.listFavGasolineras);
+        Gasolinera g = (Gasolinera) listView.getAdapter().getItem(0);
+        //Comprobamos que la localidad de la gasolinera coincide con la seleccionada en el filtro
+        Assert.assertEquals(g.getLocalidad(), localidad);
+
+        Espresso.pressBack(); //Volvemos a la vista anterior para los siguientes casos de prueba
+
+
+        //Caso 2: no se selecciona ninguna marca de filtro
+        //Vamos a la vista de filtrado
+        onView(withId(R.id.action_favorite)).perform(click());
+        //Aplicamos el filtro
+        onView(withText("OK")).perform(click());
+        newlistaFav = activityRule.getActivity().findViewById(R.id.listFavGasolineras);
+        //Volvemos a contar los favoritos
+        newFavoritos = newlistaFav.getAdapter().getCount();
+        //Comprobamos que hay el mismo numero que al principio
+        Assert.assertTrue(favoritos == newFavoritos);
+
+
+        //Caso 3: pulsamos cancelar
+        //Vamos a la vista de filtrado
+        onView(withId(R.id.action_favorite)).perform(click());
+        //No aplicamos el filtro
+        onView(withText("Cancel")).perform(click());
+        newlistaFav = activityRule.getActivity().findViewById(R.id.listFavGasolineras);
+        //Volvemos a contar los favoritos
+        newFavoritos = newlistaFav.getAdapter().getCount();
+        //Comprobamos que el numero de favoritos no ha cambiado
+        Assert.assertTrue(favoritos == newFavoritos);
+    }
+
+    @Test
+    public void filtroFavoritosDosFiltrosTest(){
+
+        //Caso 1: aplicamos los 2 filtros a la vez
+        ListView listaFav = activityRule.getActivity().findViewById(R.id.listFavGasolineras);
+        //Contamos la cantidad de favoritos antes de filtrar
+        int favoritos = listaFav.getAdapter().getCount();
+        //Vamos a la vista de filtrado
+        onView(withId(R.id.action_favorite)).perform(click());
+        //Cogemos la primera marca
+        onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listViewMarcasFavDialog)).atPosition(0).perform(click());
+        //Cogemos la primera localidad
+        onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listViewLocalidadesFavDialog)).atPosition(0).perform(click());
+        //Cogemos la localidad seleccionada
+        String localidad = activityRule.getActivity().textLocalidadFavDialog.getText().toString();
+        //Cogemos la marca
+        String marca =activityRule.getActivity().textMarcaFavDialog.getText().toString();
         //Aplicamos el filtro
         onView(withText("OK")).perform(click());
         ListView newlistaFav = activityRule.getActivity().findViewById(R.id.listFavGasolineras);
@@ -115,9 +169,12 @@ public class FiltroFavoritosActivityUITest {
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listFavGasolineras)).atPosition(0).perform(click());
         ListView listView = activityRule.getActivity().findViewById(R.id.listFavGasolineras);
         Gasolinera g = (Gasolinera) listView.getAdapter().getItem(0);
-        //TODO: No puedo comprobar una localidad, porque no se como extraerla de la lista
+        //Comprobamos que la localidad de la gasolinera coincide con la seleccionada en el filtro
+        Assert.assertEquals(g.getLocalidad(), localidad);
+        //Comprobamos que la marca de la gasolinera coincide con la seleccionada
+        onView(withId(R.id.nombreGasolineraText)).check(matches(withText(marca)));
 
-        Espresso.pressBack(); //Volvemos a la vista anterior para los siguientes casos de prueba
+        Espresso.pressBack();
 
         //Caso 2: no se selecciona ninguna marca de filtro
         //Vamos a la vista de filtrado
