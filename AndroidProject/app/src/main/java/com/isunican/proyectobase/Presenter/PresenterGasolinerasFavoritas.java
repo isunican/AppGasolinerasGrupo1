@@ -30,7 +30,7 @@ import static com.isunican.proyectobase.Presenter.PresenterGasolineras.SANTANDER
 public class PresenterGasolinerasFavoritas {
 
     ArrayList<Gasolinera> listaOriginal; //Lista de gasolineras favoritas
-    ArrayList<Gasolinera> listaActualizada;
+
 
 
     /**
@@ -39,7 +39,6 @@ public class PresenterGasolinerasFavoritas {
      */
     public PresenterGasolinerasFavoritas(){
         listaOriginal = new ArrayList<>();
-        listaActualizada = new ArrayList<>();
         //Cargar datos de la BD
 
         gasolinerasDummy();
@@ -76,7 +75,7 @@ public class PresenterGasolinerasFavoritas {
      * @return la lista de gasolineras filtradas
      */
     public List<Gasolinera> filtrarGasolinerasFavMarca(String marca){
-        listaActualizada = (ArrayList<Gasolinera>) ExtractorMarcasUtil.aplicaFiltro(marca, listaOriginal);
+        ArrayList<Gasolinera> listaActualizada = (ArrayList<Gasolinera>) ExtractorMarcasUtil.aplicaFiltro(marca, listaOriginal);
         if(listaActualizada.isEmpty())return listaOriginal;
         return listaActualizada;
     }
@@ -96,7 +95,7 @@ public class PresenterGasolinerasFavoritas {
      * @return la lista de gasolineras filtradas
      */
     public List<Gasolinera> filtrarGasolinerasFavLocal(String localidad){
-        listaActualizada = (ArrayList<Gasolinera>) ExtractorLocalidadUtil.aplicaFiltro(localidad, listaOriginal);
+        ArrayList<Gasolinera> listaActualizada = (ArrayList<Gasolinera>) ExtractorLocalidadUtil.aplicaFiltro(localidad, listaOriginal);
         if(listaActualizada.isEmpty()) return listaOriginal;
         return listaActualizada;
     }
@@ -118,7 +117,7 @@ public class PresenterGasolinerasFavoritas {
      * @return lista filtrada acorde a los 2 parámetros
      */
     public List<Gasolinera> filtraGasolinerasFavAmbos(String marca, String localidad){
-        listaActualizada = (ArrayList<Gasolinera>) ExtractorMarcasUtil.aplicaFiltro(marca, listaOriginal);
+        ArrayList<Gasolinera> listaActualizada = (ArrayList<Gasolinera>) ExtractorMarcasUtil.aplicaFiltro(marca, listaOriginal);
         if(!listaActualizada.isEmpty())listaActualizada = (ArrayList<Gasolinera>) ExtractorLocalidadUtil.aplicaFiltro(localidad, listaActualizada);
 
         if(listaActualizada.isEmpty()) return listaOriginal;

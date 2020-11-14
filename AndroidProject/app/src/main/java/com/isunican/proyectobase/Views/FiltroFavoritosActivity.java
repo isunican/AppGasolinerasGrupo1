@@ -55,21 +55,21 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
 
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
 
+    //Contexto de la aplicación
+    Context contexto;
+    //Presenter que gestiona las gasolineras favoritas
+    PresenterGasolinerasFavoritas presenterGasolinerasFavoritas;
+    //Lista de las gasolineras favoritas actuales
+    ArrayList<Gasolinera> listaActual;
+
     // Elemento de la activity. ListView que contendra las gasolineras favoritas
     ListView listViewFav;
 
-    //Elementos del dialgo de filtro fav
+    //Elementos del dialogo de filtro fav
     ListView listViewMarcasFavDialog;
     ListView listViewLocalidadFavDialog;
     EditText textMarcaFavDialog;
     EditText textLocalidadFavDialog;
-
-    Context contexto;
-
-
-    PresenterGasolinerasFavoritas presenterGasolinerasFavoritas;
-
-    ArrayList<Gasolinera> currentList;
 
     //Adapter para lista de marcas y localidades
     ArrayAdapter<String> adapterListMarcas;
@@ -95,7 +95,7 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         //Titulo en el actionBar
         this.setTitle(R.string.title_fav);
 
-        currentList = new ArrayList<>();
+        listaActual = new ArrayList<>();
 
         presenterGasolinerasFavoritas = new PresenterGasolinerasFavoritas();
         FetcherThread hilo = new FetcherThread(presenterGasolinerasFavoritas, contexto);
@@ -113,10 +113,9 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
 
 
-        currentList = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.getGasolinerasFavoritas();
+        listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.getGasolinerasFavoritas();
         //Adapter al que se le pasa la lista de gasolineras favoritas
-        adapterFavoritas = new GasolineraArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, currentList);
-        //adapterFavoritas.notifyDataSetChanged();
+        adapterFavoritas = new GasolineraArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, listaActual);
 
         //Inserta lista de gasolineras favoritas en la listView
         listViewFav = findViewById(R.id.listFavGasolineras);
@@ -131,7 +130,7 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
                  */
                 Intent myIntent = new Intent(FiltroFavoritosActivity.this, DetailActivity.class);
                 myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera),
-                        currentList.get(position));
+                        listaActual.get(position));
                 FiltroFavoritosActivity.this.startActivity(myIntent);
             }
         });
@@ -201,17 +200,17 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
                     public void onClick(View view) {
 
                         if(textMarcaFavDialog.getText().toString().equals("") && textLocalidadFavDialog.getText().toString().equals("")){
-                            currentList = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.getGasolinerasFavoritas();
+                            listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.getGasolinerasFavoritas();
 
                         }else if(textMarcaFavDialog.getText().toString().equals("")){
-                            currentList = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtrarGasolinerasFavLocal(textLocalidadFavDialog.getText().toString());
+                            listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtrarGasolinerasFavLocal(textLocalidadFavDialog.getText().toString());
                         }else if(textLocalidadFavDialog.getText().toString().equals("")){
-                            currentList = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtrarGasolinerasFavMarca(textMarcaFavDialog.getText().toString());
+                            listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtrarGasolinerasFavMarca(textMarcaFavDialog.getText().toString());
                         }else{
-                            currentList = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtraGasolinerasFavAmbos(textMarcaFavDialog.getText().toString(),textLocalidadFavDialog.getText().toString());
+                            listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtraGasolinerasFavAmbos(textMarcaFavDialog.getText().toString(),textLocalidadFavDialog.getText().toString());
                         }
 
-                        adapterFavoritas = new GasolineraArrayAdapter(FiltroFavoritosActivity.this, 0, currentList);
+                        adapterFavoritas = new GasolineraArrayAdapter(FiltroFavoritosActivity.this, 0, listaActual);
                         listViewFav.findViewById(R.id.listFavGasolineras);
                         listViewFav.setAdapter(adapterFavoritas);
                         //Mensaje de datos filtrados
@@ -242,6 +241,8 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 String marca = listViewMarcasFavDialog.getItemAtPosition(position).toString();
                 textMarcaFavDialog.setText(marca);
+
+                //Si el otro campo está vacío, filtrar su lista
                 if(textLocalidadFavDialog.getText().toString().isEmpty()) {
                     ArrayList<Gasolinera> filtradas = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtrarGasolinerasFavMarca(marca);
                     ArrayList<String> localidades = (ArrayList<String>) ExtractorLocalidadUtil.extraeLocalidades(filtradas);
@@ -257,6 +258,8 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 String localidad = listViewLocalidadFavDialog.getItemAtPosition(position).toString();
                 textLocalidadFavDialog.setText(localidad);
+                
+                //Si el otro campo está vacío, filtrar su lista
                 if(textMarcaFavDialog.getText().toString().isEmpty()) {
                     ArrayList<Gasolinera> filtradas = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtrarGasolinerasFavLocal(localidad);
                     ArrayList<String> marcas = (ArrayList<String>) ExtractorMarcasUtil.extraeMarcas(filtradas);
