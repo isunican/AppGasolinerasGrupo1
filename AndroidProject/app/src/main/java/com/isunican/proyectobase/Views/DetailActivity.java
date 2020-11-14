@@ -1,5 +1,9 @@
 package com.isunican.proyectobase.Views;
 
+import com.isunican.proyectobase.DAO.GasolineraDAO;
+import com.isunican.proyectobase.DAO.GasolineraFavoritaDAO;
+import com.isunican.proyectobase.Database.AppDatabase;
+import com.isunican.proyectobase.Presenter.PresenterGasolinerasFavoritas;
 import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.Model.*;
 
@@ -34,9 +38,12 @@ public class DetailActivity extends AppCompatActivity {
     TextView comentario;
     TextView nombreGasolinera;
     boolean gasolineraEsFavorita = false;
+    Gasolinera g;
 
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
     private static final int BTN_NEGATIVO = DialogInterface.BUTTON_NEGATIVE;
+
+    private PresenterGasolinerasFavoritas presenterGasolinerasFavoritas;
 
     /**
      * onCreate
@@ -49,6 +56,8 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        presenterGasolinerasFavoritas = new PresenterGasolinerasFavoritas();
 
         // muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -63,7 +72,7 @@ public class DetailActivity extends AppCompatActivity {
         TextView precioGasoleo95 = findViewById(R.id.precioGasoleo95Text);
         ImageView logo = findViewById(R.id.gasolineraIcon);
         comentario = findViewById(R.id.comentarioText);
-        Gasolinera g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
+        g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
         String rotuleImageID = g.getRotulo().toLowerCase();
 
         // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
@@ -184,6 +193,8 @@ public class DetailActivity extends AppCompatActivity {
                     public void onClick(View v) {
 
                         // TODO: eliminar la gasolinera de favoritos
+                        RemoverThread hilo = new RemoverThread(g.getIdeess(), DetailActivity.this.getApplicationContext(), presenterGasolinerasFavoritas);
+                        new Thread(hilo).start();
 
                         favButton.setImageResource(R.drawable.favorito_desactivado);
                         favButton.setTag(R.drawable.favorito_desactivado);
@@ -200,4 +211,24 @@ public class DetailActivity extends AppCompatActivity {
         alertDialogConfirmacion.show();
     }
 
+}
+
+class RemoverThread implements Runnable {
+
+    private PresenterGasolinerasFavoritas presenterGasolinerasFavoritas;
+    private int idGasolinera;
+    private Context contexto;
+
+    public RemoverThread (int idGasolinera, Context contexto, PresenterGasolinerasFavoritas presenterGasolinerasFavoritas) {
+        this.idGasolinera = idGasolinera;
+        this.contexto = contexto;
+        this.presenterGasolinerasFavoritas = presenterGasolinerasFavoritas;
+    }
+
+    @Override
+    public void run() {
+        GasolineraDAO gasolineraDAO = AppDatabase.getInstance(contexto).gasolineraDAO();
+        GasolineraFavoritaDAO gasolineraFavoritaDAO = AppDatabase.getInstance(contexto).gasolineraFavoritaDAO();
+        presenterGasolinerasFavoritas.eliminaGasolineraFavorita(idGasolinera, gasolineraDAO, gasolineraFavoritaDAO);
+    }
 }
