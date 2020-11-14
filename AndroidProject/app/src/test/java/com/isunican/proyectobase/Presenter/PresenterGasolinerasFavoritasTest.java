@@ -2,6 +2,7 @@ package com.isunican.proyectobase.Presenter;
 
 import android.os.Build;
 
+import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.isunican.proyectobase.Database.AppDatabaseTest;
@@ -22,6 +23,7 @@ import java.util.List;
 @Config(sdk = {Build.VERSION_CODES.O_MR1})
 public class PresenterGasolinerasFavoritasTest {
 
+    private AppDatabaseTest db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDatabaseTest.class).allowMainThreadQueries().build();
     private Gasolinera gasolinera1;
     private Gasolinera gasolinera2;
     private final static String COMENTARIO1 = "Comenatario 1";
@@ -36,40 +38,85 @@ public class PresenterGasolinerasFavoritasTest {
     @Before
     public void setUp(){
         sut = new PresenterGasolinerasFavoritas();
+        sut.setListaGasolinerasFavoritas(new ArrayList<GasolineraFavorita>());
         gasolinera1 = new Gasolinera(1,"localidad1","provincia1",
                 "direccion1",1.0,1.0,"gasolinera1");
+        gasolinera1.setId(1);
         gasolinera2 = new Gasolinera(2,"localidad2","provincia2",
                 "direccion2",1.0,1.0,"gasolinera2");
-        gasolineraFavorita1 = new GasolineraFavorita(COMENTARIO1, gasolinera1.getIdeess());
-        gasolineraFavorita2 = new GasolineraFavorita(COMENTARIO2, gasolinera2.getIdeess());
+        gasolinera2.setId(2);
+        gasolineraFavorita1 = new GasolineraFavorita(COMENTARIO1, gasolinera1.getId());
+        gasolineraFavorita2 = new GasolineraFavorita(COMENTARIO2, gasolinera2.getId());
     }
 
     @After
     public void close(){
-        AppDatabaseTest.getInstance(ApplicationProvider.getApplicationContext()).close();
+        db.gasolineraFavoritaDAO().nuke();
+        db.gasolineraDAO().nuke();
     }
 
     @Test
     public void anhadeGasolineraFavoritaTest() {
-        sut.setListaGasolinerasFavoritas(new ArrayList<GasolineraFavorita>());
+
         // UT.1.a: En lista vacia de gasolineras favoritas TODO revisar que el identificador es correcto
-        Assert.assertEquals(sut.anhadirGasolineraFavorita(gasolinera1.getIdeess(), COMENTARIO1,
-                AppDatabaseTest.getInstance(ApplicationProvider.getApplicationContext()).gasolineraFavoritaDAO()), gasolineraFavorita1);
-        // UT.1.a: En lista con una gasolinera favorita TODO revisar que el identificador es correcto
-        Assert.assertEquals(sut.anhadirGasolineraFavorita(gasolinera2.getIdeess(), COMENTARIO2,
-                AppDatabaseTest.getInstance(ApplicationProvider.getApplicationContext()).gasolineraFavoritaDAO()), gasolineraFavorita2);
+        Assert.assertEquals(sut.anhadirGasolineraFavorita(gasolinera1.getId(), COMENTARIO1,
+                db.gasolineraFavoritaDAO()), gasolineraFavorita1);
+
+        // UT.1.b: En lista con una gasolinera favorita TODO revisar que el identificador es correcto
+        Assert.assertEquals(sut.anhadirGasolineraFavorita(gasolinera2.getId(), COMENTARIO2,
+                db.gasolineraFavoritaDAO()), gasolineraFavorita2);
+
+        // UT.1.c: Insercion de una gasolinera favorita con un id_gasolinera ya existente en la tabla (comprobacion de unicidad)
+        try {
+            sut.anhadirGasolineraFavorita(gasolinera2.getId(), COMENTARIO2,
+                db.gasolineraFavoritaDAO());
+            Assert.fail();
+        } catch (Exception e){
+            Assert.assertEquals(2, db.gasolineraFavoritaDAO().getAll().size());
+            Assert.assertEquals(2, sut.getListaGasolinerasFavoritas().size());
+        }
+
+        // UT.1.d: Paso nulo en GasolineraFavoritaDAO
+        Assert.assertNull(sut.anhadirGasolineraFavorita(gasolinera1.getId(), COMENTARIO1, null));
     }
 
     @Test
     public void modificaGasolineraFavoritaTest() {
-        sut.setListaGasolinerasFavoritas(new ArrayList<GasolineraFavorita>());
-        // UT.2.a: En lista vacia de gasolineras favoritas TODO revisar que el identificador es correcto
-        gasolineraFavorita1 = new GasolineraFavorita(COMENTARIO3, gasolinera1.getIdeess());
-        Assert.assertEquals(sut.modificarGasolineraFavorita(gasolinera1.getIdeess(), COMENTARIO3,
-                AppDatabaseTest.getInstance(ApplicationProvider.getApplicationContext()).gasolineraFavoritaDAO()), gasolineraFavorita1);
-        // UT.2.a: En lista con una gasolinera favorita TODO revisar que el identificador es correcto
-        gasolineraFavorita2 = new GasolineraFavorita(COMENTARIO3, gasolinera2.getIdeess());
-        Assert.assertEquals(sut.modificarGasolineraFavorita(gasolinera2.getIdeess(), COMENTARIO4,
-                AppDatabaseTest.getInstance(ApplicationProvider.getApplicationContext()).gasolineraFavoritaDAO()), gasolineraFavorita2);
+
+        // UT.2.a: Modificar gasolinera favorita no existente en la base de datos
+        Assert.assertNull(sut.modificarGasolineraFavorita(gasolinera1.getId(), COMENTARIO1, db.gasolineraFavoritaDAO()));
+        Assert.assertEquals(0, db.gasolineraFavoritaDAO().getAll().size());
+        Assert.assertEquals(0, sut.getListaGasolinerasFavoritas().size());
+
+        // UT.2.b: En lista vacia de gasolineras favoritas TODO revisar que el identificador es correcto
+        sut.anhadirGasolineraFavorita(gasolinera1.getId(), COMENTARIO1,
+                db.gasolineraFavoritaDAO());
+        gasolineraFavorita1 = new GasolineraFavorita(COMENTARIO4, gasolinera1.getId());
+        Assert.assertEquals( gasolineraFavorita1, sut.modificarGasolineraFavorita(gasolinera1.getId(), COMENTARIO4,
+                db.gasolineraFavoritaDAO()));
+
+        // UT.2.c: En lista con una gasolinera favorita TODO revisar que el identificador es correcto
+        sut.anhadirGasolineraFavorita(gasolinera2.getId(), COMENTARIO2,
+                db.gasolineraFavoritaDAO());
+        gasolineraFavorita2 = new GasolineraFavorita(COMENTARIO4, gasolinera2.getId());
+        Assert.assertEquals(gasolineraFavorita2, sut.modificarGasolineraFavorita(gasolinera2.getId(), COMENTARIO4,
+                db.gasolineraFavoritaDAO()));
+
+        // UT.2.d: Paso nulo en GasolineraFavoritaDAO
+        Assert.assertNull(sut.modificarGasolineraFavorita(gasolinera1.getId(), COMENTARIO1, null));
+    }
+
+    @Test
+    public void getGasolineraFavoritaPorIdTest(){
+        // UT.3.a: Paso nulo en GasolineraFavoritaDAO
+        Assert.assertNull(sut.getGasolineraFavoritaPorId(1,null));
+
+        // UT.3.b: Paso de id de una gasolinera que no es favorita
+        Assert.assertNull(sut.getGasolineraFavoritaPorId(1, db.gasolineraFavoritaDAO()));
+
+        // UT.3.c: Paso de id correcto
+        sut.anhadirGasolineraFavorita(gasolinera1.getId(), COMENTARIO1,
+                db.gasolineraFavoritaDAO());
+        Assert.assertEquals(gasolineraFavorita1, sut.getGasolineraFavoritaPorId(1, db.gasolineraFavoritaDAO()));
     }
 }
