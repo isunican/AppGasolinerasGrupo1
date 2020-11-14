@@ -65,22 +65,26 @@ public class PresenterGasolinerasFavoritas {
     public Gasolinera eliminaGasolineraFavorita(int idGasolinera, GasolineraDAO gasolineraDAO,
                                                         GasolineraFavoritaDAO gasolineraFavoritaDAO){
 
-        Gasolinera gasolinera = getGasolineraPorId(idGasolinera, gasolineraDAO);
-        GasolineraFavorita gasolineraEliminar = getGasolineraFavoritaPorId(idGasolinera,gasolineraFavoritaDAO);
+        Gasolinera gasolinera;
+        GasolineraFavorita gasolineraFavorita;
 
-        // TODO: eliminar de la BD, eliminar de la lista, y mostrar mensaje de error
-        if (gasolineraEliminar != null){
-            gasolineraFavoritaList.remove(gasolineraEliminar);
-            AppDatabase.getInstance(contexto);
-            gasolineraFavoritaDAO.delete(gasolineraEliminar);
-            gasolineraDAO.delete(gasolinera);
-            System.out.println("Dice Luis que gasolinera después de borrar" + gasolineraDAO.findById(gasolinera.getIdeess()).size());
-            //System.out.println("Dice Luis que gasolinera favorita después de borrar" + gasolineraFavoritaDAO.findByGasolineraId(gasolinera.getIdeess()).size());
+        if (gasolineraFavoritaDAO == null || gasolineraDAO == null) {
+            gasolinera = null;
         } else {
-            //Mensaje de error: la gasolinera no se ha podido eliminar correctamente.
-            //Toast.makeText(contexto, "La gasolinera no se ha podido eliminar correctamente", Toast.LENGTH_SHORT).show();
+            gasolinera = getGasolineraPorId(idGasolinera, gasolineraDAO);
+            gasolineraFavorita = getGasolineraFavoritaPorId(idGasolinera, gasolineraFavoritaDAO);
+            if (gasolineraFavorita != null && gasolinera != null) {
+                gasolineraFavoritaList.remove(gasolineraFavorita);
+                AppDatabase.getInstance(contexto);
+                gasolineraFavoritaDAO.delete(gasolineraFavorita);
+                gasolineraDAO.delete(gasolinera);
+                //System.out.println("Gasolinera después de borrar" + gasolineraDAO.findById(gasolinera.getIdeess()).size());
+                //System.out.println("Gasolinera Favorita después de borrar" + gasolineraFavoritaDAO.findByGasolineraId(gasolinera.getIdeess()).size());
+            } else {
+                //Mensaje de error: la gasolinera no se ha podido eliminar correctamente.
+                //Toast.makeText(contexto, "La gasolinera no se ha podido eliminar correctamente", Toast.LENGTH_SHORT).show();
+            }
         }
         return gasolinera;
     }
-    
 }
