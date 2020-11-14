@@ -24,7 +24,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
 
 /*
- * @author: Adrian Celis
+ * @author: Adrian Celis*
  * Clase de prueba de interfaz de añadir una gasolinera favorita
  */
 @RunWith(AndroidJUnit4.class)
