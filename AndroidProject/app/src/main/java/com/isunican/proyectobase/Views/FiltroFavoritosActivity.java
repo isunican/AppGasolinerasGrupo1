@@ -100,7 +100,6 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //presenterGasolinerasFavoritas.cargaGasolineras();
 
         // muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -239,7 +238,7 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
             }
         });
 
-        // ClickListener sobre la lista de marcas
+        // ClickListener sobre la lista de localidades
         listViewLocalidadFavDialog.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 String localidad = listViewLocalidadFavDialog.getItemAtPosition(position).toString();
@@ -283,14 +282,14 @@ class GasolineraArrayAdapter extends ArrayAdapter<Gasolinera> {
 
         // Indica el layout a usar en cada elemento de la lista
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.item_gasolinera, null);
+        View view = inflater.inflate(R.layout.item_gasolinera_fav, null);
 
         // Asocia las variables de dicho layout
-        ImageView logo = view.findViewById(R.id.imageViewLogo);
-        TextView rotulo = view.findViewById(R.id.textViewRotulo);
-        TextView direccion = view.findViewById(R.id.textViewDireccion);
-        TextView gasoleoA = view.findViewById(R.id.textViewGasoleoA);
-        TextView gasolina95 = view.findViewById(R.id.textViewGasolina95);
+        ImageView logo = view.findViewById(R.id.imageViewLogoFav);
+        TextView rotulo = view.findViewById(R.id.textViewRotuloFav);
+        TextView direccion = view.findViewById(R.id.textViewDireccionFav);
+        TextView gasoleoA = view.findViewById(R.id.textViewGasoleoAFav);
+        TextView gasolina95 = view.findViewById(R.id.textViewGasolina95Fav);
 
         // Y carga los datos del item
         rotulo.setText(gasolinera.getRotulo());
@@ -305,16 +304,16 @@ class GasolineraArrayAdapter extends ArrayAdapter<Gasolinera> {
         // reducimos el texto de las etiquetas para que se vea correctamente
         DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
         if (displayMetrics.widthPixels < 720) {
-            TextView tv = view.findViewById(R.id.textViewGasoleoALabel);
+            TextView tv = view.findViewById(R.id.textViewGasoleoALabelFav);
             RelativeLayout.LayoutParams params = ((RelativeLayout.LayoutParams) tv.getLayoutParams());
             params.setMargins(15, 0, 0, 0);
             tv.setTextSize(11);
             TextView tmp;
-            tmp = view.findViewById(R.id.textViewGasolina95Label);
+            tmp = view.findViewById(R.id.textViewGasolina95LabelFav);
             tmp.setTextSize(11);
-            tmp = view.findViewById(R.id.textViewGasoleoA);
+            tmp = view.findViewById(R.id.textViewGasoleoAFav);
             tmp.setTextSize(11);
-            tmp = view.findViewById(R.id.textViewGasolina95);
+            tmp = view.findViewById(R.id.textViewGasolina95Fav);
             tmp.setTextSize(11);
         }
         return view;
