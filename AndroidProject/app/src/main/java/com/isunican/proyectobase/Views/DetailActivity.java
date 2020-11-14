@@ -182,6 +182,9 @@ public class DetailActivity extends AppCompatActivity {
                 btnAceptar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        // TODO: eliminar la gasolinera de favoritos
+
                         favButton.setImageResource(R.drawable.favorito_desactivado);
                         favButton.setTag(R.drawable.favorito_desactivado);
                         gasolineraEsFavorita = false;
