@@ -28,7 +28,7 @@ public class PresenterGasolinerasFavoritas {
     }
 
     public GasolineraFavorita getGasolineraFavoritaPorId(int id, GasolineraFavoritaDAO gasolineraFavoritaDAO){
-
+        if (gasolineraFavoritaDAO == null) return null;
         for (GasolineraFavorita gF: gasolineraFavoritaDAO.getAll()) {
             if(gF.getIdGasolinera() == id)
                 return gF;
@@ -43,14 +43,16 @@ public class PresenterGasolinerasFavoritas {
     }
 
     public GasolineraFavorita anhadirGasolineraFavorita(int idGasolinera, String comentario, GasolineraFavoritaDAO gasolineraFavoritaDAO){
+        if (gasolineraFavoritaDAO == null) return null;
         GasolineraFavorita favorito=new GasolineraFavorita(comentario,idGasolinera);
         long rowid = gasolineraFavoritaDAO.insertOne(favorito);
         favorito.setId(gasolineraFavoritaDAO.getIdFromRowId(rowid));
         gasolineraFavoritaList.add(favorito);
         return favorito;
-    }
+}
     
     public GasolineraFavorita modificarGasolineraFavorita(int idGasolinera, String comentario, GasolineraFavoritaDAO gasolineraFavoritaDAO){
+        if (gasolineraFavoritaDAO == null) return null;
         GasolineraFavorita g = null;
         boolean encontrado = false;
         Iterator<GasolineraFavorita> gasolineraFavoritaIterator = gasolineraFavoritaList.iterator();
