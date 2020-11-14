@@ -23,6 +23,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
 
+/*
+ * @author: Adrian Celis
+ * Clase de prueba de interfaz de añadir una gasolinera favorita
+ */
 @RunWith(AndroidJUnit4.class)
 public class AnhadeFavoritoUITest {
 
@@ -32,13 +36,17 @@ public class AnhadeFavoritoUITest {
 
     @Test
     public void anhadeFavorito(){
+        // Hacemos clic en la primera gasolinera de la lista
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listViewGasolineras)).atPosition(0).perform(click());
+        // Hacemos clic en el botón de añadir favorito
         onView(withId(R.id.favButton)).perform(click());
+        // Escribimos un comentario
         onView(withId(R.id.textBox_anhadeComentario)).perform(typeText("Comentario de texto"), closeSoftKeyboard());
+        // Pulsamos guardar
         onView(withText("GUARDAR")).perform(click());
+        // Comprobamos que el comentario sale correctamente en la gasolinera
         onView(withId(R.id.comentarioText)).check(matches(withText("Comentario:\nComentario de texto")));
-        // TODO comprobar imagebutton pone imagen correcta
-        // TODO comprobar que en aparece en la lista de gasolineras favoritas
+        // No se puede comprobar el image resource del boton
     }
 
 }
