@@ -23,6 +23,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.isunican.proyectobase.DAO.GasolineraDAO;
+import com.isunican.proyectobase.DAO.GasolineraFavoritaDAO;
+import com.isunican.proyectobase.Database.AppDatabase;
 import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.Presenter.PresenterGasolinerasFavoritas;
 import com.isunican.proyectobase.R;
@@ -61,6 +64,8 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
     EditText textMarcaFavDialog;
     EditText textLocalidadFavDialog;
 
+    Context contexto;
+
 
     PresenterGasolinerasFavoritas presenterGasolinerasFavoritas;
 
@@ -85,13 +90,15 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fav);
 
+        contexto = this.getApplicationContext();
+
         //Titulo en el actionBar
         this.setTitle(R.string.title_fav);
 
         currentList = new ArrayList<>();
 
-        presenterGasolinerasFavoritas = new PresenterGasolinerasFavoritas(this.getApplicationContext());
-        FetcherThread hilo = new FetcherThread(presenterGasolinerasFavoritas);
+        presenterGasolinerasFavoritas = new PresenterGasolinerasFavoritas();
+        FetcherThread hilo = new FetcherThread(presenterGasolinerasFavoritas, contexto);
         Thread t = new Thread(hilo);
         t.start();
 
@@ -342,13 +349,19 @@ class GasolineraArrayAdapter extends ArrayAdapter<Gasolinera> {
 class FetcherThread implements Runnable{
 
     private PresenterGasolinerasFavoritas presenterGasolinerasFavoritas;
-    public FetcherThread(PresenterGasolinerasFavoritas presenter){
+    private Context contexto;
+
+    public FetcherThread(PresenterGasolinerasFavoritas presenter, Context contexto){
 
         this.presenterGasolinerasFavoritas = presenter;
+        this.contexto = contexto;
+
     }
 
     @Override
     public void run() {
-        presenterGasolinerasFavoritas.cargaGasolineras();
+        GasolineraFavoritaDAO gasolineraFavoritaDAO = AppDatabase.getInstance(contexto).gasolineraFavoritaDAO();
+        GasolineraDAO gasolineraDAO = AppDatabase.getInstance(contexto).gasolineraDAO();
+        presenterGasolinerasFavoritas.cargaGasolineras(gasolineraDAO, gasolineraFavoritaDAO);
     }
 }

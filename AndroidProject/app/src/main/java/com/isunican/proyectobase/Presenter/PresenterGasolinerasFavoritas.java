@@ -2,6 +2,8 @@ package com.isunican.proyectobase.Presenter;
 
 import android.content.Context;
 
+import com.isunican.proyectobase.DAO.GasolineraDAO;
+import com.isunican.proyectobase.DAO.GasolineraFavoritaDAO;
 import com.isunican.proyectobase.Database.AppDatabase;
 import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.Model.GasolineraFavorita;
@@ -29,18 +31,16 @@ public class PresenterGasolinerasFavoritas {
 
     ArrayList<Gasolinera> listaOriginal; //Lista de gasolineras favoritas
     ArrayList<Gasolinera> listaActualizada;
-    Context contexto; //Contexto de la aplicación (Necesario para acceder a la BD)
+
 
     /**
      * Crea el presenter, inicializando la lista de gasolineras favoritas
-     * @param contexto de la aplicación (Necesario para la BD)
+     *
      */
-    public PresenterGasolinerasFavoritas(Context contexto){
+    public PresenterGasolinerasFavoritas(){
         listaOriginal = new ArrayList<>();
         listaActualizada = new ArrayList<>();
         //Cargar datos de la BD
-
-        this.contexto = contexto;
 
         gasolinerasDummy();
     }
@@ -48,12 +48,11 @@ public class PresenterGasolinerasFavoritas {
     /**
      * Carga las gasolineras favoritas del usuario desde la base de datos
      */
-    public void cargaGasolineras(){
-        ArrayList<GasolineraFavorita> favoritas = (ArrayList<GasolineraFavorita>) AppDatabase.getInstance(contexto).gasolineraFavoritaDAO().getAll();
+    public void cargaGasolineras(GasolineraDAO gasolineraDAO, GasolineraFavoritaDAO gasolineraFavoritaDAO){
+        ArrayList<GasolineraFavorita> favoritas = (ArrayList<GasolineraFavorita>) gasolineraFavoritaDAO.getAll();
         for(GasolineraFavorita g: favoritas){
-            listaOriginal.add(AppDatabase.getInstance(contexto).gasolineraDAO().findById(g.getIdGasolinera()).get(0));
+            listaOriginal.add(gasolineraDAO.findById(g.getIdGasolinera()).get(0));
         }
-        System.out.println("Gasolineras cargadas "+ favoritas.size());
     }
 
 
