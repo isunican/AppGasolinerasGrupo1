@@ -57,7 +57,7 @@ public class GasolineraFavorita {
     public String toString(){
         String textoGasolinerasFavorita = "";
         textoGasolinerasFavorita +=
-                "autoID: "+getId()+"\n"+
+                "IDBD: " + getId()+"\n"+
                 "IdGasolinera: "+getIdGasolinera()+"\n"+
                 "Comentario: "+getComentario();
 

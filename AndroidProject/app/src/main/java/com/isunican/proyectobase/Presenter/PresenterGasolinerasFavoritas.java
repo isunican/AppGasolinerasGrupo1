@@ -55,6 +55,7 @@ public class PresenterGasolinerasFavoritas {
     }
 
     public GasolineraFavorita getGasolineraFavoritaPorId(int id, GasolineraFavoritaDAO gasolineraFavoritaDAO){
+        if (gasolineraFavoritaDAO == null) return null;
         for (GasolineraFavorita gF: gasolineraFavoritaDAO.getAll()) {
             if(gF.getIdGasolinera() == id)
                 return gF;
@@ -67,19 +68,30 @@ public class PresenterGasolinerasFavoritas {
         // hago cosas
         return gasolinera;
     }
+
     public GasolineraFavorita anhadirGasolineraFavorita(int idGasolinera, String comentario, GasolineraFavoritaDAO gasolineraFavoritaDAO){
+        if (gasolineraFavoritaDAO == null) return null;
         GasolineraFavorita favorito=new GasolineraFavorita(comentario,idGasolinera);
-        gasolineraFavoritaDAO.insertOne(favorito);
+        long rowid = gasolineraFavoritaDAO.insertOne(favorito);
+        favorito.setId(gasolineraFavoritaDAO.getIdFromRowId(rowid));
         gasolineraFavoritaList.add(favorito);
         return favorito;
-    }
+}
+    
     public GasolineraFavorita modificarGasolineraFavorita(int idGasolinera, String comentario, GasolineraFavoritaDAO gasolineraFavoritaDAO){
-        List<GasolineraFavorita> gF=gasolineraFavoritaDAO.findById(idGasolinera);
-        gasolineraFavoritaList.remove(gF.get(0));
-        gF.get(0).setComentario(comentario);
-        gasolineraFavoritaDAO.update(gF.get(0));
-        gasolineraFavoritaList.add(gF.get(0));
-        return gF.get(0);
+        if (gasolineraFavoritaDAO == null) return null;
+        GasolineraFavorita g = null;
+        boolean encontrado = false;
+        Iterator<GasolineraFavorita> gasolineraFavoritaIterator = gasolineraFavoritaList.iterator();
+        while(!encontrado && gasolineraFavoritaIterator.hasNext()){
+            g = gasolineraFavoritaIterator.next();
+            if (g.getIdGasolinera() == idGasolinera){
+                g.setComentario(comentario);
+                gasolineraFavoritaDAO.update(g);
+                encontrado = true;
+            }
+        }
+        return g;
     }
     
       /**
