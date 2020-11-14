@@ -242,6 +242,13 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 String marca = listViewMarcasFavDialog.getItemAtPosition(position).toString();
                 textMarcaFavDialog.setText(marca);
+                if(textLocalidadFavDialog.getText().toString().isEmpty()) {
+                    ArrayList<Gasolinera> filtradas = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtrarGasolinerasFavMarca(marca);
+                    ArrayList<String> localidades = (ArrayList<String>) ExtractorLocalidadUtil.extraeLocalidades(filtradas);
+                    ArrayAdapter<String> newLocalidades = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, localidades);
+                    listViewLocalidadFavDialog.setAdapter(newLocalidades);
+                }
+
             }
         });
 
@@ -250,6 +257,12 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 String localidad = listViewLocalidadFavDialog.getItemAtPosition(position).toString();
                 textLocalidadFavDialog.setText(localidad);
+                if(textMarcaFavDialog.getText().toString().isEmpty()) {
+                    ArrayList<Gasolinera> filtradas = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtrarGasolinerasFavLocal(localidad);
+                    ArrayList<String> marcas = (ArrayList<String>) ExtractorMarcasUtil.extraeMarcas(filtradas);
+                    ArrayAdapter<String> newMarcas = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, marcas);
+                    listViewMarcasFavDialog.setAdapter(newMarcas);
+                }
             }
         });
 
