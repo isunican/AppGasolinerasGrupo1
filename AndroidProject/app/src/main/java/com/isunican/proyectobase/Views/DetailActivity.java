@@ -96,6 +96,7 @@ public class DetailActivity extends AppCompatActivity {
         }
         */
         favButton.setImageResource(R.drawable.favorito_desactivado); // icono favorito desactivado TODO quitar
+        favButton.setTag(R.drawable.favorito_desactivado);
         Toast.makeText(getApplicationContext(),"estado de boton es: "+favButton.isActivated(), Toast.LENGTH_LONG);
         favButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,6 +152,7 @@ public class DetailActivity extends AppCompatActivity {
                                 comentario.getText(), Toast.LENGTH_LONG).show();
                         comentario.setText("Comentario:\n"+comentarioEditText.getText());
                         favButton.setImageResource(R.drawable.favorito_activado);
+                        favButton.setTag(R.drawable.favorito_activado);
                         gasolineraEsFavorita = true;
                         alertDialogBuilder.dismiss();
                     }
@@ -181,6 +183,7 @@ public class DetailActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         favButton.setImageResource(R.drawable.favorito_desactivado);
+                        favButton.setTag(R.drawable.favorito_desactivado);
                         gasolineraEsFavorita = false;
                         Toast.makeText(getApplicationContext(),"gasolinera eliminada",Toast.LENGTH_LONG).show();
                         comentario.setText("");
