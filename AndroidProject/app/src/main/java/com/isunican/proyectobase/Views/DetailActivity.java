@@ -12,7 +12,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -145,14 +147,21 @@ public class DetailActivity extends AppCompatActivity {
                     b.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            Toast.makeText(getApplicationContext(), "Gasolinera favorita añadida con comentario: "+
-                                    comentario.getText(), Toast.LENGTH_LONG).show();
-                            comentario.setText("Comentario:\n"+comentarioEditText.getText());
-                            favButton.setImageResource(R.drawable.favorito_activado);
-                            gasolineraEsFavorita = true;
-                            ThreadAnhadirGasolineras thread=new ThreadAnhadirGasolineras();
-                            new Thread(thread).start();
-                            alertDialogBuilder.dismiss();
+                            if(comentarioEditText.getText().length()>240)
+                                comentarioEditText.setError("El comentario debe ser menor de 240 carácteres");
+                            else{
+                                String toastComentarioReducido = comentarioEditText.getText().toString().trim();
+                                if(toastComentarioReducido.length()>30)
+                                    toastComentarioReducido = toastComentarioReducido.substring(0, 30);
+                                Toast.makeText(getApplicationContext(), "Gasolinera favorita añadida con comentario: "+
+                                        toastComentarioReducido, Toast.LENGTH_LONG).show();
+                                comentario.setText("Comentario:\n"+comentarioEditText.getText());
+                                favButton.setImageResource(R.drawable.favorito_activado);
+                                gasolineraEsFavorita = true;
+                                ThreadAnhadirGasolineras thread=new ThreadAnhadirGasolineras();
+                                new Thread(thread).start();
+                                alertDialogBuilder.dismiss();
+                            }
                         }
                     });
                 }
@@ -173,7 +182,7 @@ public class DetailActivity extends AppCompatActivity {
         }
         public void run(){
             int id = presenterGasolineras.anhadeGasolinera(g, AppDatabase.getInstance(getApplicationContext()).gasolineraDAO());
-            gasolinerasFavoritas.anhadirGasolineraFavorita(id,comentarioEditText.getText().toString(),
+            gasolinerasFavoritas.anhadirGasolineraFavorita(id,comentarioEditText.getText().toString().trim(),
                     AppDatabase.getInstance(getApplicationContext()).gasolineraFavoritaDAO());
         }
 
