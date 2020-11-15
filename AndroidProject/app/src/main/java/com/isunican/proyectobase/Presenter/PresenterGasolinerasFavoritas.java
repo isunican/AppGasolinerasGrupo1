@@ -2,12 +2,10 @@ package com.isunican.proyectobase.Presenter;
 
 import android.content.Context;
 import com.isunican.proyectobase.DAO.GasolineraFavoritaDAO;
-import com.isunican.proyectobase.Utilities.BrandExtractorUtil;
 import com.isunican.proyectobase.Utilities.ExtractorLocalidadUtil;
 
 import static com.isunican.proyectobase.Presenter.PresenterGasolineras.SANTANDER;
 import com.isunican.proyectobase.DAO.GasolineraDAO;
-import com.isunican.proyectobase.Database.AppDatabase;
 import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.Model.GasolineraFavorita;
 import com.isunican.proyectobase.Utilities.CommonUtils;
@@ -33,7 +31,6 @@ public class PresenterGasolinerasFavoritas {
     ArrayList<Gasolinera> listaOriginal; //Lista de gasolineras favoritas
     
     private ArrayList<Gasolinera> gasolineras; //Lista de gasolineras favoritas
-    Context contexto; //Contexto de la aplicación (Necesario para acceder a la BD)
 
     private List<GasolineraFavorita> gasolineraFavoritaList;
     
@@ -41,11 +38,10 @@ public class PresenterGasolinerasFavoritas {
      * Crea el presenter, inicializando la lista de gasolineras favoritas
      *
      */
-    public PresenterGasolinerasFavoritas(Context contexto){
+    public PresenterGasolinerasFavoritas(){
         gasolineras= new ArrayList<>();        //Cargar datos de la BD
         gasolineraFavoritaList = new ArrayList<>();
         listaOriginal = new ArrayList<>();
-
         gasolinerasDummy();
     }
 

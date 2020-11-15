@@ -57,7 +57,7 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-         gasolinerasFavoritas = new PresenterGasolinerasFavoritas(this.getApplicationContext());
+         gasolinerasFavoritas = new PresenterGasolinerasFavoritas();
 
         // muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
