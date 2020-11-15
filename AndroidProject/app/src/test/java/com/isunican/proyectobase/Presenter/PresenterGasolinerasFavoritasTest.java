@@ -1,53 +1,86 @@
 package com.isunican.proyectobase.Presenter;
 
-import com.isunican.proyectobase.Model.Gasolinera;
+import android.os.Build;
 
+import androidx.test.core.app.ApplicationProvider;
+
+import com.isunican.proyectobase.DAO.GasolineraDAO;
+import com.isunican.proyectobase.DAO.GasolineraFavoritaDAO;
+import com.isunican.proyectobase.Database.AppDatabase;
+import com.isunican.proyectobase.Model.Gasolinera;
+import com.isunican.proyectobase.Model.GasolineraFavorita;
+import com.isunican.proyectobase.Views.DetailActivity;
+
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import java.util.ArrayList;
-
-/**
- * Pruebas unitarias del presenter de gasolineras favoritas
- */
+import java.util.List;
+@RunWith(RobolectricTestRunner.class)
+@Config(sdk = {Build.VERSION_CODES.O_MR1})
 public class PresenterGasolinerasFavoritasTest {
 
-    PresenterGasolinerasFavoritas sut;
-    ArrayList<Gasolinera> gasolinerasFavoritas;
+    private Gasolinera gasolinera1;
+    private Gasolinera gasolinera2;
+    private final static String COMENTARIO1 = "Comenatario 1";
+    private final static String COMENTARIO2 = "Comenatario 2";
+    private final static String COMENTARIO3 = "Comenatario 3";
+    private final static String COMENTARIO4 = "Comenatario 4";
+
+    private PresenterGasolinerasFavoritas sut;
+    private GasolineraFavorita gasolineraFavorita1;
+    private GasolineraFavorita gasolineraFavorita2;
+
+    private GasolineraDAO gasolineraDAO;
+    private GasolineraFavoritaDAO gasolineraFavoritaDAO;
 
     @Before
-    public void setup() {
-        gasolinerasFavoritas = new ArrayList<>();
-        Gasolinera gasolinera1 = new Gasolinera(1000, "Santander", "Santander", "Av Valdecilla", 1.000, 1.000, "AVIA");
-        this.gasolinerasFavoritas.add(gasolinera1);
-        this.gasolinerasFavoritas.add(new Gasolinera(1053, "Santander", "Santander", "Plaza Matias Montero", 1.020, 1.020, "CEPSA"));
-        this.gasolinerasFavoritas.add(new Gasolinera(420, "Santander", "Santander", "Area Arrabal Puerto de Raos", 1.000, 1.000, "E.E.S.S. MAS, S.L."));
-        this.gasolinerasFavoritas.add(new Gasolinera(9564, "Santander", "Santander", "Av Parayas", 1.020, 1.020, "CEPSA"));
-        this.gasolinerasFavoritas.add(new Gasolinera(1025, "Santander", "Santander", "Calle el Empalme", 1.020, 1.020, "CEPSA"));
+    public void setUp() {
+        sut = new PresenterGasolinerasFavoritas();
+        sut.setListaGasolinerasFavoritas(new ArrayList<GasolineraFavorita>());
+
+        // TODO: pasar bien el contexto
+        //gasolineraDAO = AppDatabase.getInstance(contexto).gasolineraDAO();
+        //gasolineraFavoritaDAO = AppDatabase.getInstance(contexto).gasolineraFavoritaDAO();
+
+        gasolinera1 = new Gasolinera(1, "localidad1", "provincia1",
+                "direccion1", 1.0, 1.0, "gasolinera1");
+        gasolinera2 = new Gasolinera(2, "localidad2", "provincia2",
+                "direccion2", 1.0, 1.0, "gasolinera2");
+        gasolineraFavorita1 = new GasolineraFavorita(COMENTARIO1, gasolinera1.getIdeess());
+        gasolineraFavorita2 = new GasolineraFavorita(COMENTARIO2, gasolinera2.getIdeess());
+
+        gasolineraDAO.insertOne(gasolinera1);
+        gasolineraFavoritaDAO.insertOne(gasolineraFavorita1);
     }
 
     @Test
     public void eliminaGasolineraFavoritaTest() {
 
-        System.out.println("num eltos favos = "+gasolinerasFavoritas.size());
-        System.out.println("id gasol 1 = " + gasolinerasFavoritas.get(0).getIdeess());
-        sut = new PresenterGasolinerasFavoritas();
-        Gasolinera gasolinera1 = new Gasolinera(1000, "Santander", "Santander", "Av Valdecilla", 1.000, 1.000, "AVIA");
-
         // Caso 1: eliminar una gasolinera de la lista de favoritos
-        //Assert.assertEquals(sut.gasolinerasFavoritas.get(0),sut.eliminaGasolineraFavorita(1000));
-        Assert.assertTrue(sut.gasolinerasFavoritas.get(0).equals(sut.gasolinerasFavoritas.get(0)));
+        Assert.assertEquals(gasolinera1, sut.eliminaGasolineraFavorita(gasolinera1.getIdeess(), gasolineraDAO, gasolineraFavoritaDAO));
+        Assert.assertTrue(gasolineraDAO.findById(gasolinera1.getIdeess()).size() == 0);
+        Assert.assertTrue(gasolineraFavoritaDAO.findByGasolineraId(gasolinera1.getIdeess()).size() == 0);
 
         // Caso 2: eliminar una gasolinera no existente en la lista de favoritos
+        Assert.assertEquals(null, sut.eliminaGasolineraFavorita(gasolinera2.getIdeess(), gasolineraDAO, gasolineraFavoritaDAO));
+        Assert.assertTrue(gasolineraDAO.findById(gasolinera1.getIdeess()).size() == 0);
+        Assert.assertTrue(gasolineraFavoritaDAO.findByGasolineraId(gasolinera1.getIdeess()).size() == 0);
 
 
+        // Caso 3: eliminar una gasolinera con una de las DAOs nulas
+        Assert.assertEquals(null, sut.eliminaGasolineraFavorita(gasolinera1.getIdeess(), null, gasolineraFavoritaDAO));
+        Assert.assertTrue(gasolineraDAO.findById(gasolinera1.getIdeess()).size() == 0);
+        Assert.assertTrue(gasolineraFavoritaDAO.findByGasolineraId(gasolinera1.getIdeess()).size() == 0);
 
-
-        //Caso 1: "TestPorcOK", "Test", "Cepsa", "Porcentual", "33.3"
-        //Assert.assertTrue(sut.anhadirNuevaTarjeta("TestPorcOK", "test", "Cepsa", "Porcentual", "33.3"));
-
-        //TODO: COMPROBAR LOS CAMBIOS EN LOS ARRAYS Y EN LA BASE DE DATOS
+        Assert.assertEquals(null, sut.eliminaGasolineraFavorita(gasolinera1.getIdeess(), gasolineraDAO, null));
+        Assert.assertTrue(gasolineraDAO.findById(gasolinera1.getIdeess()).size() == 0);
+        Assert.assertTrue(gasolineraFavoritaDAO.findByGasolineraId(gasolinera1.getIdeess()).size() == 0);
 
         //TODO: ANHADIR MAS CASOS DE PRUEBA SI LOS HUBIERA
     }
