@@ -1,25 +1,41 @@
 package com.isunican.proyectobase.Views;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.isunican.proyectobase.DAO.GasolineraDAO;
+import com.isunican.proyectobase.DAO.GasolineraFavoritaDAO;
+import com.isunican.proyectobase.Database.AppDatabase;
 import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.Presenter.PresenterGasolinerasFavoritas;
 import com.isunican.proyectobase.R;
+import com.isunican.proyectobase.Utilities.ExtractorLocalidadUtil;
+import com.isunican.proyectobase.Utilities.ExtractorMarcasUtil;
+
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -39,17 +55,21 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
 
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
 
+    //Contexto de la aplicación
+    Context contexto;
+    //Presenter que gestiona las gasolineras favoritas
+    PresenterGasolinerasFavoritas presenterGasolinerasFavoritas;
+    //Lista de las gasolineras favoritas actuales
+    ArrayList<Gasolinera> listaActual;
+
     // Elemento de la activity. ListView que contendra las gasolineras favoritas
     ListView listViewFav;
 
-    //Elementos del dialgo de filtro fav
+    //Elementos del dialogo de filtro fav
     ListView listViewMarcasFavDialog;
     ListView listViewLocalidadFavDialog;
     EditText textMarcaFavDialog;
     EditText textLocalidadFavDialog;
-
-
-    PresenterGasolinerasFavoritas presenterGasolinerasFavoritas;
 
     //Adapter para lista de marcas y localidades
     ArrayAdapter<String> adapterListMarcas;
@@ -70,24 +90,50 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fav);
 
+        contexto = this.getApplicationContext();
+
         //Titulo en el actionBar
         this.setTitle(R.string.title_fav);
 
-        presenterGasolinerasFavoritas = new PresenterGasolinerasFavoritas(this.getApplicationContext());
-        FetcherThread hilo = new FetcherThread(presenterGasolinerasFavoritas);
-        new Thread(hilo).start();
-        //presenterGasolinerasFavoritas.cargaGasolineras();
+        listaActual = new ArrayList<>();
+
+        presenterGasolinerasFavoritas = new PresenterGasolinerasFavoritas();
+        FetcherThread hilo = new FetcherThread(presenterGasolinerasFavoritas, contexto);
+        Thread t = new Thread(hilo);
+        t.start();
+
+        try {
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         // muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
 
+
+        listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.getGasolinerasFavoritas();
         //Adapter al que se le pasa la lista de gasolineras favoritas
-        adapterFavoritas = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, presenterGasolinerasFavoritas.getGasolinerasFavoritas());
+        adapterFavoritas = new GasolineraArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, listaActual);
 
         //Inserta lista de gasolineras favoritas en la listView
         listViewFav = findViewById(R.id.listFavGasolineras);
         listViewFav.setAdapter(adapterFavoritas);
+
+
+        listViewFav.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> a, View v, int position, long id) {
+
+                /* Obtengo el elemento directamente de su posicion,
+                 * ya que es la misma que ocupa en la lista
+                 */
+                Intent myIntent = new Intent(FiltroFavoritosActivity.this, DetailActivity.class);
+                myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera),
+                        listaActual.get(position));
+                FiltroFavoritosActivity.this.startActivity(myIntent);
+            }
+        });
 
     }
 
@@ -153,6 +199,20 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
                     @Override
                     public void onClick(View view) {
 
+                        if(textMarcaFavDialog.getText().toString().equals("") && textLocalidadFavDialog.getText().toString().equals("")){
+                            listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.getGasolinerasFavoritas();
+
+                        }else if(textMarcaFavDialog.getText().toString().equals("")){
+                            listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtrarGasolinerasFavLocal(textLocalidadFavDialog.getText().toString());
+                        }else if(textLocalidadFavDialog.getText().toString().equals("")){
+                            listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtrarGasolinerasFavMarca(textMarcaFavDialog.getText().toString());
+                        }else{
+                            listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtraGasolinerasFavAmbos(textMarcaFavDialog.getText().toString(),textLocalidadFavDialog.getText().toString());
+                        }
+
+                        adapterFavoritas = new GasolineraArrayAdapter(FiltroFavoritosActivity.this, 0, listaActual);
+                        listViewFav.findViewById(R.id.listFavGasolineras);
+                        listViewFav.setAdapter(adapterFavoritas);
                         //Mensaje de datos filtrados
                         Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.toast_filtro_aplicado), Toast.LENGTH_LONG);
                         toast.show();
@@ -165,8 +225,10 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
 
 
         //Adapters al que se les pasa la lista de marcas y localidades
-        adapterListMarcas = new ArrayAdapter<>(this,  android.R.layout.simple_dropdown_item_1line, presenterGasolinerasFavoritas.getMarcasFavoritas());
-        adapterListLocalidades = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, presenterGasolinerasFavoritas.getLocalidadesFavoritas());
+        ArrayList<String> marcasFavoritas = (ArrayList<String>) presenterGasolinerasFavoritas.getMarcasFavoritas();
+        ArrayList<String> localidadesFavoritas = (ArrayList<String>) presenterGasolinerasFavoritas.getLocalidadesFavoritas();
+        adapterListMarcas = new ArrayAdapter<>(this,  android.R.layout.simple_dropdown_item_1line, marcasFavoritas);
+        adapterListLocalidades = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, localidadesFavoritas);
 
 
         // Pasamos el adapter a las listView
@@ -179,14 +241,31 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 String marca = listViewMarcasFavDialog.getItemAtPosition(position).toString();
                 textMarcaFavDialog.setText(marca);
+
+                //Si el otro campo está vacío, filtrar su lista
+                if(textLocalidadFavDialog.getText().toString().isEmpty()) {
+                    ArrayList<Gasolinera> filtradas = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtrarGasolinerasFavMarca(marca);
+                    ArrayList<String> localidades = (ArrayList<String>) ExtractorLocalidadUtil.extraeLocalidades(filtradas);
+                    ArrayAdapter<String> newLocalidades = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, localidades);
+                    listViewLocalidadFavDialog.setAdapter(newLocalidades);
+                }
+
             }
         });
 
-        // ClickListener sobre la lista de marcas
+        // ClickListener sobre la lista de localidades
         listViewLocalidadFavDialog.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
                 String localidad = listViewLocalidadFavDialog.getItemAtPosition(position).toString();
                 textLocalidadFavDialog.setText(localidad);
+                
+                //Si el otro campo está vacío, filtrar su lista
+                if(textMarcaFavDialog.getText().toString().isEmpty()) {
+                    ArrayList<Gasolinera> filtradas = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtrarGasolinerasFavLocal(localidad);
+                    ArrayList<String> marcas = (ArrayList<String>) ExtractorMarcasUtil.extraeMarcas(filtradas);
+                    ArrayAdapter<String> newMarcas = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, marcas);
+                    listViewMarcasFavDialog.setAdapter(newMarcas);
+                }
             }
         });
 
@@ -197,19 +276,107 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
     }
 }
 
+/*
+   ------------------------------------------------------------------
+       GasolineraArrayAdapter
+
+       Adaptador para inyectar los datos de las gasolineras
+       en el listview del layout principal de la aplicacion
+   ------------------------------------------------------------------
+   */
+class GasolineraArrayAdapter extends ArrayAdapter<Gasolinera> {
+
+    private Context context;
+    private List<Gasolinera> listaGasolineras;
+
+    // Constructor
+    public GasolineraArrayAdapter(Context context, int resource, List<Gasolinera> objects) {
+        super(context, resource, objects);
+        this.context = context;
+        this.listaGasolineras = objects;
+    }
+
+    // Llamado al renderizar la lista
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        // Obtiene el elemento que se está mostrando
+        Gasolinera gasolinera = listaGasolineras.get(position);
+
+        // Indica el layout a usar en cada elemento de la lista
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.item_gasolinera_fav, null);
+
+        // Asocia las variables de dicho layout
+        ImageView logo = view.findViewById(R.id.imageViewLogoFav);
+        TextView rotulo = view.findViewById(R.id.textViewRotuloFav);
+        TextView direccion = view.findViewById(R.id.textViewDireccionFav);
+        TextView gasoleoA = view.findViewById(R.id.textViewGasoleoAFav);
+        TextView gasolina95 = view.findViewById(R.id.textViewGasolina95Fav);
+
+        // Y carga los datos del item
+        rotulo.setText(gasolinera.getRotulo());
+        direccion.setText(gasolinera.getDireccion());
+        gasoleoA.setText(" " + gasolinera.getGasoleoA() + "€");
+        gasolina95.setText(" " + gasolinera.getGasolina95() + "€");
+
+        // carga icono
+        cargaIcono(gasolinera, logo);
+
+        // Si las dimensiones de la pantalla son menores
+        // reducimos el texto de las etiquetas para que se vea correctamente
+        DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
+        if (displayMetrics.widthPixels < 720) {
+            TextView tv = view.findViewById(R.id.textViewGasoleoALabelFav);
+            RelativeLayout.LayoutParams params = ((RelativeLayout.LayoutParams) tv.getLayoutParams());
+            params.setMargins(15, 0, 0, 0);
+            tv.setTextSize(11);
+            TextView tmp;
+            tmp = view.findViewById(R.id.textViewGasolina95LabelFav);
+            tmp.setTextSize(11);
+            tmp = view.findViewById(R.id.textViewGasoleoAFav);
+            tmp.setTextSize(11);
+            tmp = view.findViewById(R.id.textViewGasolina95Fav);
+            tmp.setTextSize(11);
+        }
+        return view;
+    }
+
+    private void cargaIcono(Gasolinera gasolinera, ImageView logo) {
+        String rotuleImageID = gasolinera.getRotulo().toLowerCase();
+
+        // Tengo que protegerme ante el caso en el que el rotulo solo tiene digitos.
+        // En ese caso getIdentifier devuelve esos digitos en vez de 0.
+        int imageID = context.getResources().getIdentifier(rotuleImageID,
+                "drawable", context.getPackageName());
+
+        if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
+            imageID = context.getResources().getIdentifier("por_defecto",
+                    "drawable", context.getPackageName());
+        }
+        logo.setImageResource(imageID);
+    }
+}
+
 /**
 *Clase que carga los datos de las gasolineras
  */
 class FetcherThread implements Runnable{
 
     private PresenterGasolinerasFavoritas presenterGasolinerasFavoritas;
-    public FetcherThread(PresenterGasolinerasFavoritas presenter){
+    private Context contexto;
+
+    public FetcherThread(PresenterGasolinerasFavoritas presenter, Context contexto){
 
         this.presenterGasolinerasFavoritas = presenter;
+        this.contexto = contexto;
+
     }
 
     @Override
     public void run() {
-        presenterGasolinerasFavoritas.cargaGasolineras();
+        GasolineraFavoritaDAO gasolineraFavoritaDAO = AppDatabase.getInstance(contexto).gasolineraFavoritaDAO();
+        GasolineraDAO gasolineraDAO = AppDatabase.getInstance(contexto).gasolineraDAO();
+        presenterGasolinerasFavoritas.cargaGasolineras(gasolineraDAO, gasolineraFavoritaDAO);
     }
 }

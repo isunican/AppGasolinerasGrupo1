@@ -14,6 +14,8 @@ import java.util.List;
  * @version 0.0.1
  */
 public class CommonUtils {
+
+    private CommonUtils(){}
     /**
      * Reorganiza una lista de Strings por orden alfabetico en orden ascendente
      * @return lista de String ordenada
