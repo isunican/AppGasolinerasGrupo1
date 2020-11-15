@@ -2,6 +2,7 @@ package com.isunican.proyectobase.Presenter;
 
 import android.os.Build;
 
+import androidx.room.Room;
 import androidx.test.core.app.ApplicationProvider;
 
 import com.isunican.proyectobase.DAO.GasolineraDAO;
@@ -45,8 +46,8 @@ public class PresenterGasolinerasFavoritasTest {
         sut.setListaGasolinerasFavoritas(new ArrayList<GasolineraFavorita>());
 
         // TODO: pasar bien el contexto
-        //gasolineraDAO = AppDatabase.getInstance(contexto).gasolineraDAO();
-        //gasolineraFavoritaDAO = AppDatabase.getInstance(contexto).gasolineraFavoritaDAO();
+        gasolineraDAO = AppDatabase.getInstance(ApplicationProvider.getApplicationContext()).gasolineraDAO();
+        gasolineraFavoritaDAO = AppDatabase.getInstance(ApplicationProvider.getApplicationContext()).gasolineraFavoritaDAO();
 
         gasolinera1 = new Gasolinera(1, "localidad1", "provincia1",
                 "direccion1", 1.0, 1.0, "gasolinera1");
@@ -72,7 +73,6 @@ public class PresenterGasolinerasFavoritasTest {
         Assert.assertTrue(gasolineraDAO.findById(gasolinera1.getIdeess()).size() == 0);
         Assert.assertTrue(gasolineraFavoritaDAO.findByGasolineraId(gasolinera1.getIdeess()).size() == 0);
 
-
         // Caso 3: eliminar una gasolinera con una de las DAOs nulas
         Assert.assertEquals(null, sut.eliminaGasolineraFavorita(gasolinera1.getIdeess(), null, gasolineraFavoritaDAO));
         Assert.assertTrue(gasolineraDAO.findById(gasolinera1.getIdeess()).size() == 0);
@@ -81,7 +81,5 @@ public class PresenterGasolinerasFavoritasTest {
         Assert.assertEquals(null, sut.eliminaGasolineraFavorita(gasolinera1.getIdeess(), gasolineraDAO, null));
         Assert.assertTrue(gasolineraDAO.findById(gasolinera1.getIdeess()).size() == 0);
         Assert.assertTrue(gasolineraFavoritaDAO.findByGasolineraId(gasolinera1.getIdeess()).size() == 0);
-
-        //TODO: ANHADIR MAS CASOS DE PRUEBA SI LOS HUBIERA
     }
 }

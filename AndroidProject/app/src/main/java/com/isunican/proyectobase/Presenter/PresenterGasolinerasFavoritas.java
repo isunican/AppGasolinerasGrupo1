@@ -17,7 +17,7 @@ import java.util.List;
 public class PresenterGasolinerasFavoritas {
 
     private ArrayList<Gasolinera> gasolineras; //Lista de gasolineras favoritas
-    Context contexto; //Contexto de la aplicación (Necesario para acceder a la BD)
+    //Context contexto; //Contexto de la aplicación (Necesario para acceder a la BD)
 
     private List<GasolineraFavorita> gasolineraFavoritaList;
 
@@ -28,7 +28,7 @@ public class PresenterGasolinerasFavoritas {
         gasolineras = new ArrayList<>();        //Cargar datos de la BD
         gasolineraFavoritaList = new ArrayList<>();
 
-        this.contexto = contexto;
+        //this.contexto = contexto;
     }
 
     public List<GasolineraFavorita> getListaGasolinerasFavoritas() { return gasolineraFavoritaList; }
@@ -70,19 +70,19 @@ public class PresenterGasolinerasFavoritas {
 
         if (gasolineraFavoritaDAO == null || gasolineraDAO == null) {
             gasolinera = null;
+            //System.out.println("if");
         } else {
             gasolinera = getGasolineraPorId(idGasolinera, gasolineraDAO);
             gasolineraFavorita = getGasolineraFavoritaPorId(idGasolinera, gasolineraFavoritaDAO);
+            //System.out.println("else");
             if (gasolineraFavorita != null && gasolinera != null) {
+                //System.out.println("hola maninnnnn");
                 gasolineraFavoritaList.remove(gasolineraFavorita);
-                AppDatabase.getInstance(contexto);
+                //AppDatabase.getInstance(contexto);
                 gasolineraFavoritaDAO.delete(gasolineraFavorita);
                 gasolineraDAO.delete(gasolinera);
                 //System.out.println("Gasolinera después de borrar" + gasolineraDAO.findById(gasolinera.getIdeess()).size());
                 //System.out.println("Gasolinera Favorita después de borrar" + gasolineraFavoritaDAO.findByGasolineraId(gasolinera.getIdeess()).size());
-            } else {
-                //Mensaje de error: la gasolinera no se ha podido eliminar correctamente.
-                //Toast.makeText(contexto, "La gasolinera no se ha podido eliminar correctamente", Toast.LENGTH_SHORT).show();
             }
         }
         return gasolinera;
