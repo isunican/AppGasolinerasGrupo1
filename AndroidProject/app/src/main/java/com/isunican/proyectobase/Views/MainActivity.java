@@ -43,6 +43,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -87,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //ActionBarDrawerToggle
     ActionBarDrawerToggle toggle;
-
     DrawerLayout drawerLayout;
 
     //Adapter para la listView
@@ -95,6 +95,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //Filtro
     String tipoGasolina;
+
+    // Caja de anhadir/modifica comentario
+    TextView comentarioEditText;
+    PresenterGasolinerasFavoritas gasolinerasFavoritas;
+    Gasolinera gasolineraAModificar;
+
+    // Boton guardar
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
 
     /**
@@ -469,6 +476,65 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         adapter.addAll(listaGasolinerasActual);
         adapter.notifyDataSetChanged();
     }
+
+    // ------------------------------------------------------
+    // MODIFICA GASOLINERA
+    public void modificaComentario(int position, final Gasolinera gasolinera){
+        final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
+                .setPositiveButton(getResources().getString(R.string.guardar),null)
+                .setNegativeButton(getResources().getString(R.string.cancelar), null)
+                .create();
+
+        LayoutInflater inflater = this.getLayoutInflater();
+        final View view = inflater.inflate(R.layout.modifica_comentario_favorito, null);
+        comentarioEditText = view.findViewById(R.id.textBox_modificaComentario);
+        // Buscamos la gasolinera para ver si es favorita
+        final Gasolinera gDAO = presenterGasolineras.getGasolineraPorIdess(gasolinera.getIdeess(),
+                AppDatabase.getInstance(getApplicationContext()).gasolineraDAO());
+        if(gDAO != null) {
+            gasolinerasFavoritas = new PresenterGasolinerasFavoritas();
+            // existe la gasolinera favorita
+            GasolineraFavorita gFavorita = gasolinerasFavoritas.getGasolineraFavoritaPorId(gDAO.getId(),
+                    AppDatabase.getInstance(getApplicationContext()).gasolineraFavoritaDAO());
+            // Escribo el comentario que ya habia en la gasolinera
+            comentarioEditText.setText(gFavorita.getComentario());
+        }
+        // Definicion positive button ("guardar")
+        alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button b = alertDialogBuilder.getButton(BTN_POSITIVO);
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(comentarioEditText.getText().length()>240)
+                            comentarioEditText.setError("El comentario debe ser menor de 240 carácteres");
+                        else {
+                            gasolineraAModificar = gDAO;
+                            gasolineraAModificar.setId(gDAO.getId());
+                            ThreadModificaGasolineras thread = new ThreadModificaGasolineras();
+                            new Thread(thread).start();
+                            alertDialogBuilder.dismiss();
+                        }
+                    }
+                });
+            }
+        });
+        alertDialogBuilder.setView(view);
+        alertDialogBuilder.show();
+    }
+    public class ThreadModificaGasolineras implements Runnable{
+        public ThreadModificaGasolineras(){
+            // Constructor vacio para la creacion de la Task
+        }
+        public void run(){
+            gasolinerasFavoritas.modificarGasolineraFavorita(gasolineraAModificar.getId(),
+                    comentarioEditText.getText().toString(),
+                    AppDatabase.getInstance(getApplicationContext()).gasolineraFavoritaDAO());
+        }
+
+    }
+    // ------------------------------------------------------
    
 
     /**
@@ -611,6 +677,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         private Context context;
         private List<Gasolinera> listaGasolineras;
 
+        // TODO MODIFICA GASOLINERA
+        Button buttonModifica;
+
         // Constructor
         public GasolineraArrayAdapter(Context context, int resource, List<Gasolinera> objects) {
             super(context, resource, objects);
@@ -620,21 +689,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Llamado al renderizar la lista
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
 
             // Obtiene el elemento que se está mostrando
-            Gasolinera gasolinera = listaGasolineras.get(position);
+            final Gasolinera gasolinera = listaGasolineras.get(position);
 
             // Indica el layout a usar en cada elemento de la lista
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View view = inflater.inflate(R.layout.item_gasolinera, null);
 
             // Asocia las variables de dicho layout
-            ImageView logo = view.findViewById(R.id.imageViewLogo);
-            TextView rotulo = view.findViewById(R.id.textViewRotulo);
-            TextView direccion = view.findViewById(R.id.textViewDireccion);
-            TextView gasoleoA = view.findViewById(R.id.textViewGasoleoA);
-            TextView gasolina95 = view.findViewById(R.id.textViewGasolina95);
+            ImageView logo = view.findViewById(R.id.imageViewLogoFav);
+            TextView rotulo = view.findViewById(R.id.textViewRotuloFav);
+            TextView direccion = view.findViewById(R.id.textViewDireccionFav);
+            TextView gasoleoA = view.findViewById(R.id.textViewGasoleoAFav);
+            TextView gasolina95 = view.findViewById(R.id.textViewGasolina95Fav);
 
             // Y carga los datos del item
             rotulo.setText(gasolinera.getRotulo());
@@ -649,20 +718,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // reducimos el texto de las etiquetas para que se vea correctamente
             DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
             if (displayMetrics.widthPixels < 720) {
-                TextView tv = view.findViewById(R.id.textViewGasoleoALabel);
+                TextView tv = view.findViewById(R.id.textViewGasoleoALabelFav);
                 RelativeLayout.LayoutParams params = ((RelativeLayout.LayoutParams) tv.getLayoutParams());
                 params.setMargins(15, 0, 0, 0);
                 tv.setTextSize(11);
                 TextView tmp;
-                tmp = view.findViewById(R.id.textViewGasolina95Label);
+                tmp = view.findViewById(R.id.textViewGasolina95LabelFav);
                 tmp.setTextSize(11);
-                tmp = view.findViewById(R.id.textViewGasoleoA);
+                tmp = view.findViewById(R.id.textViewGasoleoAFav);
                 tmp.setTextSize(11);
-                tmp = view.findViewById(R.id.textViewGasolina95);
+                tmp = view.findViewById(R.id.textViewGasolina95Fav);
                 tmp.setTextSize(11);
             }
+            // ------------------------------------------------------
+            // MODIFICA GASOLINERA
+
+            buttonModifica = view.findViewById(R.id.buttonModifica);
+            buttonModifica.setFocusable(false);
+            buttonModifica.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    modificaComentario(position, gasolinera);
+                }
+            });
+
+            // ------------------------------------------------------
             return view;
+
         }
+
+
 
         private void cargaIcono(Gasolinera gasolinera, ImageView logo) {
             String rotuleImageID = gasolinera.getRotulo().toLowerCase();

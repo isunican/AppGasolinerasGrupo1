@@ -55,6 +55,7 @@ public class PresenterGasolinerasFavoritas {
         if (gasolineraFavoritaDAO == null) return null;
         GasolineraFavorita g = null;
         boolean encontrado = false;
+        gasolineraFavoritaList.addAll(gasolineraFavoritaDAO.getAll());
         Iterator<GasolineraFavorita> gasolineraFavoritaIterator = gasolineraFavoritaList.iterator();
         while(!encontrado && gasolineraFavoritaIterator.hasNext()){
             g = gasolineraFavoritaIterator.next();
