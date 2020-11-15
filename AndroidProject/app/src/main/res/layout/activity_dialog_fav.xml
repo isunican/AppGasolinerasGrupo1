@@ -20,7 +20,7 @@
     <ListView
         android:id="@+id/listViewMarcasFavDialog"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="100dp" />
 
     <EditText
         android:id="@+id/textLocalidadFavDialog"
@@ -37,6 +37,6 @@
     <ListView
         android:id="@+id/listViewLocalidadesFavDialog"
         android:layout_width="match_parent"
-        android:layout_height="200dp"/>
+        android:layout_height="100dp"/>
 
 </LinearLayout>
