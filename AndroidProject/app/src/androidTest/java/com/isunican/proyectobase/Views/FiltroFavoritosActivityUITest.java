@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.test.InstrumentationRegistry;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -15,6 +16,7 @@ import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.R;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +35,11 @@ public class FiltroFavoritosActivityUITest {
     @Rule
     public IntentsTestRule<FiltroFavoritosActivity> activityRule =
             new IntentsTestRule<>(FiltroFavoritosActivity.class);
+
+    @BeforeClass
+    public static void beforeClass() {
+        InstrumentationRegistry.getTargetContext().deleteDatabase("RoomDatabase");
+    }
 
     @Test
     public void filtroFavoritosMarcaTest(){
