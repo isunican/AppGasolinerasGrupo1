@@ -98,10 +98,11 @@ public class TarjetaDescuentoPorcentaje extends TarjetaDescuento implements Parc
 
     @Override
     public boolean equals(Object o){
-        TarjetaDescuentoPorcentaje t = (TarjetaDescuentoPorcentaje) o;
-
-        if(super.equals(t) && this.descuentoPorcentaje == t.descuentoPorcentaje) return true;
-        return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TarjetaDescuentoPorcentaje that = (TarjetaDescuentoPorcentaje) o;
+        return descuentoPorcentaje == that.descuentoPorcentaje &&
+                super.equals(that);
     }
 
 }

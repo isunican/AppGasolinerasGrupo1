@@ -71,11 +71,11 @@ public abstract class TarjetaDescuento implements Parcelable{
 
     @Override
     public boolean equals(Object o){
-        TarjetaDescuento t = (TarjetaDescuento)o;
-
-        if(this.descripcion.equals(t.descripcion) && this.marca.equals(t.marca)
-                && this.nombre.equals(t.nombre)) return true;
-
-        return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TarjetaDescuento that = (TarjetaDescuento) o;
+        return nombre.equals(that.nombre) &&
+                descripcion.equals(that.descripcion)&&
+                marca.equals(that.marca);
     }
 }
