@@ -717,7 +717,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // reducimos el texto de las etiquetas para que se vea correctamente
             DisplayMetrics displayMetrics = context.getResources().getDisplayMetrics();
             if (displayMetrics.widthPixels < 720) {
-                TextView tv = view.findViewById(R.id.textViewGasoleoALabelFav);
+                TextView tv = view.findViewById(R.id.textViewGasoleoALabel);
                 RelativeLayout.LayoutParams params = ((RelativeLayout.LayoutParams) tv.getLayoutParams());
                 params.setMargins(15, 0, 0, 0);
                 tv.setTextSize(11);
