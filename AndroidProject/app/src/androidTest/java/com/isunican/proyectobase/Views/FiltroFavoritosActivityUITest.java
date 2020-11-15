@@ -7,6 +7,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.test.InstrumentationRegistry;
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -38,7 +39,7 @@ public class FiltroFavoritosActivityUITest {
 
     @BeforeClass
     public static void beforeClass() {
-        InstrumentationRegistry.getTargetContext().deleteDatabase("RoomDatabase");
+        ApplicationProvider.getApplicationContext().deleteDatabase("RoomDatabase");
     }
 
     @Test
