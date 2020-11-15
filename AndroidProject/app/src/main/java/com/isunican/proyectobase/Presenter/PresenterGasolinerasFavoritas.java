@@ -1,6 +1,6 @@
 package com.isunican.proyectobase.Presenter;
 
-
+import android.content.Context;
 import com.isunican.proyectobase.DAO.GasolineraFavoritaDAO;
 import com.isunican.proyectobase.Utilities.BrandExtractorUtil;
 import com.isunican.proyectobase.Utilities.ExtractorLocalidadUtil;
