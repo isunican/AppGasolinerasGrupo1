@@ -512,6 +512,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         else {
                             gasolineraAModificar = gDAO;
                             gasolineraAModificar.setId(gDAO.getId());
+                            Toast.makeText(getApplicationContext(), "Comentario modificado", Toast.LENGTH_LONG).show();
                             ThreadModificaGasolineras thread = new ThreadModificaGasolineras();
                             new Thread(thread).start();
                             alertDialogBuilder.dismiss();
@@ -699,11 +700,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             View view = inflater.inflate(R.layout.item_gasolinera, null);
 
             // Asocia las variables de dicho layout
-            ImageView logo = view.findViewById(R.id.imageViewLogoFav);
-            TextView rotulo = view.findViewById(R.id.textViewRotuloFav);
-            TextView direccion = view.findViewById(R.id.textViewDireccionFav);
-            TextView gasoleoA = view.findViewById(R.id.textViewGasoleoAFav);
-            TextView gasolina95 = view.findViewById(R.id.textViewGasolina95Fav);
+            ImageView logo = view.findViewById(R.id.imageViewLogo);
+            TextView rotulo = view.findViewById(R.id.textViewRotulo);
+            TextView direccion = view.findViewById(R.id.textViewDireccion);
+            TextView gasoleoA = view.findViewById(R.id.textViewGasoleoA);
+            TextView gasolina95 = view.findViewById(R.id.textViewGasolina95);
 
             // Y carga los datos del item
             rotulo.setText(gasolinera.getRotulo());
@@ -723,16 +724,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 params.setMargins(15, 0, 0, 0);
                 tv.setTextSize(11);
                 TextView tmp;
-                tmp = view.findViewById(R.id.textViewGasolina95LabelFav);
+                tmp = view.findViewById(R.id.textViewGasolina95Label);
                 tmp.setTextSize(11);
-                tmp = view.findViewById(R.id.textViewGasoleoAFav);
+                tmp = view.findViewById(R.id.textViewGasoleoA);
                 tmp.setTextSize(11);
-                tmp = view.findViewById(R.id.textViewGasolina95Fav);
+                tmp = view.findViewById(R.id.textViewGasolina95);
                 tmp.setTextSize(11);
             }
             // ------------------------------------------------------
             // MODIFICA GASOLINERA
-
+            /*
             buttonModifica = view.findViewById(R.id.buttonModifica);
             buttonModifica.setFocusable(false);
             buttonModifica.setOnClickListener(new View.OnClickListener() {
@@ -740,7 +741,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     modificaComentario(position, gasolinera);
                 }
             });
-
+            */
             // ------------------------------------------------------
             return view;
 

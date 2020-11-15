@@ -151,8 +151,10 @@ public class DetailActivity extends AppCompatActivity {
                                 comentarioEditText.setError("El comentario debe ser menor de 240 carácteres");
                             else{
                                 String toastComentarioReducido = comentarioEditText.getText().toString().trim();
-                                if(toastComentarioReducido.length()>30)
+                                if(toastComentarioReducido.length()>30){
                                     toastComentarioReducido = toastComentarioReducido.substring(0, 30);
+                                    toastComentarioReducido += "...";
+                                }
                                 Toast.makeText(getApplicationContext(), "Gasolinera favorita añadida con comentario: "+
                                         toastComentarioReducido, Toast.LENGTH_LONG).show();
                                 comentario.setText("Comentario:\n"+comentarioEditText.getText());
