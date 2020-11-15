@@ -5,11 +5,6 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
-
-import com.isunican.proyectobase.Converters.DateConverter;
-
-import java.util.Date;
 import java.util.Objects;
 
 @Entity(tableName = "gasolinera_favorita", indices = @Index(value = {"id_gasolinera"}, unique = true))

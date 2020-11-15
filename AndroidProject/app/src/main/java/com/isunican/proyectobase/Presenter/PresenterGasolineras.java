@@ -3,7 +3,6 @@ package com.isunican.proyectobase.Presenter;
 import android.util.Log;
 
 import com.isunican.proyectobase.DAO.GasolineraDAO;
-import com.isunican.proyectobase.Database.AppDatabase;
 import com.isunican.proyectobase.Model.*;
 import com.isunican.proyectobase.Utilities.ParserJSONGasolineras;
 import com.isunican.proyectobase.Utilities.RemoteFetch;

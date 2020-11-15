@@ -18,6 +18,9 @@ public class CommonUtils {
      * Reorganiza una lista de Strings por orden alfabetico en orden ascendente
      * @return lista de String ordenada
      */
+    private CommonUtils(){
+        // Constructor privado
+    }
     public static List<String> sortStringList(List<String> list){
         java.util.Collections.sort(list, Collator.getInstance());
         return list;
