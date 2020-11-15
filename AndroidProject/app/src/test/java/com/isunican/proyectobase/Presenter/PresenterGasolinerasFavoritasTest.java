@@ -37,7 +37,7 @@ public class PresenterGasolinerasFavoritasTest {
 
     @Before
     public void setUp(){
-        sut = new PresenterGasolinerasFavoritas(ApplicationProvider.getApplicationContext());
+        sut = new PresenterGasolinerasFavoritas();
         sut.setListaGasolinerasFavoritas(new ArrayList<GasolineraFavorita>());
         gasolinera1 = new Gasolinera(1,"localidad1","provincia1",
                 "direccion1",1.0,1.0,"gasolinera1");
