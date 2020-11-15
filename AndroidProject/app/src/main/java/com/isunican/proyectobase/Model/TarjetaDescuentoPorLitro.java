@@ -82,10 +82,11 @@ public class TarjetaDescuentoPorLitro extends TarjetaDescuento implements Parcel
     };
 
     public boolean equals(Object o){
-        TarjetaDescuentoPorLitro t = (TarjetaDescuentoPorLitro) o;
-
-        if(super.equals(t) && this.descuentoPorLitro == t.descuentoPorLitro) return true;
-        return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TarjetaDescuentoPorLitro that = (TarjetaDescuentoPorLitro) o;
+        return descuentoPorLitro == that.descuentoPorLitro &&
+                super.equals(that);
     }
 
 }
