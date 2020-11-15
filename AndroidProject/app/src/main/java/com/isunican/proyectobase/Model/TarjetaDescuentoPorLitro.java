@@ -80,4 +80,12 @@ public class TarjetaDescuentoPorLitro extends TarjetaDescuento implements Parcel
             return new TarjetaDescuentoPorLitro[size];
         }
     };
+
+    public boolean equals(Object o){
+        TarjetaDescuentoPorLitro t = (TarjetaDescuentoPorLitro) o;
+
+        if(super.equals(t) && this.descuentoPorLitro == t.descuentoPorLitro) return true;
+        return false;
+    }
+
 }

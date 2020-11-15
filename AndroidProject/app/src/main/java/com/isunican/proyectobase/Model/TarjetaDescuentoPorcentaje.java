@@ -96,4 +96,12 @@ public class TarjetaDescuentoPorcentaje extends TarjetaDescuento implements Parc
         }
     };
 
+    @Override
+    public boolean equals(Object o){
+        TarjetaDescuentoPorcentaje t = (TarjetaDescuentoPorcentaje) o;
+
+        if(super.equals(t) && this.descuentoPorcentaje == t.descuentoPorcentaje) return true;
+        return false;
+    }
+
 }
