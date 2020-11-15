@@ -17,6 +17,8 @@ import java.util.List;
  */
 public class ExtractorLocalidadUtil {
 
+    private ExtractorLocalidadUtil(){}
+
     /**
      * Extrae una lista de localidades de la lista de gasolineras pasada como parametro
      * @param gasolineras de las que extraer las localidades
