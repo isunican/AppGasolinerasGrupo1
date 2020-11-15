@@ -351,7 +351,7 @@ class GasolineraArrayAdapter extends ArrayAdapter<Gasolinera> {
                 "drawable", context.getPackageName());
 
         if (imageID == 0 || TextUtils.isDigitsOnly(rotuleImageID)) {
-            imageID = context.getResources().getIdentifier("por_defecto",
+            imageID = context.getResources().getIdentifier(context.getResources().getString(R.string.pordefecto),
                     "drawable", context.getPackageName());
         }
         logo.setImageResource(imageID);
