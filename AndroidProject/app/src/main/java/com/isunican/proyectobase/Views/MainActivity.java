@@ -493,7 +493,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final Gasolinera gDAO = presenterGasolineras.getGasolineraPorIdess(gasolinera.getIdeess(),
                 AppDatabase.getInstance(getApplicationContext()).gasolineraDAO());
         if(gDAO != null) {
-            gasolinerasFavoritas = new PresenterGasolinerasFavoritas();
+            gasolinerasFavoritas = new PresenterGasolinerasFavoritas(this.getApplicationContext());
             // existe la gasolinera favorita
             GasolineraFavorita gFavorita = gasolinerasFavoritas.getGasolineraFavoritaPorId(gDAO.getId(),
                     AppDatabase.getInstance(getApplicationContext()).gasolineraFavoritaDAO());
