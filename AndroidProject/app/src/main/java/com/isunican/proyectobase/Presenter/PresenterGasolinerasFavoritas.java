@@ -1,9 +1,6 @@
 package com.isunican.proyectobase.Presenter;
 
-import android.content.Context;
-import android.util.Log;
 
-import com.isunican.proyectobase.DAO.GasolineraDAO;
 import com.isunican.proyectobase.DAO.GasolineraFavoritaDAO;
 import com.isunican.proyectobase.Utilities.BrandExtractorUtil;
 import com.isunican.proyectobase.Utilities.ExtractorLocalidadUtil;
@@ -12,8 +9,6 @@ import static com.isunican.proyectobase.Presenter.PresenterGasolineras.SANTANDER
 import com.isunican.proyectobase.Database.AppDatabase;
 import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.Model.GasolineraFavorita;
-import com.isunican.proyectobase.Model.TarjetaDescuento;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -82,6 +77,7 @@ public class PresenterGasolinerasFavoritas {
         if (gasolineraFavoritaDAO == null) return null;
         GasolineraFavorita g = null;
         boolean encontrado = false;
+        gasolineraFavoritaList.addAll(gasolineraFavoritaDAO.getAll());
         Iterator<GasolineraFavorita> gasolineraFavoritaIterator = gasolineraFavoritaList.iterator();
         while(!encontrado && gasolineraFavoritaIterator.hasNext()){
             g = gasolineraFavoritaIterator.next();
