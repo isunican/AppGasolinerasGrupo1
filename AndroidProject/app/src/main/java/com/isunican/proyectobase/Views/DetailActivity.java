@@ -39,7 +39,7 @@ public class DetailActivity extends AppCompatActivity {
     TextView comentario;
     TextView comentarioEditText;
     boolean gasolineraEsFavorita = false;
-    PresenterGasolinerasFavoritas gasolinerasFavoritas=new PresenterGasolinerasFavoritas();
+    PresenterGasolinerasFavoritas gasolinerasFavoritas;
     PresenterGasolineras presenterGasolineras = new PresenterGasolineras();
 
 
@@ -57,6 +57,7 @@ public class DetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+         gasolinerasFavoritas = new PresenterGasolinerasFavoritas();
 
         // muestra el logo en el actionBar
         getSupportActionBar().setDisplayShowHomeEnabled(true);

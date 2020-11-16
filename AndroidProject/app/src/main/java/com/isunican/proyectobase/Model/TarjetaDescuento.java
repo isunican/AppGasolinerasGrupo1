@@ -68,4 +68,14 @@ public abstract class TarjetaDescuento implements Parcelable{
             return new TarjetaDescuento[0];
         }
     };
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TarjetaDescuento that = (TarjetaDescuento) o;
+        return nombre.equals(that.nombre) &&
+                descripcion.equals(that.descripcion)&&
+                marca.equals(that.marca);
+    }
 }

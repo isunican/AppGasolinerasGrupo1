@@ -14,7 +14,7 @@
         android:title="@string/menuInfo" />
     <!-- opcion auxiliar filtro por marca -->
     <item
-        android:id="@+id/itemFiltroMarca"
+        android:id="@+id/button_test_filtroMarca"
         android:title="@string/filtro_marca"
         />
     <item
