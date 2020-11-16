@@ -85,6 +85,7 @@ public class DetailActivity extends AppCompatActivity {
             GasolineraFavorita gFavorita = gasolinerasFavoritas.getGasolineraFavoritaPorId(gDAO.getId(),
                     AppDatabase.getInstance(getApplicationContext()).gasolineraFavoritaDAO());
             favButton.setImageResource(R.drawable.favorito_activado); // icono favorito activado
+            favButton.setTag(R.drawable.favorito_activado);
             gasolineraEsFavorita = true;
             comentario.setText("Comentario:\n"+gFavorita.getComentario());
         }
@@ -92,6 +93,7 @@ public class DetailActivity extends AppCompatActivity {
         {
             // no existe la gasolinera favorita
             favButton.setImageResource(R.drawable.favorito_desactivado); // icono favorito activado
+            favButton.setTag(R.drawable.favorito_desactivado);
             gasolineraEsFavorita = false;
         }
 
@@ -157,6 +159,7 @@ public class DetailActivity extends AppCompatActivity {
                                         toastComentarioReducido, Toast.LENGTH_LONG).show();
                                 comentario.setText("Comentario:\n"+comentarioEditText.getText());
                                 favButton.setImageResource(R.drawable.favorito_activado);
+                                favButton.setTag(R.drawable.favorito_activado);
                                 gasolineraEsFavorita = true;
                                 ThreadAnhadirGasolineras thread=new ThreadAnhadirGasolineras();
                                 new Thread(thread).start();
