@@ -1,17 +1,12 @@
 package com.isunican.proyectobase.Views;
 
-import android.content.Context;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import androidx.test.InstrumentationRegistry;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
-import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+import androidx.test.rule.ActivityTestRule;
 
 import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.R;
@@ -34,16 +29,16 @@ import static org.hamcrest.Matchers.anything;
 public class FiltroFavoritosActivityUITest {
 
     @Rule
-    public IntentsTestRule<FiltroFavoritosActivity> activityRule =
-            new IntentsTestRule<>(FiltroFavoritosActivity.class);
-/*
+    public ActivityTestRule<FiltroFavoritosActivity> activityRule =
+            new ActivityTestRule<>(FiltroFavoritosActivity.class);
+
     @BeforeClass
     public static void beforeClass() {
         ApplicationProvider.getApplicationContext().deleteDatabase("RoomDatabase");
     }
-    */
+
     @Test
-    public void filtroFavoritosMarcaTest(){/*
+    public void filtroFavoritosMarcaTest(){
         //Caso 1: filtramos por una marca cualquiera
         ListView listaFav = activityRule.getActivity().findViewById(R.id.listFavGasolineras);
         //Cogemos la cantidad de favoritos antes de filtrar
@@ -88,13 +83,13 @@ public class FiltroFavoritosActivityUITest {
         //Volvemos a contar los favoritos de la lista
         newFavoritos = newlistaFav.getAdapter().getCount();
         //Comprobamos que el numero de favoritos no ha cambiado
-        Assert.assertTrue(favoritos == newFavoritos);*/
+        Assert.assertTrue(favoritos == newFavoritos);
 
     }
 
     @Test
     public void filtroFavoritosLocalidadTest(){
-        /*
+
         //Caso 1: filtramos por una localidad cualquiera
         ListView listaFav = activityRule.getActivity().findViewById(R.id.listFavGasolineras);
         //Contamos la cantidad de favoritos antes de filtrar
@@ -145,12 +140,12 @@ public class FiltroFavoritosActivityUITest {
         //Volvemos a contar los favoritos
         newFavoritos = newlistaFav.getAdapter().getCount();
         //Comprobamos que el numero de favoritos no ha cambiado
-        Assert.assertTrue(favoritos == newFavoritos);*/
+        Assert.assertTrue(favoritos == newFavoritos);
     }
 
     @Test
     public void filtroFavoritosDosFiltrosTest(){
-        /*
+
         //Caso 1: aplicamos los 2 filtros a la vez
         ListView listaFav = activityRule.getActivity().findViewById(R.id.listFavGasolineras);
         //Contamos la cantidad de favoritos antes de filtrar
@@ -204,7 +199,7 @@ public class FiltroFavoritosActivityUITest {
         //Volvemos a contar los favoritos
         newFavoritos = newlistaFav.getAdapter().getCount();
         //Comprobamos que el numero de favoritos no ha cambiado
-        Assert.assertTrue(favoritos == newFavoritos);*/
+        Assert.assertTrue(favoritos == newFavoritos);
     }
 
 
