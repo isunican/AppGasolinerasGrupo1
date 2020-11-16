@@ -6,6 +6,7 @@ import android.util.JsonReader;
 import android.util.JsonToken;
 import android.util.Log;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,7 +40,7 @@ public class ParserJSONGasolineras {
             try (JsonReader reader = new JsonReader(new InputStreamReader(in, "UTF-8"));){
             return readArrayGasolineras(reader);
         } catch (NullPointerException e) {
-            return null;
+            return Collections.emptyList();
         }
     }
 
@@ -55,11 +56,11 @@ public class ParserJSONGasolineras {
      * y devuelve un objeto Gasolinera que añadimos a la lista de gasolineras.
      * Finalmente se devuelve la lista de gasolineras.
      *
-     * @param reader in JsonReader Stream de datos JSON apuntando al comienzo del stream
+     * @param reader JsonReader Stream de datos JSON apuntando al comienzo del stream
      * @return List Lista de objetos Gasolinera con los datos obtenidas tras parsear el JSON
      * @throws IOException
      */
-    public static List readArrayGasolineras (JsonReader reader) throws IOException {
+    public static List<Gasolinera> readArrayGasolineras (JsonReader reader) throws IOException {
         List<Gasolinera> listGasolineras = new ArrayList<>();
 
         reader.beginObject();
@@ -92,7 +93,7 @@ public class ParserJSONGasolineras {
      * Una vez extraidos todos los atributos, crea un objeto Gasolinera con ellos
      * y lo devuelve.
      *
-     * @param reader in JsonReader stream de datos JSON
+     * @param reader JsonReader stream de datos JSON
      * @return Gasolinera Objetos Gasolinera con los datos obtenidas tras parsear el JSON
      * @throws IOException
      */

@@ -1,6 +1,5 @@
 package com.isunican.proyectobase.Presenter;
 
-import android.content.Context;
 import com.isunican.proyectobase.DAO.GasolineraFavoritaDAO;
 import com.isunican.proyectobase.Utilities.ExtractorLocalidadUtil;
 
@@ -42,7 +41,9 @@ public class PresenterGasolinerasFavoritas {
         gasolineras= new ArrayList<>();        //Cargar datos de la BD
         gasolineraFavoritaList = new ArrayList<>();
         listaOriginal = new ArrayList<>();
+
         gasolinerasDummy();
+
     }
 
     public List<GasolineraFavorita> getListaGasolinerasFavoritas() { return gasolineraFavoritaList; }
@@ -168,11 +169,11 @@ public class PresenterGasolinerasFavoritas {
     /**
      * Datos de prueba para comprobar ciertas funcionalidades del presenter
      */
-    private void gasolinerasDummy(){
-        this.listaOriginal.add(new Gasolinera(1000,SANTANDER,SANTANDER, "Av Valdecilla", 1.299,1.359,"AVIA"));
-        this.listaOriginal.add(new Gasolinera(1053,SANTANDER,SANTANDER, "Plaza Matias Montero", 0,1.349,"CAMPSA"));
-        this.listaOriginal.add(new Gasolinera(420,SANTANDER,SANTANDER, "Area Arrabal Puerto de Raos", 0,1.279,"E.E.S.S. MAS, S.L."));
-        this.listaOriginal.add(new Gasolinera(9564,SANTANDER,SANTANDER, "Av Parayas", 1.189,0,"EASYGAS"));
-        this.listaOriginal.add(new Gasolinera(1025,SANTANDER,SANTANDER, "Calle el Empalme", 1.259,0,"CARREFOUR"));
+    public void gasolinerasDummy(){
+        listaOriginal.add(new Gasolinera(1000,SANTANDER,SANTANDER, "Av Valdecilla", 1.299,1.359,"AVIA"));
+        listaOriginal.add(new Gasolinera(1053,SANTANDER,SANTANDER, "Plaza Matias Montero", 0,1.349,"CAMPSA"));
+        listaOriginal.add(new Gasolinera(420,SANTANDER,SANTANDER, "Area Arrabal Puerto de Raos", 0,1.279,"E.E.S.S. MAS, S.L."));
+        listaOriginal.add(new Gasolinera(9564,SANTANDER,SANTANDER, "Av Parayas", 1.189,0,"EASYGAS"));
+        listaOriginal.add(new Gasolinera(1025,SANTANDER,SANTANDER, "Calle el Empalme", 1.259,0,"CARREFOUR"));
     }
 }
