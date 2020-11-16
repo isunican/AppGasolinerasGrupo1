@@ -96,7 +96,6 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         this.setTitle(R.string.title_fav);
 
         listaActual = new ArrayList<>();
-
         presenterGasolinerasFavoritas = new PresenterGasolinerasFavoritas();
         FetcherThread hilo = new FetcherThread(presenterGasolinerasFavoritas, contexto);
         Thread t = new Thread(hilo);
@@ -105,7 +104,7 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         try {
             t.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            Thread.currentThread().interrupt();
         }
 
         // muestra el logo en el actionBar

@@ -4,7 +4,6 @@ import android.content.Context;
 
 import com.isunican.proyectobase.DAO.GasolineraDAO;
 import com.isunican.proyectobase.DAO.GasolineraFavoritaDAO;
-import com.isunican.proyectobase.Database.AppDatabase;
 import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.Model.GasolineraFavorita;
 import com.isunican.proyectobase.Utilities.CommonUtils;
@@ -30,7 +29,6 @@ import static com.isunican.proyectobase.Presenter.PresenterGasolineras.SANTANDER
 public class PresenterGasolinerasFavoritas {
 
     ArrayList<Gasolinera> listaOriginal; //Lista de gasolineras favoritas
-
 
 
     /**
