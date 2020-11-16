@@ -32,7 +32,7 @@ import static org.hamcrest.Matchers.anything;
 
 @RunWith(AndroidJUnit4.class)
 public class FiltroFavoritosActivityUITest {
-
+    /*
     @Rule
     public IntentsTestRule<FiltroFavoritosActivity> activityRule =
             new IntentsTestRule<>(FiltroFavoritosActivity.class);
@@ -41,7 +41,7 @@ public class FiltroFavoritosActivityUITest {
     public static void beforeClass() {
         ApplicationProvider.getApplicationContext().deleteDatabase("RoomDatabase");
     }
-
+    */
     @Test
     public void filtroFavoritosMarcaTest(){/*
         //Caso 1: filtramos por una marca cualquiera
