@@ -44,6 +44,7 @@ public class FiltroFavoritosActivityUITest {
 
     @Test
     public void filtroFavoritosMarcaTest(){
+
         //Caso 1: filtramos por una marca cualquiera
         ListView listaFav = activityRule.getActivity().findViewById(R.id.listFavGasolineras);
         //Cogemos la cantidad de favoritos antes de filtrar
@@ -150,7 +151,7 @@ public class FiltroFavoritosActivityUITest {
 
     @Test
     public void filtroFavoritosDosFiltrosTest(){
-
+        /*
         //Caso 1: aplicamos los 2 filtros a la vez
         ListView listaFav = activityRule.getActivity().findViewById(R.id.listFavGasolineras);
         //Contamos la cantidad de favoritos antes de filtrar
@@ -183,7 +184,7 @@ public class FiltroFavoritosActivityUITest {
         onView(withId(R.id.nombreGasolineraText)).check(matches(withText(marca)));
 
         Espresso.pressBack();
-        /*
+
         //Caso 2: no se selecciona ninguna marca de filtro
         //Vamos a la vista de filtrado
         onView(withId(R.id.action_favorite)).perform(click());
