@@ -183,7 +183,7 @@ public class FiltroFavoritosActivityUITest {
         onView(withId(R.id.nombreGasolineraText)).check(matches(withText(marca)));
 
         Espresso.pressBack();
-
+        /*
         //Caso 2: no se selecciona ninguna marca de filtro
         //Vamos a la vista de filtrado
         onView(withId(R.id.action_favorite)).perform(click());
@@ -194,7 +194,7 @@ public class FiltroFavoritosActivityUITest {
         newFavoritos = newlistaFav.getAdapter().getCount();
         //Comprobamos que hay el mismo numero que al principio
         Assert.assertTrue(favoritos == newFavoritos);
-        /*
+
         //Caso 3: pulsamos cancelar
         //Vamos a la vista de filtrado
         onView(withId(R.id.action_favorite)).perform(click());
