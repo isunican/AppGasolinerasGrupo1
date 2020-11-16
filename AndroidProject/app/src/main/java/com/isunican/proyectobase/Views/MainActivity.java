@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     PresenterFiltroMarcas presenterFiltroMarcas;
 
     List<Gasolinera>listaGasolinerasActual;
+    List<Gasolinera>listaGasolinerasDAO;
     //Lista con el filtro aplicado
     ArrayList<Gasolinera> currentList;
 
@@ -543,6 +544,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         protected void onPostExecute(Boolean res) {
             listaGasolinerasActual=presenterGasolineras.getGasolineras();
             currentList = (ArrayList<Gasolinera>) presenterGasolineras.getGasolineras();
+
+            listaGasolinerasDAO=AppDatabase.getInstance(getApplicationContext()).gasolineraDAO().getAll();
             Toast toast;
 
             mSwipeRefreshLayout.setRefreshing(false);
@@ -551,7 +554,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if ( Boolean.TRUE.equals(res)) {
                 // Definimos el array adapter
                 adapter = new GasolineraArrayAdapter(activity, 0, presenterGasolineras.getGasolineras() );
+                //Jaime ha estado aquí, actualizar  las gasolineras si ha cambiado el precio
+                for (Gasolinera gDao : listaGasolinerasDAO) {
+                    for(Gasolinera g : listaGasolinerasActual){
+                        if(gDao.equals(g) && gDao.getGasolina95()!=g.getGasolina95() && gDao.getGasoleoA()!=g.getGasoleoA()){
+                            gDao.setGasoleoA(g.getGasoleoA());
+                            gDao.setGasolina95(g.getGasolina95());
+                            AppDatabase.getInstance(getApplicationContext()).gasolineraDAO().update(gDao);
+                        }
+                    }
 
+                }
                 adapter = new GasolineraArrayAdapter(activity, 0, listaGasolinerasActual);
 
                 // Obtenemos la vista de la lista
@@ -560,6 +573,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Cargamos los datos en la lista
                 if (!listaGasolinerasActual.isEmpty()) {
                     // datos obtenidos con exito
+
                     listViewGasolineras.setAdapter(adapter);
                     toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_exito), Toast.LENGTH_LONG);
                 } else {
@@ -597,6 +611,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     MainActivity.this.startActivity(myIntent);
                 }
             });
+
         }
     }
 
