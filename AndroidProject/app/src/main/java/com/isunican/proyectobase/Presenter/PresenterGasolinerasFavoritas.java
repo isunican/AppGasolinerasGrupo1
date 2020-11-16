@@ -42,7 +42,7 @@ public class PresenterGasolinerasFavoritas {
         gasolineras= new ArrayList<>();        //Cargar datos de la BD
         gasolineraFavoritaList = new ArrayList<>();
         listaOriginal = new ArrayList<>();
-        gasolinerasDummy();
+        //gasolinerasDummy();
     }
 
     public List<GasolineraFavorita> getListaGasolinerasFavoritas() { return gasolineraFavoritaList; }
