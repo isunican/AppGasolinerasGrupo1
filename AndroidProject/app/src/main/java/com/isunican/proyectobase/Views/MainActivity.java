@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     PresenterFiltroMarcas presenterFiltroMarcas;
 
     List<Gasolinera>listaGasolinerasActual;
+    List<Gasolinera>listaGasolinerasDAO;
     //Lista con el filtro aplicado
     ArrayList<Gasolinera> currentList;
 
@@ -93,11 +94,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //Filtro
     String tipoGasolina;
-
-    // Caja de anhadir/modifica comentario
-    TextView comentarioEditText;
-    PresenterGasolinerasFavoritas gasolinerasFavoritas;
-    Gasolinera gasolineraAModificar;
 
     // Boton guardar
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
@@ -478,67 +474,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         adapter.notifyDataSetChanged();
     }
 
-    // ------------------------------------------------------
-    // MODIFICA GASOLINERA
-    public void modificaComentario(int position, final Gasolinera gasolinera){
-        final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
-                .setPositiveButton(getResources().getString(R.string.guardar),null)
-                .setNegativeButton(getResources().getString(R.string.cancelar), null)
-                .create();
-
-        LayoutInflater inflater = this.getLayoutInflater();
-        final View view = inflater.inflate(R.layout.modifica_comentario_favorito, null);
-        comentarioEditText = view.findViewById(R.id.textBox_modificaComentario);
-        // Buscamos la gasolinera para ver si es favorita
-        final Gasolinera gDAO = presenterGasolineras.getGasolineraPorIdess(gasolinera.getIdeess(),
-                AppDatabase.getInstance(getApplicationContext()).gasolineraDAO());
-        if(gDAO != null) {
-            gasolinerasFavoritas = new PresenterGasolinerasFavoritas();
-            // existe la gasolinera favorita
-            GasolineraFavorita gFavorita = gasolinerasFavoritas.getGasolineraFavoritaPorId(gDAO.getId(),
-                    AppDatabase.getInstance(getApplicationContext()).gasolineraFavoritaDAO());
-            // Escribo el comentario que ya habia en la gasolinera
-            comentarioEditText.setText(gFavorita.getComentario());
-        }
-        // Definicion positive button ("guardar")
-        alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog) {
-                Button b = alertDialogBuilder.getButton(BTN_POSITIVO);
-                b.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if(comentarioEditText.getText().length()>240)
-                            comentarioEditText.setError("El comentario debe ser menor de 240 carácteres");
-                        else {
-                            gasolineraAModificar = gDAO;
-                            gasolineraAModificar.setId(gDAO.getId());
-                            Toast.makeText(getApplicationContext(), "Comentario modificado", Toast.LENGTH_LONG).show();
-                            ThreadModificaGasolineras thread = new ThreadModificaGasolineras();
-                            new Thread(thread).start();
-                            alertDialogBuilder.dismiss();
-                        }
-                    }
-                });
-            }
-        });
-        alertDialogBuilder.setView(view);
-        alertDialogBuilder.show();
-    }
-    public class ThreadModificaGasolineras implements Runnable{
-        public ThreadModificaGasolineras(){
-            // Constructor vacio para la creacion de la Task
-        }
-        public void run(){
-            gasolinerasFavoritas.modificarGasolineraFavorita(gasolineraAModificar.getId(),
-                    comentarioEditText.getText().toString(),
-                    AppDatabase.getInstance(getApplicationContext()).gasolineraFavoritaDAO());
-        }
-
-    }
-    // ------------------------------------------------------
-   
-
     /**
      * CargaDatosGasolinerasTask
      * <p>
@@ -609,6 +544,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         protected void onPostExecute(Boolean res) {
             listaGasolinerasActual=presenterGasolineras.getGasolineras();
             currentList = (ArrayList<Gasolinera>) presenterGasolineras.getGasolineras();
+
+            listaGasolinerasDAO=AppDatabase.getInstance(getApplicationContext()).gasolineraDAO().getAll();
             Toast toast;
 
             mSwipeRefreshLayout.setRefreshing(false);
@@ -617,7 +554,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if ( Boolean.TRUE.equals(res)) {
                 // Definimos el array adapter
                 adapter = new GasolineraArrayAdapter(activity, 0, presenterGasolineras.getGasolineras() );
+                //Jaime ha estado aquí, actualizar  las gasolineras si ha cambiado el precio
+                for (Gasolinera gDao : listaGasolinerasDAO) {
+                    for(Gasolinera g : listaGasolinerasActual){
+                        if(gDao.equals(g) && gDao.getGasolina95()!=g.getGasolina95() && gDao.getGasoleoA()!=g.getGasoleoA()){
+                            gDao.setGasoleoA(g.getGasoleoA());
+                            gDao.setGasolina95(g.getGasolina95());
+                            AppDatabase.getInstance(getApplicationContext()).gasolineraDAO().update(gDao);
+                        }
+                    }
 
+                }
                 adapter = new GasolineraArrayAdapter(activity, 0, listaGasolinerasActual);
 
                 // Obtenemos la vista de la lista
@@ -626,6 +573,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Cargamos los datos en la lista
                 if (!listaGasolinerasActual.isEmpty()) {
                     // datos obtenidos con exito
+
                     listViewGasolineras.setAdapter(adapter);
                     toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_exito), Toast.LENGTH_LONG);
                 } else {
@@ -663,6 +611,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     MainActivity.this.startActivity(myIntent);
                 }
             });
+
         }
     }
 
@@ -679,9 +628,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         private Context context;
         private List<Gasolinera> listaGasolineras;
-
-        // TODO MODIFICA GASOLINERA
-        Button buttonModifica;
 
         // Constructor
         public GasolineraArrayAdapter(Context context, int resource, List<Gasolinera> objects) {
@@ -733,18 +679,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 tmp = view.findViewById(R.id.textViewGasolina95);
                 tmp.setTextSize(11);
             }
-            // ------------------------------------------------------
-            // MODIFICA GASOLINERA
-            /*
-            buttonModifica = view.findViewById(R.id.buttonModifica);
-            buttonModifica.setFocusable(false);
-            buttonModifica.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    modificaComentario(position, gasolinera);
-                }
-            });
-            */
-            // ------------------------------------------------------
+
             return view;
 
         }
