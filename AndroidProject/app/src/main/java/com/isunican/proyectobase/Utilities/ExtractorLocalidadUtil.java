@@ -42,7 +42,7 @@ public class ExtractorLocalidadUtil {
      */
     public static List<Gasolinera> aplicaFiltro(String localidad, List<Gasolinera> listaGasolineras){
         ArrayList<Gasolinera> filtradas = new ArrayList<>();
-
+        if(listaGasolineras == null){ return filtradas; }
         for(Gasolinera g: listaGasolineras){
             if(g.getLocalidad().equalsIgnoreCase(localidad))filtradas.add(g);
         }
