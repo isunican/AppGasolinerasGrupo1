@@ -147,9 +147,10 @@ public class GasolineraDAOTest   {
         // Caso 1: No existente
         Gasolinera sut = new Gasolinera(1, "Santander", "Cantabria", "Los Castros Nº1", 1.00, 1.00, "CEPSA");
         db.gasolineraDAO().insertOne(sut);
-        db.gasolineraDAO().findByIdEESS(2);
+        List<Gasolinera> lista = db.gasolineraDAO().findByIdEESS(2);
+        Assert.assertEquals(0, lista.size());
         // Caso 2: Correcto con 1 elemento en tabla
-        List<Gasolinera> lista = db.gasolineraDAO().findByIdEESS(1);
+        lista = db.gasolineraDAO().findByIdEESS(1);
         Assert.assertEquals(1, lista.size());
         Assert.assertEquals(lista.get(0), sut);
         // Caso 3: Correcto con 2 o mas elementos en tabla
