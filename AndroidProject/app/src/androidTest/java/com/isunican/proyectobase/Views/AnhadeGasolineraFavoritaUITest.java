@@ -1,5 +1,6 @@
 package com.isunican.proyectobase.Views;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
@@ -8,6 +9,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.isunican.proyectobase.R;
 
 import org.hamcrest.Matchers;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +35,11 @@ public class AnhadeGasolineraFavoritaUITest {
     @Rule
     public IntentsTestRule<MainActivity> activityRule =
             new IntentsTestRule<>(MainActivity.class);
+
+    @BeforeClass
+    public static void cleanUp(){
+        ApplicationProvider.getApplicationContext().deleteDatabase("RoomDatabase");
+    }
 
     @Test
     public void anhadeFavorito(){
