@@ -5,10 +5,22 @@ import com.isunican.proyectobase.Utilities.ExtractorLocalidadUtil;
 
 import static com.isunican.proyectobase.Presenter.PresenterGasolineras.SANTANDER;
 import com.isunican.proyectobase.DAO.GasolineraDAO;
+import android.content.Context;
+
+import com.isunican.proyectobase.DAO.GasolineraDAO;
+import com.isunican.proyectobase.DAO.GasolineraFavoritaDAO;
+import com.isunican.proyectobase.Database.AppDatabase;
+import android.widget.Toast;
+
 import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.Model.GasolineraFavorita;
 import com.isunican.proyectobase.Utilities.CommonUtils;
 import com.isunican.proyectobase.Utilities.ExtractorMarcasUtil;
+import com.isunican.proyectobase.Model.GasolineraFavorita;
+import com.isunican.proyectobase.Model.TarjetaDescuento;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -20,8 +32,8 @@ import java.util.List;
  * sus DAO
  *
  * @author Luis Cruz
- * @author Elena Romón
- * @author Adrian Celis
+ * @author Elena Romon
+ * @author Jaime Lopez-Agudo
  *
  * @version 0.0.1
  */
@@ -32,8 +44,8 @@ public class PresenterGasolinerasFavoritas {
     private ArrayList<Gasolinera> gasolineras; //Lista de gasolineras favoritas
 
     private List<GasolineraFavorita> gasolineraFavoritaList;
-    
-       /**
+
+    /**
      * Crea el presenter, inicializando la lista de gasolineras favoritas
      *
      */
@@ -52,7 +64,10 @@ public class PresenterGasolinerasFavoritas {
     }
 
     public GasolineraFavorita getGasolineraFavoritaPorId(int id, GasolineraFavoritaDAO gasolineraFavoritaDAO){
-        if (gasolineraFavoritaDAO == null) return null;
+        if (gasolineraFavoritaDAO == null) {
+            System.out.println(gasolineraFavoritaDAO);
+            return null;
+        }
         for (GasolineraFavorita gF: gasolineraFavoritaDAO.getAll()) {
             if(gF.getIdGasolinera() == id)
                 return gF;
@@ -60,10 +75,40 @@ public class PresenterGasolinerasFavoritas {
         return null;
     }
 
-    public Gasolinera eliminaGasolineraFavorita(Gasolinera gasolinera){
+    public Gasolinera getGasolineraPorId (int id, GasolineraDAO gasolineraDAO){
+        for (Gasolinera g: gasolineraDAO.getAll()) {
+            if(g.getIdeess() == id)
+                return g;
+        }
+        return null;
+    }
 
-        // hago cosas
-        return gasolinera;
+    /**
+     * Elimina una gasolinera de la lista de favoritos, borrandola tanto de
+     * la lista como de la base de datos.
+     *
+     * @author Elena Romon Lopez
+     *
+     * @param gasolinera gasolinera a eliminar
+     * @return Gasolinera gasolinera eliminada
+     */
+    public GasolineraFavorita eliminaGasolineraFavorita(Gasolinera gasolinera, GasolineraDAO gasolineraDAO,
+                                                        GasolineraFavoritaDAO gasolineraFavoritaDAO){
+
+        GasolineraFavorita gasolineraFavorita = null;
+
+        if (gasolineraFavoritaDAO == null || gasolineraDAO == null) {
+            gasolinera = null;
+            System.out.println("if");
+        } else {
+            gasolineraFavorita = getGasolineraFavoritaPorId(gasolinera.getId(), gasolineraFavoritaDAO);
+            if (gasolineraFavorita != null && gasolinera != null) {
+                gasolineraFavoritaList.remove(gasolineraFavorita);
+                gasolineraFavoritaDAO.delete(gasolineraFavorita);
+                gasolineraDAO.delete(gasolinera);
+            }
+        }
+        return gasolineraFavorita;
     }
 
     public GasolineraFavorita anhadirGasolineraFavorita(int idGasolinera, String comentario, GasolineraFavoritaDAO gasolineraFavoritaDAO){
@@ -92,7 +137,7 @@ public class PresenterGasolinerasFavoritas {
         return g;
     }
     
-      /**
+    /**
      * Carga las gasolineras favoritas del usuario desde la base de datos
      */
     public void cargaGasolineras(GasolineraDAO gasolineraDAO, GasolineraFavoritaDAO gasolineraFavoritaDAO){
@@ -102,7 +147,7 @@ public class PresenterGasolinerasFavoritas {
         }
     }
 
-       /**
+    /**
      * @return Devuelve la lista de gasolineras favoritas
      */
     public List<Gasolinera> getGasolinerasFavoritas(){
@@ -143,7 +188,6 @@ public class PresenterGasolinerasFavoritas {
     }
 
     /**
-     *
      * @return Devuelve una lista con las localidades de las gasolineras guardadas como favoritas
      */
     public List<String> getLocalidadesFavoritas(){
