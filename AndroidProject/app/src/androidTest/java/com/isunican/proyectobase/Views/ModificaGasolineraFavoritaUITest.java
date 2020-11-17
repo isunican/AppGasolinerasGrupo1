@@ -1,11 +1,13 @@
 package com.isunican.proyectobase.Views;
 
+import androidx.test.annotation.UiThreadTest;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.R;
 
 import org.hamcrest.Matchers;
@@ -14,6 +16,8 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -24,9 +28,10 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.anything;
+
+import static com.isunican.proyectobase.Presenter.PresenterGasolineras.SANTANDER;
 
 /*
  * @author: Adrián Celis
@@ -51,7 +56,22 @@ public class ModificaGasolineraFavoritaUITest {
     }
 
     @Before
+    @UiThreadTest
     public void setUp(){
+        ArrayList<Gasolinera> listaOriginal = new ArrayList<Gasolinera>();
+        listaOriginal.add(new Gasolinera(1000,SANTANDER,SANTANDER, "Av Valdecilla", 1.299,1.359,"AVIA"));
+        listaOriginal.add(new Gasolinera(1053,SANTANDER,SANTANDER, "Plaza Matias Montero", 0,1.349,"CAMPSA"));
+        listaOriginal.add(new Gasolinera(420,SANTANDER,SANTANDER, "Area Arrabal Puerto de Raos", 0,1.279,"E.E.S.S. MAS, S.L."));
+        listaOriginal.add(new Gasolinera(9564,SANTANDER,SANTANDER, "Av Parayas", 1.189,0,"EASYGAS"));
+        listaOriginal.add(new Gasolinera(1025,SANTANDER,SANTANDER, "Calle el Empalme", 1.259,0,"CARREFOUR"));
+        activityRule.getActivity().listaActual = listaOriginal;
+        activityRule.getActivity().adapterFavoritas.addAll(listaOriginal);
+        activityRule.getActivity().adapterFavoritas.notifyDataSetChanged();
+
+    }
+
+    @Before
+    public void anhadeGasolineras(){
         // Guardamos una gasolinera en favoritos
         // Hacemos clic en la primera gasolinera de la lista
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listFavGasolineras)).atPosition(0).perform(click());
@@ -76,7 +96,6 @@ public class ModificaGasolineraFavoritaUITest {
 
         Espresso.pressBack();
     }
-
     @Test
     public void modificaFavorito() {
         // ID1: Cancelamos al modificar una gasolinera favorita
