@@ -2,29 +2,17 @@ package com.isunican.proyectobase.Presenter;
 
 import com.isunican.proyectobase.DAO.GasolineraFavoritaDAO;
 import com.isunican.proyectobase.Utilities.ExtractorLocalidadUtil;
-
 import static com.isunican.proyectobase.Presenter.PresenterGasolineras.SANTANDER;
 import com.isunican.proyectobase.DAO.GasolineraDAO;
-import android.content.Context;
-
-import com.isunican.proyectobase.DAO.GasolineraDAO;
-import com.isunican.proyectobase.DAO.GasolineraFavoritaDAO;
-import com.isunican.proyectobase.Database.AppDatabase;
-import android.widget.Toast;
-
 import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.Model.GasolineraFavorita;
 import com.isunican.proyectobase.Utilities.CommonUtils;
 import com.isunican.proyectobase.Utilities.ExtractorMarcasUtil;
-import com.isunican.proyectobase.Model.GasolineraFavorita;
-import com.isunican.proyectobase.Model.TarjetaDescuento;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Clase que gestiona las gasolineras favoritas del usuario,
@@ -40,8 +28,7 @@ import java.util.List;
 public class PresenterGasolinerasFavoritas {
 
     ArrayList<Gasolinera> listaOriginal; //Lista de gasolineras favoritas
-    
-    private ArrayList<Gasolinera> gasolineras; //Lista de gasolineras favoritas
+
 
     private List<GasolineraFavorita> gasolineraFavoritaList;
 
@@ -50,7 +37,7 @@ public class PresenterGasolinerasFavoritas {
      *
      */
     public PresenterGasolinerasFavoritas(){
-        gasolineras= new ArrayList<>();        //Cargar datos de la BD
+        //Cargar datos de la BD
         gasolineraFavoritaList = new ArrayList<>();
         listaOriginal = new ArrayList<>();
 
@@ -65,7 +52,6 @@ public class PresenterGasolinerasFavoritas {
 
     public GasolineraFavorita getGasolineraFavoritaPorId(int id, GasolineraFavoritaDAO gasolineraFavoritaDAO){
         if (gasolineraFavoritaDAO == null) {
-            System.out.println(gasolineraFavoritaDAO);
             return null;
         }
         for (GasolineraFavorita gF: gasolineraFavoritaDAO.getAll()) {
@@ -98,11 +84,10 @@ public class PresenterGasolinerasFavoritas {
         GasolineraFavorita gasolineraFavorita = null;
 
         if (gasolineraFavoritaDAO == null || gasolineraDAO == null) {
-            gasolinera = null;
-            System.out.println("if");
+
         } else {
             gasolineraFavorita = getGasolineraFavoritaPorId(gasolinera.getId(), gasolineraFavoritaDAO);
-            if (gasolineraFavorita != null && gasolinera != null) {
+            if (gasolineraFavorita != null) {
                 gasolineraFavoritaList.remove(gasolineraFavorita);
                 gasolineraFavoritaDAO.delete(gasolineraFavorita);
                 gasolineraDAO.delete(gasolinera);
@@ -151,7 +136,9 @@ public class PresenterGasolinerasFavoritas {
      * @return Devuelve la lista de gasolineras favoritas
      */
     public List<Gasolinera> getGasolinerasFavoritas(){
-        System.out.println("Gasolineras pasadas");
+        Logger logger=Logger.getLogger(PresenterGasolinerasFavoritas.class.getName());
+        logger.setLevel(Level.FINE);
+        logger.log(Level.FINE, "Estoy consiguiendo las gasolinerasFavoritas");
         return listaOriginal;
     }
 

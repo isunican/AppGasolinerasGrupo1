@@ -7,13 +7,11 @@ import com.isunican.proyectobase.DAO.GasolineraFavoritaDAO;
 import com.isunican.proyectobase.Database.AppDatabase;
 import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.Model.*;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +20,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.Arrays;
 import java.util.List;
 
 /*
@@ -213,8 +209,8 @@ public class DetailActivity extends AppCompatActivity {
                 .setNegativeButton(getResources().getString(R.string.cancelar), null)
                 .create();
         final View view1 = inflater.inflate(R.layout.confirmacion_elimina_favorito, null);
-        final TextView txt_confirmacion = view1.findViewById(R.id.txt_confirmacion);
-        txt_confirmacion.setText("¿Quiere eliminar la gasolinera " + nombreGasolinera.getText() + " de su lista de favoritos?");
+        final TextView txtConfirmacion = view1.findViewById(R.id.txt_confirmacion);
+        txtConfirmacion.setText("¿Quiere eliminar la gasolinera " + nombreGasolinera.getText() + " de su lista de favoritos?");
         alertDialogConfirmacion.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {

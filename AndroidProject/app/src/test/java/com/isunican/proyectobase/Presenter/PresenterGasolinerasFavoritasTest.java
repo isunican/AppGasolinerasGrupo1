@@ -137,21 +137,21 @@ public class PresenterGasolinerasFavoritasTest {
 
         // Caso 1: eliminar una gasolinera de la lista de favoritos
         Assert.assertEquals(gasolineraFavorita1, sut.eliminaGasolineraFavorita(gasolinera1, db.gasolineraDAO(), db.gasolineraFavoritaDAO()));
-        Assert.assertTrue(db.gasolineraDAO().findById(gasolinera1.getIdeess()).size() == 0);
-        Assert.assertTrue(db.gasolineraFavoritaDAO().findById(gasolinera1.getIdeess()).size() == 0);
+        Assert.assertEquals(0,db.gasolineraDAO().findById(gasolinera1.getIdeess()).size());
+        Assert.assertEquals(0,db.gasolineraFavoritaDAO().findById(gasolinera1.getIdeess()).size());
 
         // Caso 2: eliminar una gasolinera no existente en la lista de favoritos
         Assert.assertEquals(null, sut.eliminaGasolineraFavorita(gasolinera3, db.gasolineraDAO(), db.gasolineraFavoritaDAO()));
-        Assert.assertTrue(db.gasolineraFavoritaDAO().findById(gasolinera3.getIdeess()).size() == 0);
-        Assert.assertTrue(db.gasolineraDAO().findById(gasolinera3.getIdeess()).size() == 0);
+        Assert.assertEquals(0,db.gasolineraFavoritaDAO().findById(gasolinera3.getIdeess()).size());
+        Assert.assertEquals(0,db.gasolineraDAO().findById(gasolinera3.getIdeess()).size());
 
         // Caso 3: eliminar una gasolinera con una de las DAOs nulas
         Assert.assertEquals(null, sut.eliminaGasolineraFavorita(gasolinera1, null, db.gasolineraFavoritaDAO()));
-        Assert.assertTrue(db.gasolineraDAO().findById(gasolinera1.getIdeess()).size() == 0);
+        Assert.assertEquals(0,db.gasolineraDAO().findById(gasolinera1.getIdeess()).size());
 
-        Assert.assertTrue(db.gasolineraFavoritaDAO().findById(gasolinera1.getIdeess()).size() == 0);
+        Assert.assertEquals(0,db.gasolineraFavoritaDAO().findById(gasolinera1.getIdeess()).size());
         Assert.assertEquals(null, sut.eliminaGasolineraFavorita(gasolinera1, db.gasolineraDAO(), null));
-        Assert.assertTrue(db.gasolineraDAO().findById(gasolinera1.getIdeess()).size() == 0);
-        Assert.assertTrue(db.gasolineraFavoritaDAO().findById(gasolinera1.getIdeess()).size() == 0);
+        Assert.assertEquals(0,db.gasolineraDAO().findById(gasolinera1.getIdeess()).size());
+        Assert.assertEquals(0,db.gasolineraFavoritaDAO().findById(gasolinera1.getIdeess()).size());
     }
 }
