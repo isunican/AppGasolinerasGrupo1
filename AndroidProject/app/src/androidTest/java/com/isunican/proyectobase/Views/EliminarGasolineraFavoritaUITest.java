@@ -5,6 +5,7 @@ import android.opengl.EGLExt;
 import android.widget.Button;
 import android.widget.ListView;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.ViewAssertion;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
@@ -14,6 +15,7 @@ import com.isunican.proyectobase.R;
 
 import org.hamcrest.Matchers;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -40,6 +42,11 @@ public class EliminarGasolineraFavoritaUITest {
 
     @Rule
     public ActivityTestRule<MainActivity> activityRule=new ActivityTestRule<>(MainActivity.class);
+
+    @BeforeClass
+    public static void cleanUp(){
+        ApplicationProvider.getApplicationContext().deleteDatabase("RoomDatabase");
+    }
 
     @Test
     public void testEliminarGasolineraFavoritaDesdeVistaDetallada(){
