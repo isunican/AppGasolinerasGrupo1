@@ -72,7 +72,7 @@ public class FiltroFavoritosActivityUITest {
         //Volvemos a contar los favoritos de la lista
         newFavoritos = newlistaFav.getAdapter().getCount();
         //Comprobamos que es el mismo numero que al principio
-        Assert.assertTrue(favoritos == newFavoritos);
+        Assert.assertEquals(favoritos,newFavoritos);
 
         //Caso 3: pulsamos cancelar
         //Vamos a la vista de filtrado
@@ -83,7 +83,7 @@ public class FiltroFavoritosActivityUITest {
         //Volvemos a contar los favoritos de la lista
         newFavoritos = newlistaFav.getAdapter().getCount();
         //Comprobamos que el numero de favoritos no ha cambiado
-        Assert.assertTrue(favoritos == newFavoritos);
+        Assert.assertEquals(favoritos, newFavoritos);
 
     }
 
@@ -128,7 +128,7 @@ public class FiltroFavoritosActivityUITest {
         //Volvemos a contar los favoritos
         newFavoritos = newlistaFav.getAdapter().getCount();
         //Comprobamos que hay el mismo numero que al principio
-        Assert.assertTrue(favoritos == newFavoritos);
+        Assert.assertEquals(favoritos, newFavoritos);
 
 
         //Caso 3: pulsamos cancelar
@@ -140,7 +140,7 @@ public class FiltroFavoritosActivityUITest {
         //Volvemos a contar los favoritos
         newFavoritos = newlistaFav.getAdapter().getCount();
         //Comprobamos que el numero de favoritos no ha cambiado
-        Assert.assertTrue(favoritos == newFavoritos);
+        Assert.assertEquals(favoritos, newFavoritos);
     }
 
     @Test
@@ -188,7 +188,7 @@ public class FiltroFavoritosActivityUITest {
         //Volvemos a contar los favoritos
         newFavoritos = newlistaFav.getAdapter().getCount();
         //Comprobamos que hay el mismo numero que al principio
-        Assert.assertTrue(favoritos == newFavoritos);
+        Assert.assertEquals(favoritos, newFavoritos);
 
         //Caso 3: pulsamos cancelar
         //Vamos a la vista de filtrado
@@ -199,7 +199,7 @@ public class FiltroFavoritosActivityUITest {
         //Volvemos a contar los favoritos
         newFavoritos = newlistaFav.getAdapter().getCount();
         //Comprobamos que el numero de favoritos no ha cambiado
-        Assert.assertTrue(favoritos == newFavoritos);
+        Assert.assertEquals(favoritos, newFavoritos);
     }
 
 
