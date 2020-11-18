@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -134,8 +136,37 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
             }
         });
 
-    }
 
+
+    }
+    /**
+     * Clase privada que implementa la clase TextWatcher
+     */
+    private class TextChange  implements TextWatcher{
+        View view;
+        //Constructor
+        private TextChange (View v) {
+            view = v;
+        }//end constructor
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {//No se implementa
+        }
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {//No se implementa
+        }
+        @Override
+        public void afterTextChanged(Editable s) {
+            switch (view.getId()){
+                case R.id.textMarcaFavDialog:
+                    adapterListMarcas.getFilter().filter(s);
+                    break;
+                case R.id.textLocalidadFavDialog:
+                    adapterListLocalidades.getFilter().filter(s);
+                    break;
+                default:
+            }
+        }
+    }
 
     /**
      * Menú action bar
@@ -234,6 +265,9 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         listViewMarcasFavDialog.setAdapter(adapterListMarcas);
         listViewLocalidadFavDialog.setAdapter(adapterListLocalidades);
 
+        //Filtrar las listView de los dialogos
+        textMarcaFavDialog.addTextChangedListener(new TextChange(textMarcaFavDialog));
+        textLocalidadFavDialog.addTextChangedListener(new TextChange(textLocalidadFavDialog));
 
         // ClickListener sobre la lista de marcas
         listViewMarcasFavDialog.setOnItemClickListener(new AdapterView.OnItemClickListener(){
