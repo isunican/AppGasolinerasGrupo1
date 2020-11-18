@@ -45,7 +45,6 @@ public class DetailActivity extends AppCompatActivity {
 
 
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
-    private static final int BTN_NEGATIVO = DialogInterface.BUTTON_NEGATIVE;
 
     /**
      * onCreate
@@ -135,7 +134,10 @@ public class DetailActivity extends AppCompatActivity {
 
     }
 
-    public void respuestaBotonFavorito() {
+    /**
+     * Método auxiliar llamado por el onclick listener del botón detras del icono de la estrella
+     */
+    private void respuestaBotonFavorito() {
         // Creacion alertDialog
         LayoutInflater inflater = this.getLayoutInflater();
         if (!gasolineraEsFavorita) {
@@ -147,7 +149,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Se puede refactorizar más todavia
+     * Crea y abre el dialogo para introducir el comentario
      *
      * @param inflater
      */

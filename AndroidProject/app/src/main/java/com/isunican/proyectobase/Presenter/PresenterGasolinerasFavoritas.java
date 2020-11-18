@@ -11,7 +11,6 @@ import com.isunican.proyectobase.Utilities.ExtractorMarcasUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Iterator;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -28,7 +27,7 @@ import java.util.logging.Logger;
 public class PresenterGasolinerasFavoritas {
 
     ArrayList<Gasolinera> listaOriginal; //Lista de gasolineras favoritas
-
+    private static final Logger LOGGER=Logger.getLogger(PresenterGasolinerasFavoritas.class.getName());
 
     private List<GasolineraFavorita> gasolineraFavoritaList;
 
@@ -96,6 +95,7 @@ public class PresenterGasolinerasFavoritas {
         return gasolineraFavorita;
     }
 
+
     public GasolineraFavorita anhadirGasolineraFavorita(int idGasolinera, String comentario, GasolineraFavoritaDAO gasolineraFavoritaDAO){
         if (gasolineraFavoritaDAO == null) return null;
         GasolineraFavorita favorito=new GasolineraFavorita(comentario,idGasolinera);
@@ -136,9 +136,7 @@ public class PresenterGasolinerasFavoritas {
      * @return Devuelve la lista de gasolineras favoritas
      */
     public List<Gasolinera> getGasolinerasFavoritas(){
-        Logger logger=Logger.getLogger(PresenterGasolinerasFavoritas.class.getName());
-        logger.setLevel(Level.FINE);
-        logger.log(Level.FINE, "Estoy consiguiendo las gasolinerasFavoritas");
+        LOGGER.info("Estoy cogiendo las gasolineras");
         return listaOriginal;
     }
 
