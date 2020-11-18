@@ -19,7 +19,7 @@ import java.util.List;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = {Build.VERSION_CODES.O_MR1})
-public class GasolinaFavoritaDAOTest {
+public class GasolineraFavoritaDAOTest {
     private AppDatabaseTest db = Room.inMemoryDatabaseBuilder(ApplicationProvider.getApplicationContext(), AppDatabaseTest.class).allowMainThreadQueries().build();
 
     @After
