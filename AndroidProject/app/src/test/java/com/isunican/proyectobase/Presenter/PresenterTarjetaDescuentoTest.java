@@ -93,10 +93,10 @@ public class PresenterTarjetaDescuentoTest {
         }
 
         //Caso 5: Gasolineras= lista vacía descuento="5%+2"
-        Assert.assertTrue(sut.actualizarListaDePrecios(new ArrayList<Gasolinera>()).size()==0);
+        Assert.assertEquals(0,sut.actualizarListaDePrecios(new ArrayList<Gasolinera>()).size());
 
         //Caso 6: Gasolineras= lista nula descuento="5%+2" TODO: ESTE TIRA NULLPOINTER
-        Assert.assertTrue(sut.actualizarListaDePrecios(null).size()==0);
+        Assert.assertEquals(0,sut.actualizarListaDePrecios(null).size());
 
 
     }

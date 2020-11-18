@@ -5,7 +5,10 @@ import android.os.Parcelable;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import java.util.Objects;
 
 
 /*
@@ -15,9 +18,11 @@ import androidx.room.PrimaryKey;
     pasar objetos de este tipo entre activities a traves de una llamada intent
 ------------------------------------------------------------------
 */
-@Entity(tableName = "gasolinera")
+@Entity(tableName = "gasolinera", indices = @Index(value = {"ideess"}, unique = true))
 public class Gasolinera implements Parcelable {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+    @ColumnInfo
     private int ideess;
     @ColumnInfo
     private String localidad;
@@ -45,6 +50,8 @@ public class Gasolinera implements Parcelable {
         this.gasolina95 = gasolina95;
         this.rotulo = rotulo;
     }
+    public int getId(){ return id;}
+    public void setId(int id) { this.id = id; }
 
     public int getIdeess() { return ideess; }
 
@@ -83,6 +90,7 @@ public class Gasolinera implements Parcelable {
                 getRotulo() + "\n"+
                 getDireccion() + "\n" +
                 getLocalidad() + "\n" +
+                getIdeess() +"\n" +
                 "Precio diesel: " + getGasoleoA() + " " + "\n" +
                 "Precio gasolina 95: " + getGasolina95() + " " + "\n\n";
 
@@ -157,5 +165,22 @@ public class Gasolinera implements Parcelable {
             tiposGasolina += "Gasolina95 ";
         }
         return tiposGasolina;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Gasolinera that = (Gasolinera) o;
+        return ideess == that.ideess &&
+                Objects.equals(localidad, that.localidad) &&
+                Objects.equals(provincia, that.provincia) &&
+                Objects.equals(direccion, that.direccion) &&
+                Objects.equals(rotulo, that.rotulo);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(ideess, localidad, provincia, direccion, gasoleoA, gasolina95, rotulo);
     }
 }

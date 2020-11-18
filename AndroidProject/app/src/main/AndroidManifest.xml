@@ -20,6 +20,9 @@
         </activity>
         <activity android:name=".Views.InfoActivity"></activity>
         <activity android:name=".Views.DetailActivity"></activity>
+        <activity android:name=".Views.FiltroFavoritosActivity"
+            android:parentActivityName=".Views.MainActivity">
+        </activity>
     </application>
 
 </manifest>

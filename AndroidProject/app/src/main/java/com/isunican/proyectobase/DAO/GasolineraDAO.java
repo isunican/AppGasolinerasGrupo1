@@ -14,18 +14,25 @@ public interface GasolineraDAO {
     @Query("SELECT * FROM gasolinera")
     List<Gasolinera> getAll();
 
-    @Query("SELECT * FROM gasolinera WHERE ideess LIKE :id_gasolinera ")
-    List<Gasolinera> findById(int id_gasolinera);
+    @Query("SELECT * FROM gasolinera WHERE id LIKE :id ")
+    List<Gasolinera> findById(int id);
+
+    @Query("SELECT * FROM gasolinera WHERE ideess LIKE :id ")
+    List<Gasolinera> findByIdEESS(int id);
 
     @Insert
-    void insertOne(Gasolinera e);
-
-    @Insert
-    void insertAll(Gasolinera... e);
+    long insertOne(Gasolinera e);
 
     @Delete
     void delete(Gasolinera e);
 
     @Update
     void update(Gasolinera e);
+
+    @Query("DELETE FROM gasolinera")
+    void nuke();
+
+    @Query("SELECT id FROM gasolinera WHERE ROWID = :rowid")
+    int getIdFromRowId(long rowid);
+
 }

@@ -36,8 +36,8 @@ public class FiltroTipoGasolinaUITest {
 
     private static final String FIRST_ITEM_TEXT = "Gasolina95";
     private static final String SECOND_ITEM_TEXT = "Diesel";
-    private static final String OK = "OK";
-    private static final String CANCEL = "CANCEL";
+    private static final String OK = "ACEPTAR";
+    private static final String CANCEL = "CANCELAR";
 
     @Rule
     public IntentsTestRule<MainActivity> activityRule =

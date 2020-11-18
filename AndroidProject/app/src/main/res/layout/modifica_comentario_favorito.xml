@@ -8,18 +8,18 @@
     android:padding="16dp">
 
     <TextView
-        android:id="@+id/anhadeComentarioEtiqueta"
+        android:id="@+id/modificaComentarioEtiqueta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/anhade_comentario" />
+        android:text="@string/modifica_comentario" />
 
     <EditText
-        android:id="@+id/textBox_anhadeComentario"
+        android:id="@+id/textBox_modificaComentario"
         android:layout_width="match_parent"
         android:layout_height="141dp"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
-        android:autofillHints="Escribe un comentario" />
+        android:autofillHints="Escribe un comentario"/>
 
 </LinearLayout>

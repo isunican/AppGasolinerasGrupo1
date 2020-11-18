@@ -3,6 +3,8 @@ package com.isunican.proyectobase.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Objects;
+
 /**
  * Clase almacenadora de la informacion de una tarjeta de descuento
  * cuyo descuento se de a traves de cada litro comprado.
@@ -80,4 +82,19 @@ public class TarjetaDescuentoPorLitro extends TarjetaDescuento implements Parcel
             return new TarjetaDescuentoPorLitro[size];
         }
     };
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TarjetaDescuentoPorLitro that = (TarjetaDescuentoPorLitro) o;
+        return descuentoPorLitro == that.descuentoPorLitro &&
+                super.equals(that);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(descuentoPorLitro, getNombre(), getDescripcion(), getMarca());
+    }
+
 }
