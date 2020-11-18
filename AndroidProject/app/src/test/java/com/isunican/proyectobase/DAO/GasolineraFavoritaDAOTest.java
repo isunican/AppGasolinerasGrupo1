@@ -173,7 +173,7 @@ public class GasolineraFavoritaDAOTest {
         Assert.assertEquals(1, lista.size());
         Assert.assertEquals(lista.get(0), sut);
 
-        // Caso 3: Tabla con 2 o mas elementos
+        // Caso 4: Tabla con 2 o mas elementos
         GasolineraFavorita sut2 = new GasolineraFavorita("Gasolinera en la entrada de Santander", 5);
         GasolineraFavorita sut3 = new GasolineraFavorita("A medio camino de Bilbao", 8);
         db.gasolineraFavoritaDAO().insertOne(sut2);
