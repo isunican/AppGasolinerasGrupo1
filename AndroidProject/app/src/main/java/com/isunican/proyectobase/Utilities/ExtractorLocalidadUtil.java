@@ -26,7 +26,7 @@ public class ExtractorLocalidadUtil {
      */
     public static List<String> extraeLocalidades(List<Gasolinera> gasolineras){
         ArrayList<String> localidades = new ArrayList<>();
-
+        if(gasolineras == null){return localidades;}
         for(Gasolinera g: gasolineras){
             if(!localidades.contains(g.getLocalidad().trim())) localidades.add(g.getLocalidad().trim());
         }
@@ -42,7 +42,7 @@ public class ExtractorLocalidadUtil {
      */
     public static List<Gasolinera> aplicaFiltro(String localidad, List<Gasolinera> listaGasolineras){
         ArrayList<Gasolinera> filtradas = new ArrayList<>();
-
+        if(listaGasolineras == null){return filtradas;}
         for(Gasolinera g: listaGasolineras){
             if(g.getLocalidad().equalsIgnoreCase(localidad))filtradas.add(g);
         }

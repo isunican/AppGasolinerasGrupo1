@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -144,8 +146,37 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
             }
         });
 
-    }
 
+
+    }
+    /**
+     * Clase privada que implementa la clase TextWatcher
+     */
+    private class TextChange  implements TextWatcher{
+        View view;
+        //Constructor
+        private TextChange (View v) {
+            view = v;
+        }//end constructor
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {//No se implementa
+        }
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {//No se implementa
+        }
+        @Override
+        public void afterTextChanged(Editable s) {
+            switch (view.getId()){
+                case R.id.textMarcaFavDialog:
+                    adapterListMarcas.getFilter().filter(s);
+                    break;
+                case R.id.textLocalidadFavDialog:
+                    adapterListLocalidades.getFilter().filter(s);
+                    break;
+                default:
+            }
+        }
+    }
 
     /**
      * Menú action bar
@@ -280,6 +311,9 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         listViewMarcasFavDialog.setAdapter(adapterListMarcas);
         listViewLocalidadFavDialog.setAdapter(adapterListLocalidades);
 
+        //Filtrar las listView de los dialogos
+        textMarcaFavDialog.addTextChangedListener(new TextChange(textMarcaFavDialog));
+        textLocalidadFavDialog.addTextChangedListener(new TextChange(textLocalidadFavDialog));
 
         // ClickListener sobre la lista de marcas
         listViewMarcasFavDialog.setOnItemClickListener(new AdapterView.OnItemClickListener(){
@@ -287,13 +321,11 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
                 String marca = listViewMarcasFavDialog.getItemAtPosition(position).toString();
                 textMarcaFavDialog.setText(marca);
 
-                //Si el otro campo está vacío, filtrar su lista
-                if(textLocalidadFavDialog.getText().toString().isEmpty()) {
+                //Filtrar lista del otro campo
                     ArrayList<Gasolinera> filtradas = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtrarGasolinerasFavMarca(marca);
                     ArrayList<String> localidades = (ArrayList<String>) ExtractorLocalidadUtil.extraeLocalidades(filtradas);
                     ArrayAdapter<String> newLocalidades = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, localidades);
                     listViewLocalidadFavDialog.setAdapter(newLocalidades);
-                }
 
             }
         });
@@ -304,13 +336,12 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
                 String localidad = listViewLocalidadFavDialog.getItemAtPosition(position).toString();
                 textLocalidadFavDialog.setText(localidad);
                 
-                //Si el otro campo está vacío, filtrar su lista
-                if(textMarcaFavDialog.getText().toString().isEmpty()) {
+                //Filtrar lista del otro campo
+
                     ArrayList<Gasolinera> filtradas = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtrarGasolinerasFavLocal(localidad);
                     ArrayList<String> marcas = (ArrayList<String>) ExtractorMarcasUtil.extraeMarcas(filtradas);
                     ArrayAdapter<String> newMarcas = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_dropdown_item_1line, marcas);
                     listViewMarcasFavDialog.setAdapter(newMarcas);
-                }
             }
         });
 
