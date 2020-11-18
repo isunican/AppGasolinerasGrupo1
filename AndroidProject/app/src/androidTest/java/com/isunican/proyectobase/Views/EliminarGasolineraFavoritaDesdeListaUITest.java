@@ -27,9 +27,9 @@ import static org.hamcrest.Matchers.anything;
 
 /**
  * Clase test que realiza las pruebas de las interfaces de eliminar la gasolinera desde la lista de gasolineras favoritas
- * Dentro del test plan es equivalente a UIT.2.X
+ * Pruebas con identificador UIT.2.X
  *
- * @author Jaime López-AGudo Higuera
+ * @author Jaime López-Agudo Higuera
  */
 @RunWith(AndroidJUnit4.class)
 public class EliminarGasolineraFavoritaDesdeListaUITest {
@@ -45,13 +45,12 @@ public class EliminarGasolineraFavoritaDesdeListaUITest {
 
     @Test
     public void eliminarGasolineraFavoritaDesdeListaTest(){
-        //Set up
+        //Set up, añadimos la gasolinera para realizar las pruebas
         ListView listView=activityRule.getActivity().findViewById(R.id.listFavGasolineras);
         g = (Gasolinera)listView.getAdapter().getItem(0);
         onData(anything()).inAdapterView(withId(R.id.listFavGasolineras)).atPosition(0).perform(click());
         onView(withId(R.id.favButton)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
-        //Añadida la gasolinera para hacer las pruebas
         Espresso.pressBack();
 
         //UIT.2.a
@@ -60,17 +59,17 @@ public class EliminarGasolineraFavoritaDesdeListaUITest {
         onView(withId(android.R.id.button1)).check(matches(withText("APLICAR")));
         onView(withId(android.R.id.button2)).check(matches(withText("CANCELAR")));
         //Comprobamos que al pulsar boton de eliminar aparece ventana de dialogo con todos los campos
-        //UIT.2.b
 
+        //UIT.2.b
         onView(withId(android.R.id.button2)).perform(click());
         Assert.assertEquals(listView.getAdapter().getItem(0),g);
-        //Comprobamos que al clickar en el boton de cancelar, la gasolinera no ha sido eliminada
+        //Comprobamos que al clickar en el boton de cancelar, la gasolinera no ha sido eliminada (existe en la lista todavia)
 
         //UIT2.c
         onData(anything()).inAdapterView(withId(R.id.listFavGasolineras)).atPosition(0).onChildView(withId(R.id.buttonElimina)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
         Assert.assertNotEquals(listView.getAdapter().getItem(0),g);
-        //Comprobamos que al clickar en el botón de aplicar, la gasolinera ha sido eliminada de la lista de favoritos
+        //Comprobamos que al clickar en el botón de aplicar, la gasolinera ha sido eliminada de la lista de favoritos (no existe en la lista ya)
     }
 
 }
