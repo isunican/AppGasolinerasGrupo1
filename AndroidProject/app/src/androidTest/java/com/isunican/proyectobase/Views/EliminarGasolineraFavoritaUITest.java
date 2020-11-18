@@ -49,7 +49,7 @@ public class EliminarGasolineraFavoritaUITest {
     }
 
     @Test
-    public void testEliminarGasolineraFavoritaDesdeVistaDetallada(){
+    public void testEliminarGasolineraFavoritaDesdeVistaDetalladaTest(){
         //Set up
         onData(anything()).inAdapterView(withId(R.id.listViewGasolineras)).atPosition(0).perform(click());
         ListView listView=activityRule.getActivity().findViewById(R.id.listViewGasolineras);
@@ -71,12 +71,5 @@ public class EliminarGasolineraFavoritaUITest {
         onView(withId(R.id.favButton)).check(matches(withTagValue(Matchers.<Object>equalTo(R.drawable.favorito_desactivado))));
         onView(withId(R.id.comentarioText)).check(matches(withText("")));
     }
-
-    /*
-    @Test
-    public void testEliminarGasolineraFavoritaDesdeListaFavoritos(){
-        // Falta por implementar
-    }
-    */
 
 }

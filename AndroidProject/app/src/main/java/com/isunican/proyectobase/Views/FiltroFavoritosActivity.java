@@ -176,6 +176,42 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         return true;
     }
 
+    /**
+     *
+     * Crea dialogo de confirmación para eliminar la gasolinera al pulsar el boton de eliminar
+     *
+     * @param gasolinera
+     * @author Jaime López-Agudo Higuera
+     */
+    public void creaDialogoConfirmacion(final Gasolinera gasolinera) {
+        final AlertDialog alertDialogConfirmacion = new AlertDialog.Builder(this)
+                .setPositiveButton(getResources().getString(R.string.aplicar), null)
+                .setNegativeButton(getResources().getString(R.string.cancelar), null)
+                .create();
+        LayoutInflater inflater=this.getLayoutInflater();
+        final View view =inflater.inflate(R.layout.confirmacion_elimina_favorito, null);
+        final TextView txtConfirmacion = view.findViewById(R.id.txt_confirmacion);
+        txtConfirmacion.setText("¿Quiere eliminar la gasolinera " + gasolinera.getRotulo() + " de su lista de favoritos?");
+        alertDialogConfirmacion.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button btnAceptar = alertDialogConfirmacion.getButton(BTN_POSITIVO);
+                btnAceptar.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        RemoverThread hilo = new RemoverThread(gasolinera, getApplicationContext(), presenterGasolinerasFavoritas);
+                        new Thread(hilo).start();
+                        Toast.makeText(getApplicationContext(), "gasolinera eliminada", Toast.LENGTH_LONG).show();
+                        adapterFavoritas.remove(gasolinera);
+                        alertDialogConfirmacion.dismiss();
+                    }
+
+                });
+            }
+        });
+        alertDialogConfirmacion.setView(view);
+        alertDialogConfirmacion.show();
+    }
 
     /**
      *  Ventana flotante para filtrar marca y localidad.
@@ -357,6 +393,7 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         private List<Gasolinera> listaGasolineras;
 
         Button buttonModifica;
+        Button buttonElimina;
 
         // Constructor
         public GasolineraArrayAdapter(Context context, int resource, List<Gasolinera> objects) {
@@ -419,6 +456,14 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
                 }
             });
 
+            buttonElimina=view.findViewById(R.id.buttonElimina);
+            buttonElimina.setFocusable(false);
+            buttonElimina.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    creaDialogoConfirmacion(gasolinera);
+                }
+            });
             // ------------------------------------------------------
             return view;
         }
