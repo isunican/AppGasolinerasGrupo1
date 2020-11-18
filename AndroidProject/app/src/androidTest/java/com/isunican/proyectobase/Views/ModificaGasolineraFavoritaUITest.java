@@ -50,11 +50,6 @@ public class ModificaGasolineraFavoritaUITest {
     public IntentsTestRule<FiltroFavoritosActivity> activityRule =
             new IntentsTestRule<>(FiltroFavoritosActivity.class);
 
-    @BeforeClass
-    public static void cleanUp(){
-        ApplicationProvider.getApplicationContext().deleteDatabase("RoomDatabase");
-    }
-
     @Before
     @UiThreadTest
     public void setUp(){
@@ -64,14 +59,15 @@ public class ModificaGasolineraFavoritaUITest {
         listaOriginal.add(new Gasolinera(420,SANTANDER,SANTANDER, "Area Arrabal Puerto de Raos", 0,1.279,"E.E.S.S. MAS, S.L."));
         listaOriginal.add(new Gasolinera(9564,SANTANDER,SANTANDER, "Av Parayas", 1.189,0,"EASYGAS"));
         listaOriginal.add(new Gasolinera(1025,SANTANDER,SANTANDER, "Calle el Empalme", 1.259,0,"CARREFOUR"));
-        activityRule.getActivity().listaActual = listaOriginal;
+        activityRule.getActivity().listaActual =listaOriginal;
         activityRule.getActivity().adapterFavoritas.addAll(listaOriginal);
         activityRule.getActivity().adapterFavoritas.notifyDataSetChanged();
-
     }
 
-    @Before
-    public void anhadeGasolineras(){
+    /**
+     * Esto es para askfasfjñaoisdfaoñsd
+     */
+    private void anhadeGasolineras(){
         // Guardamos una gasolinera en favoritos
         // Hacemos clic en la primera gasolinera de la lista
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listFavGasolineras)).atPosition(0).perform(click());
@@ -98,6 +94,8 @@ public class ModificaGasolineraFavoritaUITest {
     }
     @Test
     public void modificaFavorito() {
+        anhadeGasolineras(); // añade dos gasolineras favoritas a la base de datos, para modificar su comentario posteriormente
+
         // ID1: Cancelamos al modificar una gasolinera favorita
         // Hacemos clic en la primera gasolinera de la lista en el boton de modificar
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listFavGasolineras)).atPosition(0).

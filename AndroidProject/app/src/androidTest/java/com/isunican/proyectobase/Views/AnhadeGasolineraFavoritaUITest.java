@@ -51,7 +51,7 @@ public class AnhadeGasolineraFavoritaUITest {
     }
 
     @Test
-    public void anhadeFavoritoCancelar() {
+    public void anhadeFavorito() {
         // ID1: Cancelar al anhadir comentario
         // Hacemos clic en la primera gasolinera de la lista
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listViewGasolineras)).atPosition(0).perform(click());
@@ -63,26 +63,24 @@ public class AnhadeGasolineraFavoritaUITest {
         onView(withId(R.id.comentarioText)).check(matches(withText("")));
         // Se comprueba que el boton no ha cambiado
         onView(withId(R.id.favButton)).check(matches(withTagValue(Matchers.<Object>equalTo(R.drawable.favorito_desactivado))));
-    }
 
-    @Test
-    public void anhadeFavoritoGuardarComentarioVacio() {
-        // ID2: Guardar al anhadir comentario vacio
+        Espresso.pressBack();
+
+        // ID4: Guardar al anhadir comentario mayor de 240 caracteres (error)
         // Hacemos clic en la primera gasolinera de la lista
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listViewGasolineras)).atPosition(0).perform(click());
         // Hacemos clic en el botón de añadir favorito
         onView(withId(R.id.favButton)).perform(click());
+        // Escribimos un comentario
+        onView(withId(R.id.textBox_anhadeComentario)).perform(typeText(COMENTARIOFUERALIMITE), closeSoftKeyboard());
         // Pulsamos guardar
         onView(withId(android.R.id.button1)).perform(click());
-        // Comprobamos que el comentario sale correctamente en la gasolinera
-        onView(withId(R.id.comentarioText)).check(matches(withText("Comentario:\n")));
-        // Se comprueba que el boton no ha cambiado
-        onView(withId(R.id.favButton)).check(matches(withTagValue(Matchers.<Object>equalTo(R.drawable.favorito_activado))));
+        // Obtenemos mensaje de error
+        onView(withId(R.id.textBox_anhadeComentario)).check(matches(hasErrorText("El comentario debe ser menor de 240 carácteres")));
 
-    }
+        Espresso.pressBack();
+        Espresso.pressBack();
 
-    @Test
-    public void anhadeFavoritoGuardarComentarioDentroLimite() {
         // ID3: Guardar al anhadir comentario menor de 240 caracteres
         // Hacemos clic en la primera gasolinera de la lista
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listViewGasolineras)).atPosition(1).perform(click());
@@ -96,21 +94,20 @@ public class AnhadeGasolineraFavoritaUITest {
         onView(withId(R.id.comentarioText)).check(matches(withText("Comentario:\nComentario de texto")));
         // Se comprueba que el boton no ha cambiado
         onView(withId(R.id.favButton)).check(matches(withTagValue(Matchers.<Object>equalTo(R.drawable.favorito_activado))));
-    }
 
-    @Test
-    public void anhadeFavoritoGuardarComentarioFueraLimite() {
-        // ID4: Guardar al anhadir comentario mayor de 240 caracteres (error)
+        Espresso.pressBack();
+
+        // ID2: Guardar al anhadir comentario vacio
         // Hacemos clic en la primera gasolinera de la lista
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listViewGasolineras)).atPosition(0).perform(click());
         // Hacemos clic en el botón de añadir favorito
         onView(withId(R.id.favButton)).perform(click());
-        // Escribimos un comentario
-        onView(withId(R.id.textBox_anhadeComentario)).perform(typeText(COMENTARIOFUERALIMITE), closeSoftKeyboard());
         // Pulsamos guardar
         onView(withId(android.R.id.button1)).perform(click());
-        // Obtenemos mensaje de error
-        onView(withId(R.id.textBox_anhadeComentario)).check(matches(hasErrorText("El comentario debe ser menor de 240 carácteres")));
+        // Comprobamos que el comentario sale correctamente en la gasolinera
+        onView(withId(R.id.comentarioText)).check(matches(withText("Comentario:\n")));
+        // Se comprueba que el boton no ha cambiado
+        onView(withId(R.id.favButton)).check(matches(withTagValue(Matchers.<Object>equalTo(R.drawable.favorito_activado))));
     }
 
 }

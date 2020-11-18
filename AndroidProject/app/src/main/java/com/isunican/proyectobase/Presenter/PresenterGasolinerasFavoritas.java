@@ -40,7 +40,7 @@ public class PresenterGasolinerasFavoritas {
         gasolineraFavoritaList = new ArrayList<>();
         listaOriginal = new ArrayList<>();
 
-        gasolinerasDummy();
+        //gasolinerasDummy();
 
     }
 
@@ -82,9 +82,7 @@ public class PresenterGasolinerasFavoritas {
 
         GasolineraFavorita gasolineraFavorita = null;
 
-        if (gasolineraFavoritaDAO == null || gasolineraDAO == null) {
-
-        } else {
+        if (gasolineraFavoritaDAO != null && gasolineraDAO != null) {
             gasolineraFavorita = getGasolineraFavoritaPorId(gasolinera.getId(), gasolineraFavoritaDAO);
             if (gasolineraFavorita != null) {
                 gasolineraFavoritaList.remove(gasolineraFavorita);
