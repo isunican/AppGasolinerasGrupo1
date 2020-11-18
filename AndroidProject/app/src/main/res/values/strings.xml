@@ -35,6 +35,7 @@
     <string name="toast_filtro_aplicado">Datos filtrados</string>
     <string name="campo_vacio">Campo vacío</string>
     <string name="marca_invalida">Marca inválida</string>
+    <string name="localidad_invalida">Localidad inválida</string>
     <string name="filtro_marca">Filtro marca</string>
     <string name="filtrar_favoritos">Filtrar favoritos</string>
     <string name="title_fav">Favoritos</string>
