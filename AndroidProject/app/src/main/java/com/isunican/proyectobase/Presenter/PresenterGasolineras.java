@@ -142,11 +142,11 @@ public class PresenterGasolineras {
      * @param tipo Tipo de gasolina buscada
      * @return boolean
      */
-    public List<Gasolinera> filtraGasolinerasTipoCombustible(String tipo,List<Gasolinera>lista) throws NullPointerException{
+    public List<Gasolinera> filtraGasolinerasTipoCombustible(String tipo,List<Gasolinera>lista){
         if(lista==null){
             throw new NullPointerException();
         }
-        List<Gasolinera>gasolinerasFiltradas=new ArrayList<Gasolinera>();
+        List<Gasolinera>gasolinerasFiltradas=new ArrayList<>();
         for(Gasolinera g : lista) {
 
             if (g.tiposGasolina().contains(tipo)) {

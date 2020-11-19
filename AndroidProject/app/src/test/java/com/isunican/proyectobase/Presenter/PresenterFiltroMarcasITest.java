@@ -43,7 +43,7 @@ public class PresenterFiltroMarcasITest {
         ArrayList<Gasolinera> filtradas = (ArrayList<Gasolinera>) sut.filtraGasolineras("Repsol");
 
         for(Gasolinera g: filtradas){
-            Assert.assertTrue(g.getRotulo().equals("REPSOL"));
+            Assert.assertEquals(g.getRotulo(), "REPSOL");
             Assert.assertTrue(gasolineras.contains(g));
         }
 

@@ -32,6 +32,7 @@
     <string name="toast_filtro_aplicado">Datos filtrados</string>
     <string name="campo_vacio">Campo vacío</string>
     <string name="marca_invalida">Marca inválida</string>
+    <string name="localidad_invalida">Localidad inválida</string>
     <string name="filtrar_marcaGasolinera">Filtrar por marca </string>
     <string name="filtrar_tipoGasolina">Filtrar por tipo de gasolina</string>
     <string name="slider_menu_text_nueva_tarjeta_descuento">Añadir tarjeta descuento</string>
