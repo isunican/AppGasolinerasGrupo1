@@ -249,7 +249,7 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
                             textMarcaFavDialog.setError(getResources().getString(R.string.marca_invalida));
                         }
                         else if(!localidadesFavoritas.contains(textLocalidadFavDialog.getText().toString()) && !textLocalidadFavDialog.getText().toString().isEmpty()){
-                            textLocalidadFavDialog.setError(getResources().getString(R.string.marca_invalida));
+                            textLocalidadFavDialog.setError(getResources().getString(R.string.localidad_invalida));
                         }
                         else {
                             if (textMarcaFavDialog.getText().toString().equals("") && textLocalidadFavDialog.getText().toString().equals("")) {
