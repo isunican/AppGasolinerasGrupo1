@@ -26,7 +26,7 @@ public class PresenterTarjetaDescuento {
      * para que pueda se utilizada
      */
     public PresenterTarjetaDescuento(){
-        this.listaTarjetasDescuento = new ArrayList<TarjetaDescuento>();
+        this.listaTarjetasDescuento = new ArrayList<>();
     }
 
     /**
@@ -89,7 +89,7 @@ public class PresenterTarjetaDescuento {
         for (Gasolinera g: gasolineras) {
             cambioPrecios(g);
         }
-        return new ArrayList<Gasolinera>(gasolineras);
+        return new ArrayList<>(gasolineras);
     }
 
     /**

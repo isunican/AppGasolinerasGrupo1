@@ -3,6 +3,8 @@ package com.isunican.proyectobase.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Objects;
+
 /**
  * Clase almacenadora de la informacion de una tarjeta de descuento.
  * Author: Adrian Celis Fernandez.
@@ -68,4 +70,19 @@ public abstract class TarjetaDescuento implements Parcelable{
             return new TarjetaDescuento[0];
         }
     };
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TarjetaDescuento that = (TarjetaDescuento) o;
+        return nombre.equals(that.nombre) &&
+                descripcion.equals(that.descripcion)&&
+                marca.equals(that.marca);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nombre, descripcion, marca);
+    }
 }

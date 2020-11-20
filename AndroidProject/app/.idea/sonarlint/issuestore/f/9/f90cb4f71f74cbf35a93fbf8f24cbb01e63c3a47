@@ -1,0 +1,6 @@
+
+i
+java:S3008"SRename this field "INSTANCE" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Û½ïÕ
+o	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(éâİÍ
+T
+java:S2168"9Remove this dangerous instance of double-checked locking.(šÃåøÿÿÿÿ

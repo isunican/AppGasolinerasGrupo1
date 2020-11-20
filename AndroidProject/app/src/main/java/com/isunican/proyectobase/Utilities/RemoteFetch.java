@@ -17,6 +17,12 @@ import java.net.URL;
 public class RemoteFetch {
 
     /**
+     * Constructor privado
+     */
+    private RemoteFetch(){//No se implementa
+    }
+
+    /**
      * cargaBufferDesdeURL
      *
      * Toma la direccion pasada como parámetro y descarga los datos,

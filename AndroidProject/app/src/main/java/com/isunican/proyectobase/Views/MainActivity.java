@@ -1,10 +1,11 @@
 package com.isunican.proyectobase.Views;
 
 import com.google.android.material.navigation.NavigationView;
+import com.isunican.proyectobase.Database.AppDatabase;
 import com.isunican.proyectobase.Presenter.*;
 import com.isunican.proyectobase.Model.*;
 import com.isunican.proyectobase.R;
-import com.isunican.proyectobase.Utilities.BrandExtractorUtil;
+import com.isunican.proyectobase.Utilities.ExtractorMarcasUtil;
 import com.isunican.proyectobase.Utilities.CommonUtils;
 
 import android.app.Activity;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     PresenterFiltroMarcas presenterFiltroMarcas;
 
     List<Gasolinera>listaGasolinerasActual;
+    List<Gasolinera>listaGasolinerasDAO;
     //Lista con el filtro aplicado
     ArrayList<Gasolinera> currentList;
 
@@ -85,7 +87,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //ActionBarDrawerToggle
     ActionBarDrawerToggle toggle;
-
     DrawerLayout drawerLayout;
 
     //Adapter para la listView
@@ -93,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     //Filtro
     String tipoGasolina;
+
+    // Boton guardar
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
 
     /**
@@ -116,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.presenterTarjetaDescuento = new PresenterTarjetaDescuento();
 
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         // Muestra el logo en el actionBar
@@ -143,6 +145,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
+
+
+
 
 
     }
@@ -181,17 +186,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if(item.getItemId()==R.id.itemActualizar){
             mSwipeRefreshLayout.setRefreshing(true);
             new CargaDatosGasolinerasTask(this).execute();
-        } else if (item.getItemId() == R.id.itemInfo) {
+        }else if(item.getItemId() == R.id.itemInfo) {
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
             MainActivity.this.startActivity(myIntent);
         }else if(toggle.onOptionsItemSelected(item)) {
             return false;
-        }else if(item.getItemId() == R.id.itemFiltroMarca){
+        }else if(item.getItemId() == R.id.button_test_filtroMarca){
             creaAlertDialogFiltroMarca();
         }else if(item.getItemId() == R.id.button_test_filtroTipoGasolina){
             creaVentanaFiltroTipoGasolina();
-        }
-        else if(item.getItemId()==R.id.button_test_anhadeTarjetaDescuento){
+        }else if(item.getItemId()==R.id.button_test_anhadeTarjetaDescuento){
             creaVentanaAnhadirTarjetaDescuento();
         }
         return true;
@@ -203,14 +207,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.filtroTipoGasolina:
                 creaVentanaFiltroTipoGasolina();
                 break;
-
             case R.id.filtroMarcaGasolinera:
                 creaAlertDialogFiltroMarca();
                 break;
             case R.id.itemNuevaTarjetaDescuento:
                 creaVentanaAnhadirTarjetaDescuento();
                 break;
-
+            case R.id.filtarGasolinerasFavoritas:
+                Intent favIntent = new Intent(MainActivity.this, FiltroFavoritosActivity.class);
+                startActivity(favIntent);
+                break;
             default:
                 Log.d("MIGUEL", "Default en switch");
         }
@@ -243,16 +249,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Datos spinner de tipo descuento
         String[] datosTipoDescuento = new String[] {getResources().getString(R.string.default_type_discount_card),getResources().getString(R.string.porcentual),
                 getResources().getString(R.string.cts_litro)};
-        ArrayAdapter<String> adapterTipoDescuento = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapterTipoDescuento = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, datosTipoDescuento);
         adapterTipoDescuento.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnTipoDescuento.setAdapter(adapterTipoDescuento);
 
         // Datos spinner de marcas
-        List<String> datosMarcas = BrandExtractorUtil.extractBrands((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
+        List<String> datosMarcas = ExtractorMarcasUtil.extraeMarcas(presenterGasolineras.getGasolineras());
         datosMarcas = CommonUtils.sortStringList(datosMarcas);
         datosMarcas.add(0,getResources().getString(R.string.default_brand));
-        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, datosMarcas);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnMarca.setAdapter(adapter2);
@@ -303,11 +309,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-    /**
-     * Crea el alertDialog del filtrar gasolinera por marca
+    /*
+     * Ventana de dialogo para filtrar gasolineras por marca
      */
     public void creaAlertDialogFiltroMarca(){
-        presenterFiltroMarcas = new PresenterFiltroMarcas((ArrayList<Gasolinera>) presenterGasolineras.getGasolineras());
+        presenterFiltroMarcas = new PresenterFiltroMarcas(presenterGasolineras.getGasolineras());
         // Get the layout inflater
         LayoutInflater inflater = this.getLayoutInflater();
         View view = inflater.inflate(R.layout.activity_filtro_marca_acivity, null);
@@ -319,8 +325,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Create alertDialog
         final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
                 //Set to null. We override the onclick
-                .setPositiveButton(android.R.string.ok, null)
-                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(getResources().getString(R.string.aceptar), null)
+                .setNegativeButton(getResources().getString(R.string.cancelar), null)
                 .create();
 
         // Create list elements with an array adapter
@@ -351,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         else{
                             //Actualiza la lista actual para solo contener las gasolineras con la marca seleccionada
                             currentList= (ArrayList<Gasolinera>) presenterFiltroMarcas.filtraGasolineras(marcaTxt.getText().toString());
-                            adapter=new GasolineraArrayAdapter(MainActivity.this, 0, currentList);
+                            adapter = new GasolineraArrayAdapter(MainActivity.this, 0, currentList);
                             listViewGasolineras = findViewById(R.id.listViewGasolineras);
                             listViewGasolineras.setAdapter(adapter);
 
@@ -413,8 +419,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         final AlertDialog alertDialogBuilder = new AlertDialog.Builder(this)
                 //.setView(view)
                 //Set to null. We override the onclick
-                .setPositiveButton(android.R.string.ok, null)
-                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(getResources().getString(R.string.aceptar), null)
+                .setNegativeButton(getResources().getString(R.string.cancelar), null)
                 .setTitle(getResources().getString(R.string.filtrar_tipoGasolina))
                 .create();
 
@@ -467,7 +473,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         adapter.addAll(listaGasolinerasActual);
         adapter.notifyDataSetChanged();
     }
-   
 
     /**
      * CargaDatosGasolinerasTask
@@ -538,6 +543,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         protected void onPostExecute(Boolean res) {
             listaGasolinerasActual=presenterGasolineras.getGasolineras();
+            currentList = (ArrayList<Gasolinera>) presenterGasolineras.getGasolineras();
+
+            listaGasolinerasDAO=AppDatabase.getInstance(getApplicationContext()).gasolineraDAO().getAll();
             Toast toast;
 
             mSwipeRefreshLayout.setRefreshing(false);
@@ -546,7 +554,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             if ( Boolean.TRUE.equals(res)) {
                 // Definimos el array adapter
                 adapter = new GasolineraArrayAdapter(activity, 0, presenterGasolineras.getGasolineras() );
+                //Jaime ha estado aquí, actualizar  las gasolineras si ha cambiado el precio
+                for (Gasolinera gDao : listaGasolinerasDAO) {
+                    for(Gasolinera g : listaGasolinerasActual){
+                        if(gDao.equals(g) && gDao.getGasolina95()!=g.getGasolina95() && gDao.getGasoleoA()!=g.getGasoleoA()){
+                            gDao.setGasoleoA(g.getGasoleoA());
+                            gDao.setGasolina95(g.getGasolina95());
+                            AppDatabase.getInstance(getApplicationContext()).gasolineraDAO().update(gDao);
+                        }
+                    }
 
+                }
                 adapter = new GasolineraArrayAdapter(activity, 0, listaGasolinerasActual);
 
                 // Obtenemos la vista de la lista
@@ -555,6 +573,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 // Cargamos los datos en la lista
                 if (!listaGasolinerasActual.isEmpty()) {
                     // datos obtenidos con exito
+
                     listViewGasolineras.setAdapter(adapter);
                     toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.datos_exito), Toast.LENGTH_LONG);
                 } else {
@@ -588,10 +607,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                      */
                     Intent myIntent = new Intent(MainActivity.this, DetailActivity.class);
                     myIntent.putExtra(getResources().getString(R.string.pasoDatosGasolinera),
-                            listaGasolinerasActual.get(position));
+                            currentList.get(position));
                     MainActivity.this.startActivity(myIntent);
                 }
             });
+
         }
     }
 
@@ -618,10 +638,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         // Llamado al renderizar la lista
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
 
             // Obtiene el elemento que se está mostrando
-            Gasolinera gasolinera = listaGasolineras.get(position);
+            final Gasolinera gasolinera = listaGasolineras.get(position);
 
             // Indica el layout a usar en cada elemento de la lista
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -659,8 +679,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 tmp = view.findViewById(R.id.textViewGasolina95);
                 tmp.setTextSize(11);
             }
+
             return view;
+
         }
+
+
 
         private void cargaIcono(Gasolinera gasolinera, ImageView logo) {
             String rotuleImageID = gasolinera.getRotulo().toLowerCase();

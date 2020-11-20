@@ -38,9 +38,8 @@ public class AnhadeTarjetaDescuentoUITest {
     public void anahdeTarjetaDescuentoTest() {
 
         // Interfaz con el estilo deseado
-        //onView(withId(R.id.button_test_anhadeTarjetaDescuento)).perform(click());
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
-        onView(withText("Añade tarjeta descuento")).perform(click());
+        onView(withText("Añadir tarjeta descuento")).perform(click());
         onView(ViewMatchers.withId(R.id.txtNombreTarjeta)).check(matches(withText("Nombre:")));
         onView(withId(R.id.txtMarcaGasolinera)).check(matches(withText("Marca:")));
         onView(withId(R.id.txtTipoDescuento)).check(matches(withText("Tipo Descuento:")));
@@ -50,7 +49,7 @@ public class AnhadeTarjetaDescuentoUITest {
 
         // Datos correctos para descuento porcentual
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
-        onView(withText("Añade tarjeta descuento")).perform(click());
+        onView(withText("Añadir tarjeta descuento")).perform(click());
         onView(withId(R.id.nombreTarjeta)).perform(typeText("Tarjeta CAMPSA"), closeSoftKeyboard());
         onView(withId(R.id.spnMarcas)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("CAMPSA"))).inRoot(isPlatformPopup()).perform(click());

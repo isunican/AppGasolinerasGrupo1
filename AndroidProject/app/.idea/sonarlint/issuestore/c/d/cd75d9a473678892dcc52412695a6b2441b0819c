@@ -1,0 +1,10 @@
+
+T
+java:S1172">Remove this unused method parameter "gasolineraFavoritaListM".(Íñ“À
+h
+java:S1128	"MRemove this unused import 'com.isunican.proyectobase.Model.TarjetaDescuento'.(¯þ€¢ûÿÿÿÿ
+Š
+java:S4165"tRemove this useless assignment; "gasolineraFavoritaList" already holds the assigned value along all execution paths.(Ñòé¬
+t
+java:S2293"YReplace the type specification in this constructor call with the diamond operator ("<>").(ó¤¡Çÿÿÿÿÿ
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(¬§ÐÝÿÿÿÿÿ

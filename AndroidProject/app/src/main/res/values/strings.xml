@@ -17,26 +17,30 @@
     <string name="aplicar">Aplicar</string>
     <string name="marca">Marca</string>
     <string name="tipoGasolina">Tipo de Gasolina</string>
-    <string name="filtrar_tipoGasolina">Filtrar por tipo de gasolina</string>
     <string name="guardar">GUARDAR</string>
     <string name="cancelar">CANCELAR</string>
+    <string name="aceptar">ACEPTAR</string>
     <string name="complete_nombre">El campo Nombre es obligatorio</string>
     <string name="complete_marca">La marca se encuentra sin seleccionar</string>
     <string name="complete_descuento">El campo Descuento es obligatorio</string>
     <string name="porcentual">Porcentual</string>
     <string name="cts_litro">cts/Litro</string>
-    <string name="slider_menu_text_nueva_tarjeta_descuento">Nueva tarjeta descuento</string>
     <string name="tarjeta_descuento_guardada">La tarjeta de descuento se guardó correctamente</string>
     <string name="default_type_discount_card">Elija un tipo de descuento</string>
     <string name="default_brand">Elija una marca de gasolinera</string>
     <string name="complete_tipo_descuento">El tipo de descuento se encuentra sin seleccionar</string>
-    <string name="nueva_tarjeta_descuento">Nueva tarjeta descuento</string>
-    <string name="filtrar_marcaGasolinera">Filtrar por rótulo </string>
     <string name="toast_filtro_aplicado">Datos filtrados</string>
     <string name="campo_vacio">Campo vacío</string>
     <string name="marca_invalida">Marca inválida</string>
-    <string name="filtro_marca">Filtro marca</string>
+    <string name="localidad_invalida">Localidad inválida</string>
+    <string name="filtrar_marcaGasolinera">Filtrar por marca </string>
+    <string name="filtrar_tipoGasolina">Filtrar por tipo de gasolina</string>
+    <string name="slider_menu_text_nueva_tarjeta_descuento">Añadir tarjeta descuento</string>
+    <string name="title_fav">Favoritos</string>
+    <string name="filtrar_favoritos">Filtrar favoritos</string>
     <!-- El nombre de filtrar por marca de gasolinera no cabía en el panel lateral-->
     <string name="navigation_drawer_open">Abrir drawer</string>
     <string name="navigation_drawer_close">Cerrar drawer</string>
+    <string name="anhade_comentario">Añade un comentario</string>
+    <string name="modifica_comentario">Modifica el comentario</string>
 </resources>

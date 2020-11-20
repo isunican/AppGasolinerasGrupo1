@@ -3,6 +3,8 @@ package com.isunican.proyectobase.Model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Objects;
+
 /**
  * Clase almacenadora de la informacion de una tarjeta de descuento
  * cuyo descuento se de en porcentaje sobre el precio final.
@@ -95,5 +97,19 @@ public class TarjetaDescuentoPorcentaje extends TarjetaDescuento implements Parc
             return new TarjetaDescuentoPorcentaje[size];
         }
     };
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TarjetaDescuentoPorcentaje that = (TarjetaDescuentoPorcentaje) o;
+        return descuentoPorcentaje == that.descuentoPorcentaje &&
+                super.equals(that);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(descuentoPorcentaje, getNombre(), getDescripcion(), getMarca());
+    }
 
 }
