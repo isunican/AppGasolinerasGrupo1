@@ -36,6 +36,12 @@ import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.not;
 
+/**
+ * Clase test que realiza las pruebas de las interfaces de eliminar la gasolinera desde la vista detallada
+ * Pruebas con identificador UIT.1.X
+ *
+ * @author Jaime López-Agudo Higuera
+ */
 @RunWith(AndroidJUnit4.class)
 public class EliminarGasolineraFavoritaUITest {
     private Gasolinera g;
@@ -50,26 +56,32 @@ public class EliminarGasolineraFavoritaUITest {
 
     @Test
     public void testEliminarGasolineraFavoritaDesdeVistaDetalladaTest(){
-        //Set up
+        //Set up, añadimos la gasolinera para hacer las pruebas
         onData(anything()).inAdapterView(withId(R.id.listViewGasolineras)).atPosition(0).perform(click());
         ListView listView=activityRule.getActivity().findViewById(R.id.listViewGasolineras);
         g = (Gasolinera)listView.getAdapter().getItem(0);
         onView(withId(R.id.favButton)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
+
         //UIT.1.a
         onView(withId(R.id.favButton)).perform(click());
         onView(withId(R.id.txt_confirmacion)).check(matches(withText("¿Quiere eliminar la gasolinera "+g.getRotulo()+" de su lista de favoritos?")));
         onView(withId(android.R.id.button1)).check(matches(withText("APLICAR")));
         onView(withId(android.R.id.button2)).check(matches(withText("CANCELAR")));
+        //Comprobamos que el alert dialog tiene los botones y el texto determinado
+
         //UIT.1.b
         onView(withId(android.R.id.button2)).perform(click());
         onView(withId(R.id.favButton)).check(matches(withTagValue(Matchers.<Object>equalTo(R.drawable.favorito_activado))));
         onView(withId(R.id.comentarioText)).check(matches(withText("Comentario:\n")));
+        //Comprobamos que la gasolinera no se elimina (botón sigue encendido y hay comentario añadido)
+
         //UIT.1.c
         onView(withId(R.id.favButton)).perform(click());
         onView(withId(android.R.id.button1)).perform(click());
         onView(withId(R.id.favButton)).check(matches(withTagValue(Matchers.<Object>equalTo(R.drawable.favorito_desactivado))));
         onView(withId(R.id.comentarioText)).check(matches(withText("")));
+        //Comprobamos que la gasolinera se ha eliminado (el botón está apagado y no hay comentario)
     }
 
 }

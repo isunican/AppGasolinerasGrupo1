@@ -201,18 +201,22 @@ public class DetailActivity extends AppCompatActivity {
 
 
     /**
-     * Se puede refactorizar más todavia
+     * Método que crea una ventana de diálogo de confirmación para eliminar la gasolinera.
      *
+     * @Author Jaime López-Agudo Higuera
      * @param inflater
      */
     public void creaDialogoConfirmacion(LayoutInflater inflater) {
+        //Creacion de la ventana de diálogo
         final AlertDialog alertDialogConfirmacion = new AlertDialog.Builder(this)
                 .setPositiveButton(getResources().getString(R.string.aplicar), null)
                 .setNegativeButton(getResources().getString(R.string.cancelar), null)
                 .create();
+        //Variables de la ventana de diálogo
         final View view1 = inflater.inflate(R.layout.confirmacion_elimina_favorito, null);
         final TextView txtConfirmacion = view1.findViewById(R.id.txt_confirmacion);
         txtConfirmacion.setText("¿Quiere eliminar la gasolinera " + nombreGasolinera.getText() + " de su lista de favoritos?");
+        //on click listener del botón de aceptar
         alertDialogConfirmacion.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
@@ -220,15 +224,16 @@ public class DetailActivity extends AppCompatActivity {
                 btnAceptar.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        //lanzamos la task de eliminar el hilo
                         RemoverThread hilo = new RemoverThread(g, DetailActivity.this.getApplicationContext(), gasolinerasFavoritas);
                         new Thread(hilo).start();
-
+                        //Cambiamos la interfaz para que se refleje la gasolinera eliminada
                         favButton.setImageResource(R.drawable.favorito_desactivado);
                         favButton.setTag(R.drawable.favorito_desactivado);
                         gasolineraEsFavorita = false;
                         Toast.makeText(getApplicationContext(), "gasolinera eliminada", Toast.LENGTH_LONG).show();
                         comentario.setText("");
+                        //Cerramos la ventana de dialogo
                         alertDialogConfirmacion.dismiss();
                     }
 
