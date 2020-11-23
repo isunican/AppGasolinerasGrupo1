@@ -14,6 +14,9 @@
         <item android:id="@+id/filtarGasolinerasFavoritas"
             android:icon="@drawable/por_defecto"
             android:title="@string/filtrar_favoritos"/>
+        <item android:id="@+id/filtarPrecioMaximo"
+            android:icon="@drawable/por_defecto"
+            android:title="@string/filtrar_precioMaximo"/>
     </group>
 
 </menu>
