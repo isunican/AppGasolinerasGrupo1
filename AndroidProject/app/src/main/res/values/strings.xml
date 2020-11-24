@@ -38,6 +38,7 @@
     <string name="slider_menu_text_nueva_tarjeta_descuento">Añadir tarjeta descuento</string>
     <string name="title_fav">Favoritos</string>
     <string name="filtrar_favoritos">Filtrar favoritos</string>
+    <string name="filtrar_precioMaximo">Filtrar por precio máximo</string>
     <!-- El nombre de filtrar por marca de gasolinera no cabía en el panel lateral-->
     <string name="navigation_drawer_open">Abrir drawer</string>
     <string name="navigation_drawer_close">Cerrar drawer</string>
