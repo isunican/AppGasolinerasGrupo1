@@ -81,11 +81,36 @@
             android:textSize="36sp"
             android:textStyle="bold" />
 
+
         <TextView
-            android:id="@+id/comentarioText"
+            android:id="@+id/txtComentario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="10" />
+            android:layout_weight="10"
+            android:text="Comentario:" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1000000"
+            android:scrollbarStyle="outsideOverlay"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/comentarioText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10"
+                    android:elegantTextHeight="false"
+                    android:maxHeight="120dp" />
+            </LinearLayout>
+        </ScrollView>
+
 
     </LinearLayout>
 

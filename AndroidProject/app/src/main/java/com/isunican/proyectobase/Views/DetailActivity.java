@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +39,8 @@ public class DetailActivity extends AppCompatActivity {
     TextView comentario;
     TextView comentarioEditText;
     TextView nombreGasolinera;
+    TextView txtComentario;
+
     boolean gasolineraEsFavorita = false;
     PresenterGasolinerasFavoritas gasolinerasFavoritas;
     PresenterGasolineras presenterGasolineras = new PresenterGasolineras();
@@ -72,7 +75,9 @@ public class DetailActivity extends AppCompatActivity {
         TextView precioGasoleoA = findViewById(R.id.precioGasoleoAText);
         TextView precioGasoleo95 = findViewById(R.id.precioGasoleo95Text);
         ImageView logo = findViewById(R.id.gasolineraIcon);
+        //txtComentario.setVisibility(View.GONE);
         comentario = findViewById(R.id.comentarioText);
+        comentario.setMovementMethod(new ScrollingMovementMethod());
         g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
 
         favButton = findViewById(R.id.favButton);
@@ -182,6 +187,8 @@ public class DetailActivity extends AppCompatActivity {
                                 }
                                 Toast.makeText(getApplicationContext(), "Gasolinera favorita añadida con comentario: " +
                                         toastComentarioReducido, Toast.LENGTH_LONG).show();
+                                //txtComentario.setVisibility(View.VISIBLE);
+                                //txtComentario.setTextColor(000000);
                                 comentario.setText("Comentario:\n" + comentarioEditText.getText());
                                 favButton.setImageResource(R.drawable.favorito_activado);
                                 favButton.setTag(R.drawable.favorito_activado);
