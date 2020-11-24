@@ -15,21 +15,25 @@
     android:id="@+id/spinnerFiltroPrecio"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-        android:layout_marginTop="20dp" />
+    android:layout_marginTop="5dp" />
 
     <TextView
         android:id="@+id/titlePrecioCombustible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Precio: "
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="10dp" />
 
     <EditText
-        android:id="@+id/editTextNumber"
+        android:id="@+id/textNumberPrecioMax"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:inputType="number" />
+        android:layout_marginTop="5dp"
+        android:inputType="numberDecimal"
+        android:hint="€/L"/>
+
+
+
 
 
 </LinearLayout>
