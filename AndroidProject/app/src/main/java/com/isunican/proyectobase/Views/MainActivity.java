@@ -217,6 +217,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent favIntent = new Intent(MainActivity.this, FiltroFavoritosActivity.class);
                 startActivity(favIntent);
                 break;
+            case R.id.filtarPrecioMaximo:
+
+                // Definidos Inflater y View
+                LayoutInflater inflater = this.getLayoutInflater();
+                View view = inflater.inflate(R.layout.activity_filtro_preciomax, null);
+
+                //Definidos los elementos
+                Spinner spinnerPrecioMax = view.findViewById(R.id.spinnerFiltroPrecio);
+
+                ArrayList<String> elementos = new ArrayList<>();
+                elementos.add("Diesel");
+                elementos.add("Gasoleo 95");
+
+                ArrayAdapter adp = new ArrayAdapter(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, elementos);
+                spinnerPrecioMax.setAdapter(adp);
+                // Creacion alertDialog
+                final AlertDialog alertDialogFiltroPrecio = new AlertDialog.Builder(this)
+                        .setPositiveButton(getResources().getString(R.string.aceptar),null)
+                        .setNegativeButton(getResources().getString(R.string.cancelar), null)
+                        .setCancelable(false) //Impide que el dialogo se cierre si pulsas fuera del dialogo
+                        .create();
+
+
+                //Insertar elementos en el dialogo
+                alertDialogFiltroPrecio.setView(view);
+                alertDialogFiltroPrecio.show();
+                break;
             default:
                 Log.d("MIGUEL", "Default en switch");
         }
@@ -224,6 +251,37 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return false;
     }
 
+    /**
+     * Ventana emergente que filtra las gasolineras por el precio maximo
+     * @Autor Carolay Corales
+     */
+
+    public void creaVentanaFiltroPrecio(){
+
+        // Definidos Inflater y View
+        LayoutInflater inflater = this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.activity_filtro_preciomax, null);
+
+        //Definidos los elementos
+        Spinner spinnerPrecioMax = view.findViewById(R.id.filtarPrecioMaximo);
+
+        // Creacion alertDialog
+        final AlertDialog alertDialogFiltroPrecio = new AlertDialog.Builder(this)
+                .setPositiveButton(getResources().getString(R.string.aceptar),null)
+                .setNegativeButton(getResources().getString(R.string.cancelar), null)
+                .create();
+
+        //Tipos de combustibles
+        String[] elementos = new String[] {"Gasolina 95","Diesel"};
+
+        //Adapter para el spinner
+        ArrayAdapter adp = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, elementos);
+        spinnerPrecioMax.setAdapter(adp);
+
+        //Insertar elementos en el dialogo
+        alertDialogFiltroPrecio.setView(view);
+        alertDialogFiltroPrecio.show();
+    }
     /*
      * Ventana de dialogo con un formulario para anhadir una tarjeta
      * de descuento.
