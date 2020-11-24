@@ -29,6 +29,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -218,31 +219,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(favIntent);
                 break;
             case R.id.filtarPrecioMaximo:
-
-                // Definidos Inflater y View
-                LayoutInflater inflater = this.getLayoutInflater();
-                View view = inflater.inflate(R.layout.activity_filtro_preciomax, null);
-
-                //Definidos los elementos
-                Spinner spinnerPrecioMax = view.findViewById(R.id.spinnerFiltroPrecio);
-
-                ArrayList<String> elementos = new ArrayList<>();
-                elementos.add("Diesel");
-                elementos.add("Gasoleo 95");
-
-                ArrayAdapter adp = new ArrayAdapter(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, elementos);
-                spinnerPrecioMax.setAdapter(adp);
-                // Creacion alertDialog
-                final AlertDialog alertDialogFiltroPrecio = new AlertDialog.Builder(this)
-                        .setPositiveButton(getResources().getString(R.string.aceptar),null)
-                        .setNegativeButton(getResources().getString(R.string.cancelar), null)
-                        .setCancelable(false) //Impide que el dialogo se cierre si pulsas fuera del dialogo
-                        .create();
-
-
-                //Insertar elementos en el dialogo
-                alertDialogFiltroPrecio.setView(view);
-                alertDialogFiltroPrecio.show();
+                creaVentanaFiltroPrecio();
                 break;
             default:
                 Log.d("MIGUEL", "Default en switch");
@@ -263,24 +240,60 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View view = inflater.inflate(R.layout.activity_filtro_preciomax, null);
 
         //Definidos los elementos
-        Spinner spinnerPrecioMax = view.findViewById(R.id.filtarPrecioMaximo);
+        Spinner spinnerPrecioMax = view.findViewById(R.id.spinnerFiltroPrecio);
+        final EditText editTextPrecioMax = view.findViewById(R.id.textNumberPrecioMax);
+        //
+        ArrayList<String> elementos = new ArrayList<>();
+        elementos.add("Diesel");
+        elementos.add("Gasoleo 95");
+
+        ArrayAdapter adp = new ArrayAdapter(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, elementos);
+        adp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPrecioMax.setAdapter(adp);
 
         // Creacion alertDialog
         final AlertDialog alertDialogFiltroPrecio = new AlertDialog.Builder(this)
                 .setPositiveButton(getResources().getString(R.string.aceptar),null)
                 .setNegativeButton(getResources().getString(R.string.cancelar), null)
+                .setCancelable(false) //Impide que el dialogo se cierre si pulsas fuera del dialogo
                 .create();
 
-        //Tipos de combustibles
-        String[] elementos = new String[] {"Gasolina 95","Diesel"};
+        //Lista vacia
+        final ArrayList<String> listaPrueba = new ArrayList<>();
 
-        //Adapter para el spinner
-        ArrayAdapter adp = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, elementos);
-        spinnerPrecioMax.setAdapter(adp);
+        // Definicion positive button ("guardar")
+        alertDialogFiltroPrecio.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button b = alertDialogFiltroPrecio.getButton(BTN_POSITIVO);
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        if(editTextPrecioMax.getText().toString().isEmpty()){
+                            editTextPrecioMax.setError("El campo precio es obligatorio");
+                        }
+                        if(!editTextPrecioMax.getText().toString().isEmpty() && listaPrueba.isEmpty()){
+                            creaVentanaInformativa();
+                        }
+
+                    }
+                });
+            }
+        });
 
         //Insertar elementos en el dialogo
         alertDialogFiltroPrecio.setView(view);
         alertDialogFiltroPrecio.show();
+    }
+
+    public void creaVentanaInformativa(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("No hay ninguna gasolineras disponible");
+        builder.setPositiveButton("OK", null);
+        builder.setCancelable(false);
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
     /*
      * Ventana de dialogo con un formulario para anhadir una tarjeta
