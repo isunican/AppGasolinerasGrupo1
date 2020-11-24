@@ -29,7 +29,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 
-import java.lang.reflect.Array;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +39,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -198,6 +199,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             creaVentanaFiltroTipoGasolina();
         }else if(item.getItemId()==R.id.button_test_anhadeTarjetaDescuento){
             creaVentanaAnhadirTarjetaDescuento();
+        }else if(item.getItemId() == R.id.button_test_filtroPrecioMaximo){
+            creaVentanaFiltroPrecio();
         }
         return true;
     }
@@ -214,12 +217,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.itemNuevaTarjetaDescuento:
                 creaVentanaAnhadirTarjetaDescuento();
                 break;
+            case R.id.filtarPrecioMaximo:
+                creaVentanaFiltroPrecio();
+                break;
             case R.id.filtarGasolinerasFavoritas:
                 Intent favIntent = new Intent(MainActivity.this, FiltroFavoritosActivity.class);
                 startActivity(favIntent);
-                break;
-            case R.id.filtarPrecioMaximo:
-                creaVentanaFiltroPrecio();
                 break;
             default:
                 Log.d("MIGUEL", "Default en switch");
@@ -247,9 +250,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         elementos.add("Diesel");
         elementos.add("Gasoleo 95");
 
-        ArrayAdapter adp = new ArrayAdapter(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, elementos);
-        adp.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerPrecioMax.setAdapter(adp);
+        //Adapter para el spinner
+        ArrayAdapter adpSpinner = new ArrayAdapter(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, elementos);
+        adpSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPrecioMax.setAdapter(adpSpinner);
 
         // Creacion alertDialog
         final AlertDialog alertDialogFiltroPrecio = new AlertDialog.Builder(this)
@@ -258,22 +262,33 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .setCancelable(false) //Impide que el dialogo se cierre si pulsas fuera del dialogo
                 .create();
 
-        //Lista vacia
+        //Lista prueba vacia
         final ArrayList<String> listaPrueba = new ArrayList<>();
+        //Elemento de prueba
+        listaPrueba.add("Hola");
 
-        // Definicion positive button ("guardar")
+        // Definicion positive button
         alertDialogFiltroPrecio.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog) {
-                Button b = alertDialogFiltroPrecio.getButton(BTN_POSITIVO);
-                b.setOnClickListener(new View.OnClickListener() {
+                Button bpm = alertDialogFiltroPrecio.getButton(BTN_POSITIVO);
+                bpm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 
-                        if(editTextPrecioMax.getText().toString().isEmpty()){
-                            editTextPrecioMax.setError("El campo precio es obligatorio");
+                        //Error si el campo precio esta vacio o es 0
+                        if(editTextPrecioMax.getText().toString().isEmpty() || Double.parseDouble(editTextPrecioMax.getText().toString()) <= 0 ){
+                           editTextPrecioMax.setError("El campo precio es obligatorio");
                         }
+
+                        //Error si el no hay ninguna gasolinera con los parametros establecidos
                         if(!editTextPrecioMax.getText().toString().isEmpty() && listaPrueba.isEmpty()){
+
+                            //Opcion de cerrar el teclado cuando sale el dialogo de informacion
+                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(editTextPrecioMax.getWindowToken(), 0);
+
+                            //Ventana emergente informativa
                             creaVentanaInformativa();
                         }
 
@@ -287,14 +302,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         alertDialogFiltroPrecio.show();
     }
 
+    /**
+     * Ventana que muestra un mensaje informativo
+     * @Autor: Carolay Corales
+     */
     public void creaVentanaInformativa(){
+        //Crea el alertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("No hay ninguna gasolineras disponible");
         builder.setPositiveButton("OK", null);
+        //No permite cerrar la ventana si pulsas fuera del dialogo
         builder.setCancelable(false);
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        builder.create();
+        builder.show();
     }
+
     /*
      * Ventana de dialogo con un formulario para anhadir una tarjeta
      * de descuento.
