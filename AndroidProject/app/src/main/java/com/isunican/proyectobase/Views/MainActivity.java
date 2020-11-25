@@ -261,10 +261,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .setCancelable(false) //Impide que el dialogo se cierre si pulsas fuera del dialogo
                 .create();
 
-        //Lista prueba vacia
-        final ArrayList<String> listaPrueba = new ArrayList<>();
-        //Elemento de prueba
-        //listaPrueba.add("Hola");
 
         // Definicion positive button
         alertDialogFiltroPrecio.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -283,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             String tipo =spinnerPrecioMax.getSelectedItem().toString();
                             try{
                                 gasolinerasFiltradas = presenterGasolineras.filtrarGasolineraPorPrecioMaximo(tipo, listaGasolinerasActual,precio);
-                                if(gasolinerasFiltradas.size()==0){
+                                if(gasolinerasFiltradas.size() == 0){
                                     //Opcion de cerrar el teclado cuando sale el dialogo de informacion
                                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                                     imm.hideSoftInputFromWindow(editTextPrecioMax.getWindowToken(), 0);
@@ -292,11 +288,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     creaVentanaInformativa();
                                 }else{
                                     refreshAdapter(gasolinerasFiltradas);
+                                    alertDialogFiltroPrecio.dismiss();
                                 }
                             }catch(NullPointerException e) {
                                 Toast.makeText(getApplicationContext(), "Error al al leer gasolineras", Toast.LENGTH_LONG);
                             }
                         }
+
+
+
                     }
                 });
             }
@@ -306,6 +306,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         alertDialogFiltroPrecio.setView(view);
         alertDialogFiltroPrecio.show();
     }
+
 
     /**
      * Ventana que muestra un mensaje informativo
