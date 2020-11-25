@@ -243,12 +243,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View view = inflater.inflate(R.layout.activity_filtro_preciomax, null);
 
         //Definidos los elementos
-        Spinner spinnerPrecioMax = view.findViewById(R.id.spinnerFiltroPrecio);
+        final Spinner spinnerPrecioMax = view.findViewById(R.id.spinnerFiltroPrecio);
         final EditText editTextPrecioMax = view.findViewById(R.id.textNumberPrecioMax);
 
 
         //Adapter para el spinner
-        ArrayAdapter<CharSequence> adpSpinner = ArrayAdapter.createFromResource(this,
+        final ArrayAdapter<CharSequence> adpSpinner = ArrayAdapter.createFromResource(this,
                 R.array.tipos_gasolinas, android.R.layout.simple_spinner_item);
 
         adpSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -274,15 +274,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 bpm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        List<Gasolinera> gasolinerasFiltradas=null;
                         //Error si el campo precio esta vacio o es 0
                         if(editTextPrecioMax.getText().toString().isEmpty() || Double.parseDouble(editTextPrecioMax.getText().toString()) <= 0 ){
                            editTextPrecioMax.setError(getResources().getString(R.string.mensaje_error_pmax));
+                        }else{
+                            double precio=Double.parseDouble(editTextPrecioMax.getText().toString());
+                            String tipo =spinnerPrecioMax.getSelectedItem().toString();
+                            try{
+                                gasolinerasFiltradas = presenterGasolineras.filtrarGasolineraPorPrecioMaximo(tipo, listaGasolinerasActual,precio);
+                            }catch(NullPointerException e) {
+                                Toast.makeText(getApplicationContext(), "Error al al leer gasolineras", Toast.LENGTH_LONG);
+                            }
                         }
 
-                        //Error si el no hay ninguna gasolinera con los parametros establecidos.
-                        //TODO:CAMBIAR CONDICION DEL IF
-                        if(!editTextPrecioMax.getText().toString().isEmpty() && listaPrueba.isEmpty()){
+
+                        if(!editTextPrecioMax.getText().toString().isEmpty() && gasolinerasFiltradas.isEmpty()){
 
                             //Opcion de cerrar el teclado cuando sale el dialogo de informacion
                             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -290,6 +297,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                             //Ventana emergente informativa
                             creaVentanaInformativa();
+                        }else{
+                            refreshAdapter(gasolinerasFiltradas);
                         }
 
                     }

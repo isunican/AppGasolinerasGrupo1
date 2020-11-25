@@ -162,14 +162,14 @@ public class PresenterGasolineras {
         }
         List<Gasolinera>gasolinerasFiltradas=new ArrayList<>();
         switch(tipo){
-            case "Gasolinera95 ":
+            case "Gasolinera95":
                 for (Gasolinera g : lista) {
                     if(g.tiposGasolina().contains("Gasolinera95 ") && g.getGasolina95()<=precioMax){
                         gasolinerasFiltradas.add(g);
                     }
                 }
                 break;
-            case "Diesel ":
+            case "Diesel":
                 for (Gasolinera g: lista) {
                     if(g.tiposGasolina().contains("Diesel ")&& g.getGasoleoA()<=precioMax){
                         gasolinerasFiltradas.add(g);
