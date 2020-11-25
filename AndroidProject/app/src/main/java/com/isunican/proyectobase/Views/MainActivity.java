@@ -245,13 +245,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Definidos los elementos
         Spinner spinnerPrecioMax = view.findViewById(R.id.spinnerFiltroPrecio);
         final EditText editTextPrecioMax = view.findViewById(R.id.textNumberPrecioMax);
-        //
-        ArrayList<String> elementos = new ArrayList<>();
-        elementos.add("Diesel");
-        elementos.add("Gasoleo 95");
+
 
         //Adapter para el spinner
-        ArrayAdapter adpSpinner = new ArrayAdapter(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, elementos);
+        ArrayAdapter<CharSequence> adpSpinner = ArrayAdapter.createFromResource(this,
+                R.array.tipos_gasolinas, android.R.layout.simple_spinner_item);
+
         adpSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerPrecioMax.setAdapter(adpSpinner);
 
@@ -265,7 +264,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Lista prueba vacia
         final ArrayList<String> listaPrueba = new ArrayList<>();
         //Elemento de prueba
-        listaPrueba.add("Hola");
+        //listaPrueba.add("Hola");
 
         // Definicion positive button
         alertDialogFiltroPrecio.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -278,10 +277,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
                         //Error si el campo precio esta vacio o es 0
                         if(editTextPrecioMax.getText().toString().isEmpty() || Double.parseDouble(editTextPrecioMax.getText().toString()) <= 0 ){
-                           editTextPrecioMax.setError("El campo precio es obligatorio");
+                           editTextPrecioMax.setError(getResources().getString(R.string.mensaje_error_pmax));
                         }
 
-                        //Error si el no hay ninguna gasolinera con los parametros establecidos
+                        //Error si el no hay ninguna gasolinera con los parametros establecidos.
+                        //TODO:CAMBIAR CONDICION DEL IF
                         if(!editTextPrecioMax.getText().toString().isEmpty() && listaPrueba.isEmpty()){
 
                             //Opcion de cerrar el teclado cuando sale el dialogo de informacion
@@ -309,8 +309,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void creaVentanaInformativa(){
         //Crea el alertDialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("No hay ninguna gasolineras disponible");
-        builder.setPositiveButton("OK", null);
+        builder.setMessage(R.string.mensaje_info_pmax);
+        builder.setPositiveButton(R.string.ok, null);
         //No permite cerrar la ventana si pulsas fuera del dialogo
         builder.setCancelable(false);
         builder.create();
