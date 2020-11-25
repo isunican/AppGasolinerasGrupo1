@@ -10,9 +10,14 @@ import com.isunican.proyectobase.Model.*;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.speech.tts.TextToSpeech;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -42,7 +47,7 @@ public class DetailActivity extends AppCompatActivity {
     PresenterGasolinerasFavoritas gasolinerasFavoritas;
     PresenterGasolineras presenterGasolineras = new PresenterGasolineras();
     Gasolinera g;
-
+    final static int NUM_CARACTERES_MAXIMO_COMENTARIO = 240;
 
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
 
@@ -164,38 +169,57 @@ public class DetailActivity extends AppCompatActivity {
         //final TextView
         comentarioEditText = view.findViewById(R.id.textBox_anhadeComentario);
 
-            // Definicion positive button ("guardar")
-            alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
-                @Override
-                public void onShow(DialogInterface dialog) {
-                    Button b = alertDialogBuilder.getButton(BTN_POSITIVO);
-                    b.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            if (comentarioEditText.getText().length() > 240)
-                                comentarioEditText.setError("El comentario debe ser menor de 240 carácteres");
-                            else {
-                                String toastComentarioReducido = comentarioEditText.getText().toString().trim();
-                                if (toastComentarioReducido.length() > 30) {
-                                    toastComentarioReducido = toastComentarioReducido.substring(0, 30);
-                                    toastComentarioReducido += "...";
-                                }
-                                Toast.makeText(getApplicationContext(), "Gasolinera favorita añadida con comentario: " +
-                                        toastComentarioReducido, Toast.LENGTH_LONG).show();
-                                comentario.setText("Comentario:\n" + comentarioEditText.getText());
-                                favButton.setImageResource(R.drawable.favorito_activado);
-                                favButton.setTag(R.drawable.favorito_activado);
-                                gasolineraEsFavorita = true;
-                                ThreadAnhadirGasolineras thread = new ThreadAnhadirGasolineras();
-                                new Thread(thread).start();
-                                alertDialogBuilder.dismiss();
+        // Definicion positive button ("guardar")
+        alertDialogBuilder.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button b = alertDialogBuilder.getButton(BTN_POSITIVO);
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (comentarioEditText.getText().length() > NUM_CARACTERES_MAXIMO_COMENTARIO)
+                            comentarioEditText.setError("El comentario debe ser menor de 240 carácteres");
+                        else {
+                            String toastComentarioReducido = comentarioEditText.getText().toString().trim();
+                            if (toastComentarioReducido.length() > 30) {
+                                toastComentarioReducido = toastComentarioReducido.substring(0, 30);
+                                toastComentarioReducido += "...";
                             }
+                            Toast.makeText(getApplicationContext(), "Gasolinera favorita añadida con comentario: " +
+                                    toastComentarioReducido, Toast.LENGTH_LONG).show();
+                            comentario.setText("Comentario:\n" + comentarioEditText.getText());
+                            favButton.setImageResource(R.drawable.favorito_activado);
+                            favButton.setTag(R.drawable.favorito_activado);
+                            gasolineraEsFavorita = true;
+                            ThreadAnhadirGasolineras thread = new ThreadAnhadirGasolineras();
+                            new Thread(thread).start();
+                            alertDialogBuilder.dismiss();
                         }
-                    });
-                }
-            });
-            alertDialogBuilder.setView(view);
-            alertDialogBuilder.show();
+                    }
+                });
+            }
+        });
+        alertDialogBuilder.setView(view);
+        alertDialogBuilder.show();
+
+        // Caracteres totales escritos
+        final TextView textNumCaracteresActual = view.findViewById(R.id.textNumCaracteresActual);
+        final TextView textNumCaracteresTotal = view.findViewById(R.id.textNumCaracteresTotal);
+        textNumCaracteresTotal.setText("/"+NUM_CARACTERES_MAXIMO_COMENTARIO);
+        comentarioEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int numCaracteresActual = comentarioEditText.getText().length();
+                textNumCaracteresActual.setText(Integer.toString(numCaracteresActual));
+                if(numCaracteresActual>NUM_CARACTERES_MAXIMO_COMENTARIO)
+                    textNumCaracteresActual.setTextColor(Color.RED);
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
 
         }
 
