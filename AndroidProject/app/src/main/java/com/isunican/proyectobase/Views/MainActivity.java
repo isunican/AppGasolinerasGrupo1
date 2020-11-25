@@ -216,6 +216,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.filtarGasolinerasFavoritas:
                 Intent favIntent = new Intent(MainActivity.this, FiltroFavoritosActivity.class);
                 startActivity(favIntent);
+                creaVentanaFavoritosVacios(); //TODO: activar esta linea SOLO cuando la lista este vacia
                 break;
             default:
                 Log.d("MIGUEL", "Default en switch");
@@ -458,6 +459,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Set elements in the dialog
         alertDialogBuilder.setView(view);
         alertDialogBuilder.show();
+    }
+
+    /**
+     *Crea la ventana emergente que avisa al usuario de que la lista de favoritos esta
+     *vacia, se puede cerrar pulsando en aceptar o fuera de la propia ventana
+     */
+    public void creaVentanaFavoritosVacios(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.fav_vacios);
+        builder.setPositiveButton(getResources().getString(R.string.aceptar), null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 
     private void refreshAdapter(List<Gasolinera> gasolinerasNuevas){
