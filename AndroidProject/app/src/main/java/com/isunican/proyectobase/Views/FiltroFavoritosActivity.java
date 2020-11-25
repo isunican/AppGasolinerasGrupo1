@@ -59,7 +59,7 @@ import java.util.List;
 public class FiltroFavoritosActivity extends AppCompatActivity  {
 
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
-    private PresenterTarjetaDescuento presenterTarjetaDescuento = PresenterTarjetaDescuento.getInstance();
+    PresenterTarjetaDescuento presenterTarjetaDescuento = PresenterTarjetaDescuento.getInstance();
     //Contexto de la aplicación
     Context contexto;
     //Presenter que gestiona las gasolineras
