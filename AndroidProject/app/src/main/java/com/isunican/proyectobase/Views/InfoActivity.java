@@ -4,7 +4,9 @@ import com.isunican.proyectobase.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 /*
@@ -17,7 +19,7 @@ import android.widget.TextView;
 public class InfoActivity extends AppCompatActivity {
 
     TextView textView;
-
+    int clicks = 0;
     /**
      * onCreate
      *
@@ -38,5 +40,19 @@ public class InfoActivity extends AppCompatActivity {
         // y muestra en él un texto de información predefinido
         textView = findViewById(R.id.nombreGasolineraText);
         textView.setText(getResources().getString(R.string.infoTexto));
+
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clicks++;
+                if(clicks >= 10){
+                    System.out.println("Activado Easter Egg");
+                    setContentView(R.layout.easter_egg);
+                    Toast easterEgg = Toast.makeText( getApplicationContext(), getResources().getString(R.string.Easter_Egg), Toast.LENGTH_LONG);
+                    easterEgg.show();
+                    getSupportActionBar().hide();
+                }
+            }
+        });
     }
 }

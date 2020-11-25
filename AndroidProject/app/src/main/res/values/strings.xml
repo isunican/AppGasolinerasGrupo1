@@ -8,9 +8,10 @@
     <string name="gasolina95">Gasolina:</string>
     <string name="pordefecto">por_defecto</string>
     <string name="moneda">€</string>
-    <string name="infoTexto">App desarrollada por los magníficos docentes de Ingeniería del Software de la UC</string>
+    <string name="infoTexto">App base desarrollada por los magníficos docentes de Ingeniería del Software de la UC.\n\n Funcionalidad extra añadida por los
+    geniales miembros del Grupo 1, A todo Gas:\n\n -Miguel Carbayo\n -Adrian Celis\n -Carolay B. Corales\n -Luis Cruz\n -Jaime López-Agudo\n -Elena Romón</string>
     <string name="menuActualizar">Actualizar</string>
-    <string name="menuInfo">Info</string>
+    <string name="menuInfo">Acerca De</string>
     <string name="pasoDatosInfo">DatosInfo</string>
     <string name="pasoDatosGasolinera">DatosGasolinera</string>
     <string name="pasoListaGasolinerasFiltros">ListaGasolineras</string>
@@ -43,4 +44,17 @@
     <string name="navigation_drawer_close">Cerrar drawer</string>
     <string name="anhade_comentario">Añade un comentario</string>
     <string name="modifica_comentario">Modifica el comentario</string>
+    <string name="Easter_Egg">Easter egg encontrado</string>
+    <string name="Carbayo">Miguel Carbayo: </string>
+    <string name="Adri">Adrian Celis: </string>
+    <string name="Carol">Carolay B. Corales: </string>
+    <string name="Luis">Luis Cruz: </string>
+    <string name="Jaimelah">Jaime Lopez-Agudo: </string>
+    <string name="Elena">Elena Romón: </string>
+    <string name="d_master">Discord Master</string>
+    <string name="g_master">Git Master</string>
+    <string name="e_master">Emo Master</string>
+    <string name="s_master">Scrum Master</string>
+    <string name="c_master">Coffee Master</string>
+    <string name="doc_master">Document Master</string>
 </resources>
