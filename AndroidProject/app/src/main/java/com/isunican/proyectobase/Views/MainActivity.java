@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         currentList = new ArrayList<>();
 
         this.presenterGasolineras = new PresenterGasolineras();
-        this.presenterTarjetaDescuento = new PresenterTarjetaDescuento();
+        this.presenterTarjetaDescuento = PresenterTarjetaDescuento.getInstance();
 
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
