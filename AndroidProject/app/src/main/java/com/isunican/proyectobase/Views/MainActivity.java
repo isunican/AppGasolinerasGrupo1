@@ -283,24 +283,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             String tipo =spinnerPrecioMax.getSelectedItem().toString();
                             try{
                                 gasolinerasFiltradas = presenterGasolineras.filtrarGasolineraPorPrecioMaximo(tipo, listaGasolinerasActual,precio);
+                                if(gasolinerasFiltradas.size()==0){
+                                    //Opcion de cerrar el teclado cuando sale el dialogo de informacion
+                                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(editTextPrecioMax.getWindowToken(), 0);
+
+                                    //Ventana emergente informativa
+                                    creaVentanaInformativa();
+                                }else{
+                                    refreshAdapter(gasolinerasFiltradas);
+                                }
                             }catch(NullPointerException e) {
                                 Toast.makeText(getApplicationContext(), "Error al al leer gasolineras", Toast.LENGTH_LONG);
                             }
                         }
-
-
-                        if(!editTextPrecioMax.getText().toString().isEmpty() && gasolinerasFiltradas.isEmpty()){
-
-                            //Opcion de cerrar el teclado cuando sale el dialogo de informacion
-                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                            imm.hideSoftInputFromWindow(editTextPrecioMax.getWindowToken(), 0);
-
-                            //Ventana emergente informativa
-                            creaVentanaInformativa();
-                        }else{
-                            refreshAdapter(gasolinerasFiltradas);
-                        }
-
                     }
                 });
             }

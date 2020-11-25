@@ -2,6 +2,6 @@
 <resources>
     <string-array name="tipos_gasolinas">
         <item>Diesel</item>
-        <item>Gasoleo 95</item>
+        <item>Gasolina95</item>
     </string-array>
 </resources>
