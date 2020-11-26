@@ -33,6 +33,7 @@ import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.Model.GasolineraFavorita;
 import com.isunican.proyectobase.Presenter.PresenterGasolineras;
 import com.isunican.proyectobase.Presenter.PresenterGasolinerasFavoritas;
+import com.isunican.proyectobase.Presenter.PresenterTarjetaDescuento;
 import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.Utilities.ExtractorLocalidadUtil;
 import com.isunican.proyectobase.Utilities.ExtractorMarcasUtil;
@@ -59,7 +60,7 @@ import java.util.List;
 public class FiltroFavoritosActivity extends AppCompatActivity  {
 
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
-
+    PresenterTarjetaDescuento presenterTarjetaDescuento = PresenterTarjetaDescuento.getInstance();
     //Contexto de la aplicación
     Context contexto;
     //Presenter que gestiona las gasolineras
@@ -129,6 +130,7 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
 
 
         listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.getGasolinerasFavoritas();
+        listaActual = (ArrayList<Gasolinera>) presenterTarjetaDescuento.actualizarListaDePrecios(listaActual);
         //Adapter al que se le pasa la lista de gasolineras favoritas
         adapterFavoritas = new GasolineraArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, listaActual);
 

@@ -19,14 +19,27 @@ import java.util.List;
  */
 public class PresenterTarjetaDescuento {
 
+    private static PresenterTarjetaDescuento INSTANCE = null;
     private List<TarjetaDescuento> listaTarjetasDescuento;
 
     /**
      * Constructor que inicializa la tarjeta de descuentos
      * para que pueda se utilizada
      */
-    public PresenterTarjetaDescuento(){
+    private PresenterTarjetaDescuento(){
         this.listaTarjetasDescuento = new ArrayList<>();
+    }
+    // creador sincronizado para protegerse de posibles problemas  multi-hilo
+    // otra prueba para evitar instanciación múltiple
+    private synchronized static void createInstance() {
+        if (INSTANCE == null) {
+            INSTANCE = new PresenterTarjetaDescuento();
+        }
+    }
+
+    public static PresenterTarjetaDescuento getInstance() {
+        if (INSTANCE == null) createInstance();
+        return INSTANCE;
     }
 
     /**
@@ -81,15 +94,15 @@ public class PresenterTarjetaDescuento {
      * @param gasolineras listado de tarjetas a actualizar
      * @return listado de gasolineras con precios actualizados
      */
-    public List<Gasolinera> actualizarListaDePrecios(List<Gasolinera> gasolineras){
+    public ArrayList<Gasolinera> actualizarListaDePrecios(ArrayList<Gasolinera> gasolineras){
         if (gasolineras == null)
         {
-            return Collections.emptyList();
+            return new ArrayList<Gasolinera>();
         }
         for (Gasolinera g: gasolineras) {
             cambioPrecios(g);
         }
-        return new ArrayList<>(gasolineras);
+        return gasolineras;
     }
 
     /**
