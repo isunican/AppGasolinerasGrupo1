@@ -67,7 +67,7 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
     //Presenter que gestiona las gasolineras favoritas
     PresenterGasolinerasFavoritas presenterGasolinerasFavoritas;
     //Lista de las gasolineras favoritas actuales
-    ArrayList<Gasolinera> listaActual;
+    List<Gasolinera> listaActual;
 
     // Elemento de la activity. ListView que contendra las gasolineras favoritas
     ListView listViewFav;
@@ -124,16 +124,14 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
 
-
-        listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.getGasolinerasFavoritas();
-        listaActual = (ArrayList<Gasolinera>) presenterTarjetaDescuento.actualizarListaDePrecios(listaActual);
+        listaActual = presenterGasolinerasFavoritas.getGasolinerasFavoritas();
+        listaActual = presenterTarjetaDescuento.actualizarListaDePrecios(listaActual);
         //Adapter al que se le pasa la lista de gasolineras favoritas
         adapterFavoritas = new GasolineraArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, listaActual);
 
         //Inserta lista de gasolineras favoritas en la listView
         listViewFav = findViewById(R.id.listFavGasolineras);
         listViewFav.setAdapter(adapterFavoritas);
-
 
         listViewFav.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
@@ -147,10 +145,8 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
                 FiltroFavoritosActivity.this.startActivity(myIntent);
             }
         });
-
-
-
     }
+
     /**
      * Clase privada que implementa la clase TextWatcher
      */
@@ -268,7 +264,6 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         listViewLocalidadFavDialog = view.findViewById(R.id.listViewLocalidadesFavDialog);
         textLocalidadFavDialog = view.findViewById(R.id.textLocalidadFavDialog);
         textMarcaFavDialog = view.findViewById(R.id.textMarcaFavDialog);
-
 
         //Adapters al que se les pasa la lista de marcas y localidades
         final ArrayList<String> marcasFavoritas = (ArrayList<String>) presenterGasolinerasFavoritas.getMarcasFavoritas();

@@ -468,9 +468,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void updateListWithNewDiscountCard(){
         //Esto tiene que cambiar cuando se haga la historia de ver tarjetas de descuento porque tenemos que usar solo una tarjeta de desucento al tiempo
         listaGasolinerasActual = presenterTarjetaDescuento.actualizarListaDePrecios((ArrayList<Gasolinera>)listaGasolinerasActual);
-        System.out.println("Precio 95:" + listaGasolinerasActual.get(0).getGasolina95());
-        //adapter.clear();
-        //adapter.addAll(listaGasolinerasActual);
         adapter.notifyDataSetChanged();
     }
 
