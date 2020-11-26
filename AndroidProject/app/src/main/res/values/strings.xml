@@ -57,4 +57,5 @@
     <string name="s_master">Scrum Master</string>
     <string name="c_master">Coffee Master</string>
     <string name="doc_master">Document Master</string>
+    <string name="fav_vacios">La lista de gasolineras favoritas está vacía</string>
 </resources>
