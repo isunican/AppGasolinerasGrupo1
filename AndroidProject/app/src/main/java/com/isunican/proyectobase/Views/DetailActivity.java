@@ -10,14 +10,10 @@ import com.isunican.proyectobase.Model.*;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.speech.tts.TextToSpeech;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -47,7 +43,6 @@ public class DetailActivity extends AppCompatActivity {
     PresenterGasolinerasFavoritas gasolinerasFavoritas;
     PresenterGasolineras presenterGasolineras = new PresenterGasolineras();
     Gasolinera g;
-    final static int NUM_CARACTERES_MAXIMO_COMENTARIO = 240;
 
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
 
@@ -177,7 +172,8 @@ public class DetailActivity extends AppCompatActivity {
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if (comentarioEditText.getText().length() > NUM_CARACTERES_MAXIMO_COMENTARIO)
+                        if (comentarioEditText.getText().length() >
+                                DialogoComentarioGasolineraFavorita.getNumCaracteresMaximoComentario())
                             comentarioEditText.setError("El comentario debe ser menor de 240 carácteres");
                         else {
                             String toastComentarioReducido = comentarioEditText.getText().toString().trim();
@@ -203,23 +199,7 @@ public class DetailActivity extends AppCompatActivity {
         alertDialogBuilder.show();
 
         // Caracteres totales escritos
-        final TextView textNumCaracteresActual = view.findViewById(R.id.textNumCaracteresActual);
-        final TextView textNumCaracteresTotal = view.findViewById(R.id.textNumCaracteresTotal);
-        textNumCaracteresTotal.setText("/"+NUM_CARACTERES_MAXIMO_COMENTARIO);
-        comentarioEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int numCaracteresActual = comentarioEditText.getText().length();
-                textNumCaracteresActual.setText(Integer.toString(numCaracteresActual));
-                if(numCaracteresActual>NUM_CARACTERES_MAXIMO_COMENTARIO)
-                    textNumCaracteresActual.setTextColor(Color.RED);
-            }
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
+        DialogoComentarioGasolineraFavorita.cambiaNumeroCaracteresActual(view, comentarioEditText);
 
         }
 
