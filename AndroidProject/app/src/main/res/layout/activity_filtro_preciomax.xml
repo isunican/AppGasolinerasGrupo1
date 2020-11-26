@@ -30,7 +30,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:inputType="numberDecimal"
-        android:hint="€/L"/>
+        android:hint="€/L"
+        android:digits="0123456789.,"/>
 
 
 

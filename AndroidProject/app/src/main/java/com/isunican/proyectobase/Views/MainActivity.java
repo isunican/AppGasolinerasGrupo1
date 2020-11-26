@@ -94,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Adapter para la listView
     ArrayAdapter<String> dataAdapter;
 
+    EditText editTextPrecioMax;
+    Spinner spinnerPrecioMax;
     //Filtro
     String tipoGasolina;
 
@@ -243,8 +245,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         View view = inflater.inflate(R.layout.activity_filtro_preciomax, null);
 
         //Definidos los elementos
-        final Spinner spinnerPrecioMax = view.findViewById(R.id.spinnerFiltroPrecio);
-        final EditText editTextPrecioMax = view.findViewById(R.id.textNumberPrecioMax);
+        spinnerPrecioMax = view.findViewById(R.id.spinnerFiltroPrecio);
+        editTextPrecioMax = view.findViewById(R.id.textNumberPrecioMax);
 
 
         //Adapter para el spinner
@@ -262,6 +264,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 .create();
 
 
+
         // Definicion positive button
         alertDialogFiltroPrecio.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
@@ -270,16 +273,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 bpm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        List<Gasolinera> gasolinerasFiltradas=null;
+                        List<Gasolinera> gasolinerasFiltradas = null;
+
+                        //Error si se hay mas de un punto, coma o un punto y coma a la vez
+                        if (!caracterValidos(editTextPrecioMax.getText().toString())) {
+                            editTextPrecioMax.setError("Precio no valido");
+
                         //Error si el campo precio esta vacio o es 0
-                        if(editTextPrecioMax.getText().toString().isEmpty() || Double.parseDouble(editTextPrecioMax.getText().toString()) <= 0 ){
+                        }else if(editTextPrecioMax.getText().toString().isEmpty() || Double.parseDouble(editTextPrecioMax.getText().toString().replaceAll(",",".")) <= 0 ){
                            editTextPrecioMax.setError(getResources().getString(R.string.mensaje_error_pmax));
+
                         }else{
-                            double precio=Double.parseDouble(editTextPrecioMax.getText().toString());
+                            double precio=Double.parseDouble(editTextPrecioMax.getText().toString().replaceAll(",","."));
                             String tipo =spinnerPrecioMax.getSelectedItem().toString();
                             try{
                                 gasolinerasFiltradas = presenterGasolineras.filtrarGasolineraPorPrecioMaximo(tipo, listaGasolinerasActual,precio);
                                 if(gasolinerasFiltradas.size() == 0){
+
                                     //Opcion de cerrar el teclado cuando sale el dialogo de informacion
                                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                                     imm.hideSoftInputFromWindow(editTextPrecioMax.getWindowToken(), 0);
@@ -287,7 +297,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     //Ventana emergente informativa
                                     creaVentanaInformativa();
                                 }else{
+                                    //Inserta las nuevas gasolineras
                                     refreshAdapter(gasolinerasFiltradas);
+                                    //Cierra el dialogo
                                     alertDialogFiltroPrecio.dismiss();
                                 }
                             }catch(NullPointerException e) {
@@ -305,6 +317,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         //Insertar elementos en el dialogo
         alertDialogFiltroPrecio.setView(view);
         alertDialogFiltroPrecio.show();
+    }
+
+    /**
+     * Metodo que comprueba si el caracter introducido  en el campo delprecio de filtro por
+     * precio maximo es valido
+     * @autor Carolay Corales
+     * @param textoPrecio
+     * @return true si el caracter no contiene mas de un punto, coma o que no contenga un punto y coma
+     * en el mismo string
+     */
+    public boolean caracterValidos(String textoPrecio){
+        //Numero de puntos en el string
+        int numPuntos = contarCaracteres(editTextPrecioMax.getText().toString(), '.');
+        //Numero de comas en el string
+        int numComas =  contarCaracteres(editTextPrecioMax.getText().toString(), ',');
+        //Si hay un punto y coma en el mismo string
+        int numPuntoComa = numPuntos + numComas;
+
+        if (numPuntos > 1 || numComas > 1 || numPuntoComa >=2) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Metodo que cuenta el numero de veces que aparece un caracter en un string
+     * @Autor Carolay Corales
+     * @param precio
+     * @param caracter
+     * @return
+     */
+    public int contarCaracteres(String precio, char caracter) {
+        int posicion, contador = 0;
+        posicion = precio.indexOf(caracter);
+        while (posicion != -1) {
+            contador++;
+            posicion = precio.indexOf(caracter, posicion + 1);
+        }
+        return contador;
     }
 
 
