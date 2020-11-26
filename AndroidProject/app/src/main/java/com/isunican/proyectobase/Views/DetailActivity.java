@@ -185,7 +185,7 @@ public class DetailActivity extends AppCompatActivity {
                             else {
                                 String toastComentarioReducido = comentarioEditText.getText().toString().trim();
                                 if (toastComentarioReducido.length() > 30) {
-                                    toastComentarioReducido = toastComentarioReducido.substring(0, 30);
+                                    toastComentarioReducido = toastComentarioReducido.substring(0, 30).replace("\n"," ");
                                     toastComentarioReducido += "...";
                                 }
                                 Toast.makeText(getApplicationContext(), "Gasolinera favorita añadida con comentario: " +
