@@ -31,6 +31,8 @@ import android.util.DisplayMetrics;
 
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import android.util.Log;
@@ -149,11 +151,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
-
-
-
-
-
     }
 
     @Override
@@ -287,9 +284,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                             double precio=Double.parseDouble(editTextPrecioMax.getText().toString().replaceAll(",","."));
                             String tipo =spinnerPrecioMax.getSelectedItem().toString();
                             try{
-                                gasolinerasFiltradas = presenterGasolineras.filtrarGasolineraPorPrecioMaximo(tipo, listaGasolinerasActual,precio);
-                                if(gasolinerasFiltradas.size() == 0){
-
+                                currentList = presenterGasolineras.filtrarGasolineraPorPrecioMaximo(tipo, listaGasolinerasActual,precio);
+                                if(currentList.size() == 0){
                                     //Opcion de cerrar el teclado cuando sale el dialogo de informacion
                                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                                     imm.hideSoftInputFromWindow(editTextPrecioMax.getWindowToken(), 0);
@@ -297,9 +293,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     //Ventana emergente informativa
                                     creaVentanaInformativa();
                                 }else{
-                                    //Inserta las nuevas gasolineras
-                                    refreshAdapter(gasolinerasFiltradas);
-                                    //Cierra el dialogo
+                                    adapter = new GasolineraArrayAdapter(MainActivity.this, 0, currentList);
+                                    listViewGasolineras = findViewById(R.id.listViewGasolineras);
+                                    listViewGasolineras.setAdapter(adapter);
                                     alertDialogFiltroPrecio.dismiss();
                                 }
                             }catch(NullPointerException e) {

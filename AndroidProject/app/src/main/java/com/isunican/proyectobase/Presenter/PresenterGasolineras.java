@@ -156,11 +156,11 @@ public class PresenterGasolineras {
         return gasolinerasFiltradas;
     }
 
-    public List<Gasolinera> filtrarGasolineraPorPrecioMaximo(String tipo, List<Gasolinera>lista, double precioMax){
+    public ArrayList<Gasolinera> filtrarGasolineraPorPrecioMaximo(String tipo, List<Gasolinera>lista, double precioMax){
         if(lista==null) {
             throw new NullPointerException();
         }
-        List<Gasolinera>gasolinerasFiltradas=new ArrayList<>();
+        ArrayList<Gasolinera>gasolinerasFiltradas=new ArrayList<>();
         switch(tipo){
             case "Gasolina95":
                 for (Gasolinera g : lista) {
