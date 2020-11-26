@@ -94,7 +94,7 @@ public class PresenterTarjetaDescuento {
      * @param gasolineras listado de tarjetas a actualizar
      * @return listado de gasolineras con precios actualizados
      */
-    public ArrayList<Gasolinera> actualizarListaDePrecios(ArrayList<Gasolinera> gasolineras){
+    public List<Gasolinera> actualizarListaDePrecios(List<Gasolinera> gasolineras){
         if (gasolineras == null)
         {
             return new ArrayList<Gasolinera>();
