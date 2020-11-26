@@ -1,13 +1,22 @@
 package com.isunican.proyectobase.Views;
 
+import android.graphics.Color;
+import android.view.View;
+import android.widget.TextView;
+
+import androidx.core.content.ContextCompat;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.espresso.Espresso;
+import androidx.test.espresso.ViewAssertion;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
+import androidx.test.espresso.matcher.BoundedMatcher;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.isunican.proyectobase.R;
 
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
@@ -23,6 +32,7 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
+import static androidx.test.espresso.matcher.ViewMatchers.hasTextColor;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withTagValue;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
@@ -39,7 +49,7 @@ public class AnhadeGasolineraFavoritaUITest {
             "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii" +
             "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii" +
             "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii" +
-            "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii";
+            "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii";
 
     @Rule
     public IntentsTestRule<MainActivity> activityRule =
@@ -52,7 +62,7 @@ public class AnhadeGasolineraFavoritaUITest {
 
     @Test
     public void anhadeFavorito() {
-        // ID1: Cancelar al anhadir comentario
+        // UIT1.a: Cancelar al anhadir comentario
         // Hacemos clic en la primera gasolinera de la lista
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listViewGasolineras)).atPosition(0).perform(click());
         // Hacemos clic en el botón de añadir favorito
@@ -66,13 +76,16 @@ public class AnhadeGasolineraFavoritaUITest {
 
         Espresso.pressBack();
 
-        // ID4: Guardar al anhadir comentario mayor de 240 caracteres (error)
+        // UIT1.d: Guardar al anhadir comentario mayor de 240 caracteres (error)
         // Hacemos clic en la primera gasolinera de la lista
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listViewGasolineras)).atPosition(0).perform(click());
         // Hacemos clic en el botón de añadir favorito
         onView(withId(R.id.favButton)).perform(click());
         // Escribimos un comentario
         onView(withId(R.id.textBox_anhadeComentario)).perform(typeText(COMENTARIOFUERALIMITE), closeSoftKeyboard());
+        // Comprobamos que el contador de caracteres es de 241 y color rojo
+        onView(withId(R.id.textNumCaracteresActual)).check(matches(withText("241")));
+        // TODO onView(withId(R.id.textNumCaracteresActual)).check(matches(hasTextColor(Color.RED)));
         // Pulsamos guardar
         onView(withId(android.R.id.button1)).perform(click());
         // Obtenemos mensaje de error
@@ -81,13 +94,15 @@ public class AnhadeGasolineraFavoritaUITest {
         Espresso.pressBack();
         Espresso.pressBack();
 
-        // ID3: Guardar al anhadir comentario menor de 240 caracteres
+        // UIT1.c: Guardar al anhadir comentario menor de 240 caracteres
         // Hacemos clic en la primera gasolinera de la lista
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listViewGasolineras)).atPosition(1).perform(click());
         // Hacemos clic en el botón de añadir favorito
         onView(withId(R.id.favButton)).perform(click());
         // Escribimos un comentario
         onView(withId(R.id.textBox_anhadeComentario)).perform(typeText("Comentario de texto"), closeSoftKeyboard());
+        // Comprobamos que el contador de caracteres es de 19
+        onView(withId(R.id.textNumCaracteresActual)).check(matches(withText("19")));
         // Pulsamos guardar
         onView(withId(android.R.id.button1)).perform(click());
         // Comprobamos que el comentario sale correctamente en la gasolinera
@@ -97,7 +112,7 @@ public class AnhadeGasolineraFavoritaUITest {
 
         Espresso.pressBack();
 
-        // ID2: Guardar al anhadir comentario vacio
+        // UIT1.b: Guardar al anhadir comentario vacio
         // Hacemos clic en la primera gasolinera de la lista
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listViewGasolineras)).atPosition(0).perform(click());
         // Hacemos clic en el botón de añadir favorito
@@ -109,5 +124,6 @@ public class AnhadeGasolineraFavoritaUITest {
         // Se comprueba que el boton no ha cambiado
         onView(withId(R.id.favButton)).check(matches(withTagValue(Matchers.<Object>equalTo(R.drawable.favorito_activado))));
     }
+
 
 }
