@@ -79,7 +79,7 @@ public class DetailActivity extends AppCompatActivity {
         txtComentario = findViewById(R.id.txtComentario);
         comentario = findViewById(R.id.comentarioText);
         comentario.setMovementMethod(new ScrollingMovementMethod());
-        comentario.setVerticalScrollBarEnabled(true);
+        //comentario.setVerticalScrollBarEnabled(true);
         g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
 
         favButton = findViewById(R.id.favButton);
@@ -185,13 +185,13 @@ public class DetailActivity extends AppCompatActivity {
                             else {
                                 String toastComentarioReducido = comentarioEditText.getText().toString().trim();
                                 if (toastComentarioReducido.length() > 30) {
-                                    toastComentarioReducido = toastComentarioReducido.substring(0, 30).replace("\n"," ");
+                                    toastComentarioReducido = toastComentarioReducido.substring(0, 30);
                                     toastComentarioReducido += "...";
                                 }
                                 Toast.makeText(getApplicationContext(), "Gasolinera favorita añadida con comentario: " +
-                                        toastComentarioReducido, Toast.LENGTH_LONG).show();
+                                        toastComentarioReducido.replace("\n"," "), Toast.LENGTH_LONG).show();
                                 txtComentario.setVisibility(View.VISIBLE);
-                                comentario.setVerticalScrollBarEnabled(true);
+                                //comentario.setVerticalScrollBarEnabled(true);
                                 comentario.setText(comentarioEditText.getText());
                                 favButton.setImageResource(R.drawable.favorito_activado);
                                 favButton.setTag(R.drawable.favorito_activado);
@@ -240,9 +240,9 @@ public class DetailActivity extends AppCompatActivity {
                         //Cambiamos la interfaz para que se refleje la gasolinera eliminada
                         favButton.setImageResource(R.drawable.favorito_desactivado);
                         favButton.setTag(R.drawable.favorito_desactivado);
-                        txtComentario.setVisibility(View.INVISIBLE);
                         gasolineraEsFavorita = false;
                         Toast.makeText(getApplicationContext(), "gasolinera eliminada", Toast.LENGTH_LONG).show();
+                        txtComentario.setVisibility(View.INVISIBLE);
                         comentario.setText("");
                         //Cerramos la ventana de dialogo
                         alertDialogConfirmacion.dismiss();
