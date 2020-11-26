@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.List;
@@ -75,9 +76,10 @@ public class DetailActivity extends AppCompatActivity {
         TextView precioGasoleoA = findViewById(R.id.precioGasoleoAText);
         TextView precioGasoleo95 = findViewById(R.id.precioGasoleo95Text);
         ImageView logo = findViewById(R.id.gasolineraIcon);
-        //txtComentario.setVisibility(View.GONE);
+        txtComentario = findViewById(R.id.txtComentario);
         comentario = findViewById(R.id.comentarioText);
         comentario.setMovementMethod(new ScrollingMovementMethod());
+        comentario.setVerticalScrollBarEnabled(true);
         g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
 
         favButton = findViewById(R.id.favButton);
@@ -92,7 +94,8 @@ public class DetailActivity extends AppCompatActivity {
             favButton.setImageResource(R.drawable.favorito_activado); // icono favorito activado
             favButton.setTag(R.drawable.favorito_activado);
             gasolineraEsFavorita = true;
-            comentario.setText("Comentario:\n" + gFavorita.getComentario());
+            txtComentario.setVisibility(View.VISIBLE);
+            comentario.setText(gFavorita.getComentario());
         } else {
             // no existe la gasolinera favorita
             favButton.setImageResource(R.drawable.favorito_desactivado); // icono favorito activado
@@ -187,9 +190,9 @@ public class DetailActivity extends AppCompatActivity {
                                 }
                                 Toast.makeText(getApplicationContext(), "Gasolinera favorita añadida con comentario: " +
                                         toastComentarioReducido, Toast.LENGTH_LONG).show();
-                                //txtComentario.setVisibility(View.VISIBLE);
-                                //txtComentario.setTextColor(000000);
-                                comentario.setText("Comentario:\n" + comentarioEditText.getText());
+                                txtComentario.setVisibility(View.VISIBLE);
+                                comentario.setVerticalScrollBarEnabled(true);
+                                comentario.setText(comentarioEditText.getText());
                                 favButton.setImageResource(R.drawable.favorito_activado);
                                 favButton.setTag(R.drawable.favorito_activado);
                                 gasolineraEsFavorita = true;
@@ -237,6 +240,7 @@ public class DetailActivity extends AppCompatActivity {
                         //Cambiamos la interfaz para que se refleje la gasolinera eliminada
                         favButton.setImageResource(R.drawable.favorito_desactivado);
                         favButton.setTag(R.drawable.favorito_desactivado);
+                        txtComentario.setVisibility(View.INVISIBLE);
                         gasolineraEsFavorita = false;
                         Toast.makeText(getApplicationContext(), "gasolinera eliminada", Toast.LENGTH_LONG).show();
                         comentario.setText("");
