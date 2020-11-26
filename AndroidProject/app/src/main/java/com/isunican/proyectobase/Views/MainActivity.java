@@ -214,9 +214,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 creaVentanaAnhadirTarjetaDescuento();
                 break;
             case R.id.filtarGasolinerasFavoritas:
-                Intent favIntent = new Intent(MainActivity.this, FiltroFavoritosActivity.class);
-                startActivity(favIntent);
-                creaVentanaFavoritosVacios(); //TODO: activar esta linea SOLO cuando la lista este vacia
+                if(AppDatabase.getInstance(this).gasolineraFavoritaDAO().getAll().isEmpty())
+                {
+                    creaVentanaFavoritosVacios();
+                } else {
+                    Intent favIntent = new Intent(MainActivity.this, FiltroFavoritosActivity.class);
+                    startActivity(favIntent);
+                }
                 break;
             default:
                 Log.d("MIGUEL", "Default en switch");
