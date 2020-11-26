@@ -4,7 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -88,9 +87,6 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
     // Caja de anhadir/modifica comentario
     TextView comentarioEditText;
     Gasolinera gasolineraAModificar;
-
-    // Numero de caracteres máximo en un comentario
-    final static int NUM_CARACTERES_MAXIMO_COMENTARIO = 240;
 
 
     /**
@@ -403,7 +399,8 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if(comentarioEditText.getText().length()>NUM_CARACTERES_MAXIMO_COMENTARIO)
+                        if(comentarioEditText.getText().length()>
+                                DialogoComentarioGasolineraFavorita.getNumCaracteresMaximoComentario())
                             comentarioEditText.setError("El comentario debe ser menor de 240 carácteres");
                         else {
                             gasolineraAModificar = gDAO;
@@ -421,23 +418,8 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         alertDialogBuilder.show();
 
         // Caracteres totales escritos
-        final TextView textNumCaracteresActual = view.findViewById(R.id.textNumCaracteresActual);
-        final TextView textNumCaracteresTotal = view.findViewById(R.id.textNumCaracteresTotal);
-        textNumCaracteresTotal.setText("/"+NUM_CARACTERES_MAXIMO_COMENTARIO);
-        comentarioEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        DialogoComentarioGasolineraFavorita.cambiaNumeroCaracteresActual(view, comentarioEditText);
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int numCaracteresActual = comentarioEditText.getText().length();
-                textNumCaracteresActual.setText(Integer.toString(numCaracteresActual));
-                if(numCaracteresActual>NUM_CARACTERES_MAXIMO_COMENTARIO)
-                    textNumCaracteresActual.setTextColor(Color.RED);
-            }
-            @Override
-            public void afterTextChanged(Editable s) {}
-        });
     }
     public class ThreadModificaGasolineras implements Runnable{
         public ThreadModificaGasolineras(){
