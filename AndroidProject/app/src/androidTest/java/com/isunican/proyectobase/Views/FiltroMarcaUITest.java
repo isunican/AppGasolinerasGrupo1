@@ -33,7 +33,6 @@ public class FiltroMarcaUITest {
     public IntentsTestRule<MainActivity> activityRule =
             new IntentsTestRule<>(MainActivity.class);
 
-
     @Test
     public void filtroTipoMarcaTest()  {
         //Caso IVF.1.a: campo con la marca correcta
