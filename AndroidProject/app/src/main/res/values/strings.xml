@@ -41,7 +41,9 @@
     <string name="filtrar_favoritos">Filtrar favoritos</string>
     <string name="filtrar_precioMaximo">Filtrar por precio máximo</string>
     <string name="mensaje_info_pmax">No hay ninguna gasolinera disponible</string>
-    <string name="mensaje_error_pmax">El campo precio es obligatorio</string>
+    <string name="mensaje_error_pmaxVacio">El campo precio es obligatorio</string>
+    <string name="mensaje_error_pmaxCero">El precio debe ser mayor que cero</string>
+    <string name="mensaje_error_pmaxCarcaterNovalido">Precio no válido</string>
     <!-- El nombre de filtrar por marca de gasolinera no cabía en el panel lateral-->
     <string name="navigation_drawer_open">Abrir drawer</string>
     <string name="navigation_drawer_close">Cerrar drawer</string>
