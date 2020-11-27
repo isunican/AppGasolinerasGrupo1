@@ -3,14 +3,12 @@ package com.isunican.proyectobase.Views;
 import android.widget.ListView;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.R;
 
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,15 +22,18 @@ import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withSpinnerText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertTrue;
+
+
+/*
+ * @author: Carolay Corales
+ * Clase de prueba de interfaz de filtrar por precio maximo
+ */
 
 @RunWith(AndroidJUnit4.class)
 public class FiltroPrecioMaximoUITest {
