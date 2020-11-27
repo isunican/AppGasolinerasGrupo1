@@ -296,14 +296,14 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
                         }
                         else {
                             if (textMarcaFavDialog.getText().toString().equals("") && textLocalidadFavDialog.getText().toString().equals("")) {
-                                listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.getGasolinerasFavoritas();
+                                listaActual = presenterGasolinerasFavoritas.getGasolinerasFavoritas();
 
                             } else if (textMarcaFavDialog.getText().toString().equals("")) {
-                                listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtrarGasolinerasFavLocal(textLocalidadFavDialog.getText().toString());
+                                listaActual =  presenterGasolinerasFavoritas.filtrarGasolinerasFavLocal(textLocalidadFavDialog.getText().toString());
                             } else if (textLocalidadFavDialog.getText().toString().equals("")) {
-                                listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtrarGasolinerasFavMarca(textMarcaFavDialog.getText().toString());
+                                listaActual = presenterGasolinerasFavoritas.filtrarGasolinerasFavMarca(textMarcaFavDialog.getText().toString());
                             } else {
-                                listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtraGasolinerasFavAmbos(textMarcaFavDialog.getText().toString(), textLocalidadFavDialog.getText().toString());
+                                listaActual = presenterGasolinerasFavoritas.filtraGasolinerasFavAmbos(textMarcaFavDialog.getText().toString(), textLocalidadFavDialog.getText().toString());
                             }
 
                             adapterFavoritas = new GasolineraArrayAdapter(FiltroFavoritosActivity.this, 0, listaActual);
