@@ -49,7 +49,7 @@ public class FiltroPrecioMaximoUITest {
         onView(withText("Filtrar por precio máximo")).perform(click());
         onView(withId(R.id.textNumberPrecioMax)).perform(typeText("0"), closeSoftKeyboard());
         onView(withText("ACEPTAR")).perform(click());
-        onView(withId(R.id.textNumberPrecioMax)).check(matches(hasErrorText("El campo precio es obligatorio")));
+        onView(withId(R.id.textNumberPrecioMax)).check(matches(hasErrorText("El precio debe ser mayor que cero")));
         onView(withText("CANCELAR")).perform(click());
 
         //Caso X: Error (No introduce precio)
@@ -65,7 +65,7 @@ public class FiltroPrecioMaximoUITest {
         onView(withText("Filtrar por precio máximo")).perform(click());
         onView(withId(R.id.textNumberPrecioMax)).perform(typeText("1...0"), closeSoftKeyboard());
         onView(withText("ACEPTAR")).perform(click());
-        onView(withId(R.id.textNumberPrecioMax)).check(matches(hasErrorText("Precio no valido")));
+        onView(withId(R.id.textNumberPrecioMax)).check(matches(hasErrorText("Precio no válido")));
         onView(withText("CANCELAR")).perform(click());
 
         //Caso x: Error (Uso de caracteres no validos en el precio).
@@ -73,7 +73,7 @@ public class FiltroPrecioMaximoUITest {
         onView(withText("Filtrar por precio máximo")).perform(click());
         onView(withId(R.id.textNumberPrecioMax)).perform(typeText("1.0,0"), closeSoftKeyboard());
         onView(withText("ACEPTAR")).perform(click());
-        onView(withId(R.id.textNumberPrecioMax)).check(matches(hasErrorText("Precio no valido")));
+        onView(withId(R.id.textNumberPrecioMax)).check(matches(hasErrorText("Precio no válido")));
         onView(withText("CANCELAR")).perform(click());
 
         //Caso x: Error (Uso de caracteres no validos en el precio).
@@ -81,7 +81,15 @@ public class FiltroPrecioMaximoUITest {
         onView(withText("Filtrar por precio máximo")).perform(click());
         onView(withId(R.id.textNumberPrecioMax)).perform(typeText("1,0,9"), closeSoftKeyboard());
         onView(withText("ACEPTAR")).perform(click());
-        onView(withId(R.id.textNumberPrecioMax)).check(matches(hasErrorText("Precio no valido")));
+        onView(withId(R.id.textNumberPrecioMax)).check(matches(hasErrorText("Precio no válido")));
+        onView(withText("CANCELAR")).perform(click());
+
+        //Caso x: Error (Uso de caracteres no validos en el precio).
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+        onView(withText("Filtrar por precio máximo")).perform(click());
+        onView(withId(R.id.textNumberPrecioMax)).perform(typeText("."), closeSoftKeyboard());
+        onView(withText("ACEPTAR")).perform(click());
+        onView(withId(R.id.textNumberPrecioMax)).check(matches(hasErrorText("Precio no válido")));
         onView(withText("CANCELAR")).perform(click());
 
         //Caso X: Exito (Se aplica el filtro correctamente)
@@ -119,7 +127,7 @@ public class FiltroPrecioMaximoUITest {
         onView(withText("Filtrar por precio máximo")).perform(click());
         onView(withId(R.id.spinnerFiltroPrecio)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Gasolina95"))).inRoot(isPlatformPopup()).perform(click());
-        onView(withId(R.id.textNumberPrecioMax)).perform(typeText("0.9"), closeSoftKeyboard());
+        onView(withId(R.id.textNumberPrecioMax)).perform(typeText("0.1"), closeSoftKeyboard());
         onView(withText("ACEPTAR")).perform(click());
         onView(withText("No hay ninguna gasolinera disponible")).check(matches(isDisplayed()));
         onView(withText("OK")).perform(click());
