@@ -192,7 +192,7 @@ public class DetailActivity extends AppCompatActivity {
                                     toastComentarioReducido += "...";
                                 }
                                 Toast.makeText(getApplicationContext(), "Gasolinera favorita añadida con comentario: " +
-                                        toastComentarioReducido.replace("\n"," "), Toast.LENGTH_LONG).show();
+                                        toastComentarioReducido.replaceAll("[\n]+","\n"), Toast.LENGTH_LONG).show();
                                 txtComentario.setVisibility(View.VISIBLE);
                                 comentario.setText(comentarioEditText.getText());
                                 comentario.setMovementMethod(new ScrollingMovementMethod());
