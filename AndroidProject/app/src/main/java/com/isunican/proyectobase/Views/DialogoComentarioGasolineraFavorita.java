@@ -12,6 +12,10 @@ public class DialogoComentarioGasolineraFavorita {
 
     final static int NUM_CARACTERES_MAXIMO_COMENTARIO = 240;
 
+    private DialogoComentarioGasolineraFavorita(){
+        // no es necesario
+    }
+
     public static int getNumCaracteresMaximoComentario(){
         return NUM_CARACTERES_MAXIMO_COMENTARIO;
     }
