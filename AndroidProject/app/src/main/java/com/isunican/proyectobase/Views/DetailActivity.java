@@ -78,8 +78,7 @@ public class DetailActivity extends AppCompatActivity {
         ImageView logo = findViewById(R.id.gasolineraIcon);
         txtComentario = findViewById(R.id.txtComentario);
         comentario = findViewById(R.id.comentarioText);
-        comentario.setMovementMethod(new ScrollingMovementMethod());
-        //comentario.setVerticalScrollBarEnabled(true);
+
         g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
 
         favButton = findViewById(R.id.favButton);
@@ -96,6 +95,10 @@ public class DetailActivity extends AppCompatActivity {
             gasolineraEsFavorita = true;
             txtComentario.setVisibility(View.VISIBLE);
             comentario.setText(gFavorita.getComentario());
+            comentario.setMovementMethod(new ScrollingMovementMethod());
+            //comentario.setFocusableInTouchMode(true);
+            comentario.setVerticalScrollBarEnabled(true);
+            comentario.setScrollbarFadingEnabled(false);
         } else {
             // no existe la gasolinera favorita
             favButton.setImageResource(R.drawable.favorito_desactivado); // icono favorito activado
@@ -191,8 +194,11 @@ public class DetailActivity extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(), "Gasolinera favorita añadida con comentario: " +
                                         toastComentarioReducido.replace("\n"," "), Toast.LENGTH_LONG).show();
                                 txtComentario.setVisibility(View.VISIBLE);
-                                //comentario.setVerticalScrollBarEnabled(true);
                                 comentario.setText(comentarioEditText.getText());
+                                comentario.setMovementMethod(new ScrollingMovementMethod());
+                                //comentario.setFocusableInTouchMode(true);
+                                comentario.setVerticalScrollBarEnabled(true);
+                                comentario.setScrollbarFadingEnabled(false);
                                 favButton.setImageResource(R.drawable.favorito_activado);
                                 favButton.setTag(R.drawable.favorito_activado);
                                 gasolineraEsFavorita = true;

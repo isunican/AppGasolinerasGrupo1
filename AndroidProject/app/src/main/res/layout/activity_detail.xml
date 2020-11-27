@@ -88,36 +88,19 @@
             android:id="@+id/txtComentario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="10"
+            android:layout_weight="1"
             android:text="Comentario:"
-            android:visibility="gone"/>
+            android:textStyle="bold"
+            android:visibility="invisible" />
 
-        <ScrollView
-            android:id="@+id/scroll"
+        <TextView
+            android:id="@+id/comentarioText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1000000"
-            android:scrollbarStyle="outsideOverlay"
-            android:visibility="visible">
-            //android:fadeScrollbars="false"
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/comentarioText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="10"
-                    android:elegantTextHeight="false"
-                    android:maxHeight="120dp" />
-            </LinearLayout>
-        </ScrollView>
-
-
+            android:layout_weight="20"
+            android:elegantTextHeight="false"
+            android:fadeScrollbars="false"
+            android:maxHeight="120dp"
+            android:scrollbars="vertical" />
     </LinearLayout>
-
 </RelativeLayout>
