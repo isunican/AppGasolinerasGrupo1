@@ -1,10 +1,13 @@
 package com.isunican.proyectobase.Views;
 
+import android.widget.ListView;
+
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.R;
 
 import org.junit.Assert;
@@ -40,7 +43,7 @@ public class FiltroPrecioMaximoUITest {
 
     @Test
     public void filtroPrecioMaximoTest(){
-        //Caso X: El precio es 0
+        //Caso X: Error (Precio introducido negativo o 0)
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
         onView(withText("Filtrar por precio máximo")).perform(click());
         onView(withId(R.id.textNumberPrecioMax)).perform(typeText("0"), closeSoftKeyboard());
@@ -48,8 +51,7 @@ public class FiltroPrecioMaximoUITest {
         onView(withId(R.id.textNumberPrecioMax)).check(matches(hasErrorText("El campo precio es obligatorio")));
         onView(withText("CANCELAR")).perform(click());
 
-
-        //Caso X: El campo precio esta vacio
+        //Caso X: Error (No introduce precio)
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
         onView(withText("Filtrar por precio máximo")).perform(click());
         onView(withId(R.id.textNumberPrecioMax)).perform(typeText(""), closeSoftKeyboard());
@@ -57,20 +59,61 @@ public class FiltroPrecioMaximoUITest {
         onView(withId(R.id.textNumberPrecioMax)).check(matches(hasErrorText("El campo precio es obligatorio")));
         onView(withText("CANCELAR")).perform(click());
 
-
-        //Caso X: Exito funciona correctamente
+        //Caso x: Error (Uso de caracteres no validos en el precio).
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
         onView(withText("Filtrar por precio máximo")).perform(click());
-        onView(withId(R.id.textNumberPrecioMax)).perform(typeText("0.1"), closeSoftKeyboard());
-        //Double precioMax = Double.parseDouble(activityRule.getActivity().editTextPrecioMax.getText().toString());
+        onView(withId(R.id.textNumberPrecioMax)).perform(typeText("1...0"), closeSoftKeyboard());
         onView(withText("ACEPTAR")).perform(click());
-        //onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listViewGasolineras)).atPosition(0).perform(click());
-       // Double f = Double.parseDouble(activityRule.getActivity().getString(R.id.precioGasoleo95Text));
-       // assertTrue(f >= precioMax);
+        onView(withId(R.id.textNumberPrecioMax)).check(matches(hasErrorText("Precio no valido")));
+        onView(withText("CANCELAR")).perform(click());
 
+        //Caso x: Error (Uso de caracteres no validos en el precio).
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+        onView(withText("Filtrar por precio máximo")).perform(click());
+        onView(withId(R.id.textNumberPrecioMax)).perform(typeText("1.0,0"), closeSoftKeyboard());
+        onView(withText("ACEPTAR")).perform(click());
+        onView(withId(R.id.textNumberPrecioMax)).check(matches(hasErrorText("Precio no valido")));
+        onView(withText("CANCELAR")).perform(click());
 
+        //Caso x: Error (Uso de caracteres no validos en el precio).
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+        onView(withText("Filtrar por precio máximo")).perform(click());
+        onView(withId(R.id.textNumberPrecioMax)).perform(typeText("1,0,9"), closeSoftKeyboard());
+        onView(withText("ACEPTAR")).perform(click());
+        onView(withId(R.id.textNumberPrecioMax)).check(matches(hasErrorText("Precio no valido")));
+        onView(withText("CANCELAR")).perform(click());
 
-        //Caso X: No hay ninguna gasolinera con esos parametros (Comprobamos que dialogo se mantiene con los datos)
+        //Caso X: Exito (Se aplica el filtro correctamente)
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+        onView(withText("Filtrar por precio máximo")).perform(click());
+        onView(withId(R.id.textNumberPrecioMax)).perform(typeText("0.9"), closeSoftKeyboard());
+        //Precio introducido
+        Double precioDieselIntro =  Double.parseDouble(activityRule.getActivity().editTextPrecioMax.getText().toString());
+        onView(withText("ACEPTAR")).perform(click());
+        //Guarda la gasolinera
+        ListView listViewAux1 = activityRule.getActivity().findViewById(R.id.listViewGasolineras);
+        Gasolinera gDiesel = (Gasolinera) listViewAux1.getAdapter().getItem(0);
+        Double precioDiesel = gDiesel.getGasoleoA();
+        assertTrue(precioDieselIntro >= precioDiesel);
+
+        //Caso X: Éxito (Se aplica el filtro correctamente tras un filtrado posterior, mostrando únicamente el resultado del último filtro)
+        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+        onView(withText("Filtrar por precio máximo")).perform(click());
+        onView(withId(R.id.spinnerFiltroPrecio)).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("Gasolina95"))).inRoot(isPlatformPopup()).perform(click());
+        onView(withId(R.id.textNumberPrecioMax)).perform(typeText("1.1"), closeSoftKeyboard());
+        //Precio introducido
+        Double precioGasolina95Intro =  Double.parseDouble(activityRule.getActivity().editTextPrecioMax.getText().toString());
+        onView(withText("ACEPTAR")).perform(click());
+        //Guarda la gasolinera
+        ListView listViewAux2 = activityRule.getActivity().findViewById(R.id.listViewGasolineras);
+        Gasolinera gGasolina = (Gasolinera) listViewAux2.getAdapter().getItem(0);
+        Double precioGasolina = gGasolina.getGasolina95();
+        assertTrue(precioGasolina95Intro >= precioGasolina);
+
+        /**
+        //Caso X: Error (El filtro aplicado no devuelve gasolineras)
+         Este caso no se producira nunca porque hay gasolineras con precios negativos
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
         onView(withText("Filtrar por precio máximo")).perform(click());
         onView(withId(R.id.spinnerFiltroPrecio)).perform(click());
@@ -81,5 +124,6 @@ public class FiltroPrecioMaximoUITest {
         onView(withText("OK")).perform(click());
         onView(withId(R.id.textNumberPrecioMax)).check(matches(withText("0.9")));
         onView(withId(R.id.spinnerFiltroPrecio)).check(matches(withSpinnerText("Gasolina95")));
+         **/
     }
 }
