@@ -19,6 +19,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -83,9 +84,10 @@ public class AnhadeGasolineraFavoritaUITest {
         onView(withId(R.id.favButton)).perform(click());
         // Escribimos un comentario
         onView(withId(R.id.textBox_anhadeComentario)).perform(typeText(COMENTARIOFUERALIMITE), closeSoftKeyboard());
-        // Comprobamos que el contador de caracteres es de 241 y color rojo
+        // Comprobamos que el contador de caracteres es de 241
         onView(withId(R.id.textNumCaracteresActual)).check(matches(withText("241")));
-        // TODO onView(withId(R.id.textNumCaracteresActual)).check(matches(hasTextColor(Color.RED)));
+        // Comprobamos que el texto a cambiado a color rojo
+        onView(withId(R.id.textNumCaracteresActual)).check(matches(hasTextColor(R.color.rojo)));
         // Pulsamos guardar
         onView(withId(android.R.id.button1)).perform(click());
         // Obtenemos mensaje de error
