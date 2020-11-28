@@ -31,8 +31,6 @@ import android.util.DisplayMetrics;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 import android.util.Log;
@@ -74,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     List<Gasolinera>listaGasolinerasActual;
     List<Gasolinera>listaGasolinerasDAO;
     //Lista con el filtro aplicado
-    ArrayList<Gasolinera> currentList;
+    List<Gasolinera> currentList;
 
     // Vista de lista y adaptador para cargar datos en ella
     ListView listViewGasolineras;
@@ -275,20 +273,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 bpm.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        List<Gasolinera> gasolinerasFiltradas = null;
-
                         //Error si se hay mas de un punto, coma o un punto y coma a la vez
-                        if (!caracterValidos(editTextPrecioMax.getText().toString()) || (editTextPrecioMax.getText().toString().length() == 1 && editTextPrecioMax.getText().toString().replaceAll(",",".").equals("."))) {
+                        if (!caracterValidos(editTextPrecioMax.getText().toString().replace(",",".")) || (editTextPrecioMax.getText().toString().length() == 1 && editTextPrecioMax.getText().toString().replace(",",".").equals("."))) {
                             editTextPrecioMax.setError(getResources().getString(R.string.mensaje_error_pmaxCarcaterNovalido));
 
                         //Error si el campo precio esta vacio o es 0
                         }else if(editTextPrecioMax.getText().toString().isEmpty()){
                             editTextPrecioMax.setError(getResources().getString(R.string.mensaje_error_pmaxVacio));
-                        } else if(Double.parseDouble(editTextPrecioMax.getText().toString().replaceAll(",",".")) <= 0 ){
+                        } else if(Double.parseDouble(editTextPrecioMax.getText().toString().replace(",",".")) <= 0 ){
                             editTextPrecioMax.setError(getResources().getString(R.string.mensaje_error_pmaxCero));
 
                         }else{
-                            double precio=Double.parseDouble(editTextPrecioMax.getText().toString().replaceAll(",","."));
+                            double precio=Double.parseDouble(editTextPrecioMax.getText().toString().replace(",","."));
                             String tipo =spinnerPrecioMax.getSelectedItem().toString();
                             try{
                                 currentList = presenterGasolineras.filtrarGasolineraPorPrecioMaximo(tipo, listaGasolinerasActual,precio);
@@ -332,9 +328,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     public boolean caracterValidos(String textoPrecio){
         //Numero de puntos en el string
-        int numPuntos = contarCaracteres(editTextPrecioMax.getText().toString(), '.');
+        int numPuntos = contarCaracteres(textoPrecio, '.');
         //Numero de comas en el string
-        int numComas =  contarCaracteres(editTextPrecioMax.getText().toString(), ',');
+        int numComas =  contarCaracteres(textoPrecio, ',');
         //Si hay un punto y coma en el mismo string
         int numPuntoComa = numPuntos + numComas;
 

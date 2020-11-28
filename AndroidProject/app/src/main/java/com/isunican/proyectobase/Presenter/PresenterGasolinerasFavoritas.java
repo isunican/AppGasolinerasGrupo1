@@ -2,7 +2,6 @@ package com.isunican.proyectobase.Presenter;
 
 import com.isunican.proyectobase.DAO.GasolineraFavoritaDAO;
 import com.isunican.proyectobase.Utilities.ExtractorLocalidadUtil;
-import static com.isunican.proyectobase.Presenter.PresenterGasolineras.SANTANDER;
 import com.isunican.proyectobase.DAO.GasolineraDAO;
 import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.Model.GasolineraFavorita;
