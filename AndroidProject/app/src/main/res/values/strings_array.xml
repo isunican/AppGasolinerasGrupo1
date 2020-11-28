@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="tipos_gasolinas">
+        <item>Diesel</item>
+        <item>Gasolina95</item>
+    </string-array>
+</resources>

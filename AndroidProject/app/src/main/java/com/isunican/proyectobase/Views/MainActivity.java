@@ -29,7 +29,10 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 
+
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import android.util.Log;
@@ -38,6 +41,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -92,6 +96,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Adapter para la listView
     ArrayAdapter<String> dataAdapter;
 
+    EditText editTextPrecioMax;
+    Spinner spinnerPrecioMax;
     //Filtro
     String tipoGasolina;
 
@@ -145,11 +151,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
-
-
-
-
-
     }
 
     @Override
@@ -197,6 +198,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             creaVentanaFiltroTipoGasolina();
         }else if(item.getItemId()==R.id.button_test_anhadeTarjetaDescuento){
             creaVentanaAnhadirTarjetaDescuento();
+        }else if(item.getItemId() == R.id.button_test_filtroPrecioMaximo){
+            creaVentanaFiltroPrecio();
         }
         return true;
     }
@@ -213,6 +216,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.itemNuevaTarjetaDescuento:
                 creaVentanaAnhadirTarjetaDescuento();
                 break;
+            case R.id.filtarPrecioMaximo:
+                creaVentanaFiltroPrecio();
+                break;
             case R.id.filtarGasolinerasFavoritas:
                 if(AppDatabase.getInstance(this).gasolineraFavoritaDAO().getAll().isEmpty())
                 {
@@ -227,6 +233,148 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return false;
+    }
+
+    /**
+     * Ventana emergente que filtra las gasolineras por el precio maximo
+     * @Autor Carolay Corales
+     */
+
+    public void creaVentanaFiltroPrecio(){
+
+        // Definidos Inflater y View
+        LayoutInflater inflater = this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.activity_filtro_preciomax, null);
+
+        //Definidos los elementos
+        spinnerPrecioMax = view.findViewById(R.id.spinnerFiltroPrecio);
+        editTextPrecioMax = view.findViewById(R.id.textNumberPrecioMax);
+
+
+        //Adapter para el spinner
+        final ArrayAdapter<CharSequence> adpSpinner = ArrayAdapter.createFromResource(this,
+                R.array.tipos_gasolinas, android.R.layout.simple_spinner_item);
+
+        adpSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPrecioMax.setAdapter(adpSpinner);
+
+        // Creacion alertDialog
+        final AlertDialog alertDialogFiltroPrecio = new AlertDialog.Builder(this)
+                .setPositiveButton(getResources().getString(R.string.aceptar),null)
+                .setNegativeButton(getResources().getString(R.string.cancelar), null)
+                .setCancelable(false) //Impide que el dialogo se cierre si pulsas fuera del dialogo
+                .create();
+
+
+
+        // Definicion positive button
+        alertDialogFiltroPrecio.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button bpm = alertDialogFiltroPrecio.getButton(BTN_POSITIVO);
+                bpm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        List<Gasolinera> gasolinerasFiltradas = null;
+
+                        //Error si se hay mas de un punto, coma o un punto y coma a la vez
+                        if (!caracterValidos(editTextPrecioMax.getText().toString()) || (editTextPrecioMax.getText().toString().length() == 1 && editTextPrecioMax.getText().toString().replaceAll(",",".").equals("."))) {
+                            editTextPrecioMax.setError(getResources().getString(R.string.mensaje_error_pmaxCarcaterNovalido));
+
+                        //Error si el campo precio esta vacio o es 0
+                        }else if(editTextPrecioMax.getText().toString().isEmpty()){
+                            editTextPrecioMax.setError(getResources().getString(R.string.mensaje_error_pmaxVacio));
+                        } else if(Double.parseDouble(editTextPrecioMax.getText().toString().replaceAll(",",".")) <= 0 ){
+                            editTextPrecioMax.setError(getResources().getString(R.string.mensaje_error_pmaxCero));
+
+                        }else{
+                            double precio=Double.parseDouble(editTextPrecioMax.getText().toString().replaceAll(",","."));
+                            String tipo =spinnerPrecioMax.getSelectedItem().toString();
+                            try{
+                                currentList = presenterGasolineras.filtrarGasolineraPorPrecioMaximo(tipo, listaGasolinerasActual,precio);
+                                if(currentList.size() == 0){
+                                    //Opcion de cerrar el teclado cuando sale el dialogo de informacion
+                                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(editTextPrecioMax.getWindowToken(), 0);
+
+                                    //Ventana emergente informativa
+                                    creaVentanaInformativa();
+                                }else{
+                                    adapter = new GasolineraArrayAdapter(MainActivity.this, 0, currentList);
+                                    listViewGasolineras = findViewById(R.id.listViewGasolineras);
+                                    listViewGasolineras.setAdapter(adapter);
+                                    alertDialogFiltroPrecio.dismiss();
+                                }
+                            }catch(NullPointerException e) {
+                                Toast.makeText(getApplicationContext(), "Error al al leer gasolineras", Toast.LENGTH_LONG);
+                            }
+                        }
+
+
+
+                    }
+                });
+            }
+        });
+
+        //Insertar elementos en el dialogo
+        alertDialogFiltroPrecio.setView(view);
+        alertDialogFiltroPrecio.show();
+    }
+
+    /**
+     * Metodo que comprueba si el caracter introducido  en el campo delprecio de filtro por
+     * precio maximo es valido
+     * @autor Carolay Corales
+     * @param textoPrecio
+     * @return true si el caracter no contiene mas de un punto, coma o que no contenga un punto y coma
+     * en el mismo string
+     */
+    public boolean caracterValidos(String textoPrecio){
+        //Numero de puntos en el string
+        int numPuntos = contarCaracteres(editTextPrecioMax.getText().toString(), '.');
+        //Numero de comas en el string
+        int numComas =  contarCaracteres(editTextPrecioMax.getText().toString(), ',');
+        //Si hay un punto y coma en el mismo string
+        int numPuntoComa = numPuntos + numComas;
+
+        if (numPuntos > 1 || numComas > 1 || numPuntoComa >=2) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Metodo que cuenta el numero de veces que aparece un caracter en un string
+     * @Autor Carolay Corales
+     * @param precio
+     * @param caracter
+     * @return
+     */
+    public int contarCaracteres(String precio, char caracter) {
+        int posicion, contador = 0;
+        posicion = precio.indexOf(caracter);
+        while (posicion != -1) {
+            contador++;
+            posicion = precio.indexOf(caracter, posicion + 1);
+        }
+        return contador;
+    }
+
+
+    /**
+     * Ventana que muestra un mensaje informativo
+     * @Autor: Carolay Corales
+     */
+    public void creaVentanaInformativa(){
+        //Crea el alertDialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.mensaje_info_pmax);
+        builder.setPositiveButton(R.string.ok, null);
+        //No permite cerrar la ventana si pulsas fuera del dialogo
+        builder.setCancelable(false);
+        builder.create();
+        builder.show();
     }
 
     /*

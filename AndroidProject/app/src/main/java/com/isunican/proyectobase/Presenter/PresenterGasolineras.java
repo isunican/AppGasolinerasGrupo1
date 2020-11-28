@@ -156,6 +156,31 @@ public class PresenterGasolineras {
         return gasolinerasFiltradas;
     }
 
+    public ArrayList<Gasolinera> filtrarGasolineraPorPrecioMaximo(String tipo, List<Gasolinera>lista, double precioMax){
+        if(lista==null) {
+            throw new NullPointerException();
+        }
+        ArrayList<Gasolinera>gasolinerasFiltradas=new ArrayList<>();
+        switch(tipo){
+            case "Gasolina95":
+                for (Gasolinera g : lista) {
+                    if(g.tiposGasolina().contains("Gasolina95") && g.getGasolina95()<=precioMax){
+                        gasolinerasFiltradas.add(g);
+                    }
+                }
+                break;
+            case "Diesel":
+                for (Gasolinera g: lista) {
+                    if(g.tiposGasolina().contains("Diesel")&& g.getGasoleoA()<=precioMax){
+                        gasolinerasFiltradas.add(g);
+                    }
+
+                }
+                break;
+        }
+        return gasolinerasFiltradas;
+    }
+
 
 
 }
