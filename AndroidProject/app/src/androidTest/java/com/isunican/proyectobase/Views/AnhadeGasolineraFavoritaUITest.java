@@ -91,7 +91,8 @@ public class AnhadeGasolineraFavoritaUITest {
         // Pulsamos guardar
         onView(withId(android.R.id.button1)).perform(click());
         // Comprobamos que el comentario sale correctamente en la gasolinera
-        onView(withId(R.id.comentarioText)).check(matches(withText("Comentario:\nComentario de texto")));
+        onView(withId(R.id.txtComentario)).check(matches(withText("Comentario:")));
+        onView(withId(R.id.comentarioText)).check(matches(withText("Comentario de texto")));
         // Se comprueba que el boton no ha cambiado
         onView(withId(R.id.favButton)).check(matches(withTagValue(Matchers.<Object>equalTo(R.drawable.favorito_activado))));
 
@@ -105,7 +106,7 @@ public class AnhadeGasolineraFavoritaUITest {
         // Pulsamos guardar
         onView(withId(android.R.id.button1)).perform(click());
         // Comprobamos que el comentario sale correctamente en la gasolinera
-        onView(withId(R.id.comentarioText)).check(matches(withText("Comentario:\n")));
+        onView(withId(R.id.txtComentario)).check(matches(withText("Comentario:")));
         // Se comprueba que el boton no ha cambiado
         onView(withId(R.id.favButton)).check(matches(withTagValue(Matchers.<Object>equalTo(R.drawable.favorito_activado))));
     }
