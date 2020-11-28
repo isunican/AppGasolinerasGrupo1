@@ -107,7 +107,8 @@ public class ModificaGasolineraFavoritaUITest {
         // Comprobamos que el comentario no ha cambiado
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listFavGasolineras)).atPosition(0).perform(click());
         // Comprobamos que el comentario sale correctamente en la gasolinera
-        onView(withId(R.id.comentarioText)).check(matches(withText("Comentario:\nComentario de texto")));
+        onView(withId(R.id.txtComentario)).check(matches(withText("Comentario:")));
+        onView(withId(R.id.comentarioText)).check(matches(withText("Comentario de texto")));
 
         Espresso.pressBack();
 
@@ -139,7 +140,7 @@ public class ModificaGasolineraFavoritaUITest {
         // Comprobamos que el comentario no ha cambiado
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listFavGasolineras)).atPosition(0).perform(click());
         // Comprobamos que el comentario sale correctamente en la gasolinera
-        onView(withId(R.id.comentarioText)).check(matches(withText("Comentario:\n")));
+        onView(withId(R.id.txtComentario)).check(matches(withText("Comentario:")));
 
         Espresso.pressBack();
 
@@ -156,7 +157,8 @@ public class ModificaGasolineraFavoritaUITest {
         // Comprobamos que el comentario no ha cambiado
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listFavGasolineras)).atPosition(1).perform(click());
         // Comprobamos que el comentario sale correctamente en la gasolinera
-        onView(withId(R.id.comentarioText)).check(matches(withText("Comentario:\nNuevo comentario de texto")));
+        onView(withId(R.id.txtComentario)).check(matches(withText("Comentario:")));
+        onView(withId(R.id.comentarioText)).check(matches(withText("Nuevo comentario de texto")));
 
         Espresso.pressBack();
 

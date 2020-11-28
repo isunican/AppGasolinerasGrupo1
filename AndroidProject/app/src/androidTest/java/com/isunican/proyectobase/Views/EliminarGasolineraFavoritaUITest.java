@@ -73,7 +73,7 @@ public class EliminarGasolineraFavoritaUITest {
         //UIT.1.b
         onView(withId(android.R.id.button2)).perform(click());
         onView(withId(R.id.favButton)).check(matches(withTagValue(Matchers.<Object>equalTo(R.drawable.favorito_activado))));
-        onView(withId(R.id.comentarioText)).check(matches(withText("Comentario:\n")));
+        onView(withId(R.id.txtComentario)).check(matches(withText("Comentario:")));
         //Comprobamos que la gasolinera no se elimina (botón sigue encendido y hay comentario añadido)
 
         //UIT.1.c
