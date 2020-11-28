@@ -51,6 +51,8 @@
     <string name="anhade_comentario">Añade un comentario</string>
     <string name="modifica_comentario">Modifica el comentario</string>
     <string name="Easter_Egg">Easter egg encontrado</string>
+    <string name="Easter_Egg_Counter1">Estás a</string>
+    <string name="Easter_Egg_Counter2"> clicks de encontrar algo...</string>
     <string name="Carbayo">Miguel Carbayo: </string>
     <string name="Adri">Adrian Celis: </string>
     <string name="Carol">Carolay B. Corales: </string>
