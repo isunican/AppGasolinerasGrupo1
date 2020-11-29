@@ -125,7 +125,7 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
 
         listaActual = presenterGasolinerasFavoritas.getGasolinerasFavoritas();
-        listaActual = presenterTarjetaDescuento.actualizarListaDePrecios(listaActual);
+        listaActual = aplicarTarjetasDeDescuento(listaActual);
         //Adapter al que se le pasa la lista de gasolineras favoritas
         adapterFavoritas = new GasolineraArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, listaActual);
 
@@ -145,6 +145,10 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
                 FiltroFavoritosActivity.this.startActivity(myIntent);
             }
         });
+    }
+
+    public List<Gasolinera> aplicarTarjetasDeDescuento(List<Gasolinera> gasolineras){
+        return presenterTarjetaDescuento.actualizarListaDePrecios(gasolineras);
     }
 
     /**
