@@ -39,6 +39,8 @@ public class DialogoComentarioGasolineraFavorita {
                 textNumCaracteresActual.setText(Integer.toString(numCaracteresActual));
                 if(numCaracteresActual>NUM_CARACTERES_MAXIMO_COMENTARIO)
                     textNumCaracteresActual.setTextColor(Color.RED);
+                else
+                    textNumCaracteresActual.setTextColor(Color.BLACK);
             }
             @Override
             public void afterTextChanged(Editable s) {
