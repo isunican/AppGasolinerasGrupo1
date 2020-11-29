@@ -13,17 +13,17 @@ import com.isunican.proyectobase.Model.GasolineraFavorita;
 
 @Database(entities = {Gasolinera.class, GasolineraFavorita.class}, version = 1, exportSchema = false)
 public abstract class AppDatabaseTest extends RoomDatabase {
-    private static AppDatabaseTest INSTANCE;
+    private static AppDatabaseTest instance;
 
     public abstract GasolineraDAO gasolineraDAO();
 
     public abstract GasolineraFavoritaDAO gasolineraFavoritaDAO();
 
     public static synchronized AppDatabaseTest getInstance(Context context){
-        if (INSTANCE == null) {
-            INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+        if (instance == null) {
+            instance = Room.databaseBuilder(context.getApplicationContext(),
                     AppDatabaseTest.class, "TestDatabase").allowMainThreadQueries().build();
         }
-        return INSTANCE;
+        return instance;
     }
 }
