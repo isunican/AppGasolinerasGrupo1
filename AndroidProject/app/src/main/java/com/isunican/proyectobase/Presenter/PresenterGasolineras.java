@@ -49,7 +49,7 @@ public class PresenterGasolineras {
 
     public Gasolinera getGasolineraPorIdess(int idess, GasolineraDAO gasolineraDAO){
         List<Gasolinera> lista = gasolineraDAO.findByIdEESS(idess);
-        if (lista.size()==0)
+        if (lista.isEmpty())
             return null;
         return lista.get(0);
     }

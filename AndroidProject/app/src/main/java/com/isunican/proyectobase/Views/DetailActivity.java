@@ -19,7 +19,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 import java.util.List;
@@ -96,7 +95,6 @@ public class DetailActivity extends AppCompatActivity {
             txtComentario.setVisibility(View.VISIBLE);
             comentario.setText(gFavorita.getComentario());
             comentario.setMovementMethod(new ScrollingMovementMethod());
-            //comentario.setFocusableInTouchMode(true);
             comentario.setVerticalScrollBarEnabled(true);
             comentario.setScrollbarFadingEnabled(false);
         } else {
