@@ -295,6 +295,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                                     listViewGasolineras = findViewById(R.id.listViewGasolineras);
                                     listViewGasolineras.setAdapter(adapter);
                                     alertDialogFiltroPrecio.dismiss();
+
+                                    //Mensaje de datos filtrados
+                                    Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.toast_filtro_aplicado), Toast.LENGTH_LONG);
+                                    toast.show();
                                 }
                             }catch(NullPointerException e) {
                                 Toast.makeText(getApplicationContext(), "Error al al leer gasolineras", Toast.LENGTH_LONG);
