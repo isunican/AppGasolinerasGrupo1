@@ -42,12 +42,12 @@ public class MensajeFavoritosVaciosUITest {
     public void testMensajeFavoritos(){
         onView(withId(R.id.activity_precio_gasolina_drawer)).perform(swipeRight());
         onView(withText("Filtrar favoritos")).perform(click());
-        //Comprobación de botones y texto de la interfaz.
+        //404010UIT.1.a Comprobación de botones y texto de la interfaz.
         onView(withId(android.R.id.button1)).check(matches(withText("ACEPTAR")));
         onView(withId(android.R.id.message)).check(matches(withText("La lista de gasolineras favoritas está vacía")));
-        //404010UIT.1.a (pulsar botón aceptar para cerrar)
+        //404010UIT.1.b (pulsar botón aceptar para cerrar)
         onView(withId(android.R.id.button1)).perform(click());
-        //404010UIT.1.b (pulsar fuera de la ventana para cerrar).
+        //404010UIT.1.c (pulsar fuera de la ventana para cerrar).
         onView(withId(R.id.activity_precio_gasolina_drawer)).perform(swipeRight());
         onView(withText("Filtrar favoritos")).perform(click());
         UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).click(0, 100);
