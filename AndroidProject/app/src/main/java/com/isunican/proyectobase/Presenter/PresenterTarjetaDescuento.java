@@ -6,7 +6,6 @@ import com.isunican.proyectobase.Model.TarjetaDescuentoPorLitro;
 import com.isunican.proyectobase.Model.TarjetaDescuentoPorcentaje;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 /**
  * -----------------------------------------------------
@@ -84,7 +83,7 @@ public class PresenterTarjetaDescuento {
     public List<Gasolinera> actualizarListaDePrecios(List<Gasolinera> gasolineras){
         if (gasolineras == null)
         {
-            return Collections.emptyList();
+            return new ArrayList<Gasolinera>();
         }
         for (Gasolinera g: gasolineras) {
             cambioPrecios(g);

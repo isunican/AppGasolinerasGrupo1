@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     List<Gasolinera>listaGasolinerasActual;
     List<Gasolinera>listaGasolinerasDAO;
     //Lista con el filtro aplicado
-    ArrayList<Gasolinera> currentList;
+    List<Gasolinera> currentList;
 
     // Vista de lista y adaptador para cargar datos en ella
     ListView listViewGasolineras;
@@ -356,7 +356,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         }
                         else{
                             //Actualiza la lista actual para solo contener las gasolineras con la marca seleccionada
-                            currentList= (ArrayList<Gasolinera>) presenterFiltroMarcas.filtraGasolineras(marcaTxt.getText().toString());
+                            currentList= presenterFiltroMarcas.filtraGasolineras(marcaTxt.getText().toString());
                             adapter = new GasolineraArrayAdapter(MainActivity.this, 0, currentList);
                             listViewGasolineras = findViewById(R.id.listViewGasolineras);
                             listViewGasolineras.setAdapter(adapter);
@@ -508,6 +508,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          * Metodo ejecutado de forma previa a la ejecucion de la tarea definida en el metodo doInBackground()
          * Muestra un diálogo de progreso
          */
+        @Deprecated
         @Override
         protected void onPreExecute() {
             // Nada que hacer
@@ -522,6 +523,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          * @param params
          * @return boolean
          */
+        @Deprecated
         @Override
         protected Boolean doInBackground(Void... params) {
             return presenterGasolineras.cargaDatosGasolineras();
@@ -543,7 +545,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         @Override
         protected void onPostExecute(Boolean res) {
             listaGasolinerasActual=presenterGasolineras.getGasolineras();
-            currentList = (ArrayList<Gasolinera>) presenterGasolineras.getGasolineras();
+            currentList = presenterGasolineras.getGasolineras();
 
             listaGasolinerasDAO=AppDatabase.getInstance(getApplicationContext()).gasolineraDAO().getAll();
             Toast toast;
