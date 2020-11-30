@@ -2,6 +2,11 @@ package com.isunican.proyectobase.Views;
 
 import android.view.Gravity;
 
+import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.action.GeneralLocation;
+import androidx.test.espresso.action.GeneralSwipeAction;
+import androidx.test.espresso.action.Press;
+import androidx.test.espresso.action.Swipe;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.espresso.contrib.NavigationViewActions;
@@ -35,18 +40,22 @@ public class MensajeFavoritosVaciosUITest {
     public ActivityTestRule<MainActivity>activityRule=new ActivityTestRule<>(MainActivity.class);
     @Test
     public void testMensajeFavoritos(){
-        //Comprobación de botones y texto de la interfaz 404010UIT.1.a
-        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+        onView(withId(R.id.activity_precio_gasolina_drawer)).perform(swipeRight());
         onView(withText("Filtrar favoritos")).perform(click());
+        //Comprobación de botones y texto de la interfaz.
         onView(withId(android.R.id.button1)).check(matches(withText("ACEPTAR")));
         onView(withId(android.R.id.message)).check(matches(withText("La lista de gasolineras favoritas está vacía")));
-        //404010UIT.1.b (pulsar botón aceptar para cerrar)
+        //404010UIT.1.a (pulsar botón aceptar para cerrar)
         onView(withId(android.R.id.button1)).perform(click());
-        //404010UIT.1.c (pulsar fuera de la ventana para cerrar)
-        openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+        //404010UIT.1.b (pulsar fuera de la ventana para cerrar).
+        onView(withId(R.id.activity_precio_gasolina_drawer)).perform(swipeRight());
         onView(withText("Filtrar favoritos")).perform(click());
         UiDevice.getInstance(InstrumentationRegistry.getInstrumentation()).click(0, 100);
         //Comprobamos que estamos en la vista original.
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
+    }
+    public static ViewAction swipeRight() {
+        return new GeneralSwipeAction(Swipe.FAST, GeneralLocation.CENTER_LEFT,
+                GeneralLocation.CENTER_RIGHT, Press.FINGER);
     }
 }

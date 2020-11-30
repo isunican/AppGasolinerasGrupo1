@@ -193,14 +193,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             creaVentanaFiltroTipoGasolina();
         }else if(item.getItemId()==R.id.button_test_anhadeTarjetaDescuento){
             creaVentanaAnhadirTarjetaDescuento();
-        }else if(item.getItemId()==R.id.button_test_filtro_favorito){
-            if(AppDatabase.getInstance(this).gasolineraFavoritaDAO().getAll().isEmpty())
-            {
-                creaVentanaFavoritosVacios();
-            } else {
-                Intent favIntent = new Intent(MainActivity.this, FiltroFavoritosActivity.class);
-                startActivity(favIntent);
-            }
         }
         return true;
     }
