@@ -5,9 +5,6 @@
 
     <!-- opcion para refrescar los datos -->
     <item
-        android:id="@+id/button_test_filtro_favorito"
-        android:title="@string/filtrar_favoritos" />
-    <item
         android:id="@+id/itemActualizar"
         android:title="@string/menuActualizar" />
 
@@ -31,4 +28,7 @@
     <item
         android:id="@+id/button_test_anhadeTarjetaDescuento"
         android:title="@string/slider_menu_text_nueva_tarjeta_descuento" />
+    <item
+        android:id="@+id/button_test_filtro_favorito"
+        android:title="@string/filtrar_favoritos" />
 </menu>
