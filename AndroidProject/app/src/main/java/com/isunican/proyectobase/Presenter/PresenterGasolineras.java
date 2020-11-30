@@ -135,12 +135,14 @@ public class PresenterGasolineras {
 
 
     /**
-     * Author: Jaime López-Agudo Higuera
-     * Filtro de gasolineras por tipo de combustible, filtra las gasolineras mostradas en funcion de @param.
+     *
+     * Filtro de gasolineras por tipo de combustible, filtra las gasolineras mostradas en funcion de un tipo de gasolina (tipo).
      * Hace uso de hasTipoGasolina() para determinar los tipos de gasolina de la gasolinera
      *
-     * @param tipo Tipo de gasolina buscada
-     * @return boolean
+     * @param tipo (String tipo de gasolina buscada)
+     * @param lista (List<Gasolinera>lista de gasolineras a filtrar)
+     * @return lista de gasolineras filtradas
+     * Autor: Jaime López-Agudo Higuera
      */
     public List<Gasolinera> filtraGasolinerasTipoCombustible(String tipo,List<Gasolinera>lista){
         if(lista==null){
@@ -156,6 +158,15 @@ public class PresenterGasolineras {
         return gasolinerasFiltradas;
     }
 
+    /**
+     * Método encargado de aplicar un filtro por precioMaximo a una lista (lista) y mostrar solo las gasolineras cuyo tipo
+     * de combustible (tipo) tenga un precio menor que un precio determinado (precioMax).
+     * @param tipo (String tipo de gasolina)
+     * @param lista (List<Gasolinera> lista a filtrar)
+     * @param precioMax (double precio máximo por el que filtrar)
+     * @return Lista de gasolineras filtradas
+     * Autor: Jaime López-Agudo Higuera
+     */
     public List<Gasolinera> filtrarGasolineraPorPrecioMaximo(String tipo, List<Gasolinera>lista, double precioMax){
         if(lista==null) {
             throw new NullPointerException();
