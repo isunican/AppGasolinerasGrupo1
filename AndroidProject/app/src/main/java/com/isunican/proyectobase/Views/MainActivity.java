@@ -149,6 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
         new CargaDatosGasolinerasTask(this).execute();
+
     }
 
     @Override
