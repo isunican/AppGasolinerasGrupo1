@@ -97,7 +97,7 @@ public class ModificaGasolineraFavoritaUITest {
     public void modificaFavorito() {
         anhadeGasolineras(); // añade dos gasolineras favoritas a la base de datos, para modificar su comentario posteriormente
 
-        // ID1: Cancelamos al modificar una gasolinera favorita
+        // UT.a: Cancelamos al modificar una gasolinera favorita
         // Hacemos clic en la primera gasolinera de la lista en el boton de modificar
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listFavGasolineras)).atPosition(0).
                 onChildView(withId(R.id.buttonModifica)).perform(click());
@@ -112,7 +112,7 @@ public class ModificaGasolineraFavoritaUITest {
 
         Espresso.pressBack();
 
-        // ID2: Guardamos al modificar una gasolinera favorita con comentario fuera de 240 caracteres
+        // UT.d: Guardamos al modificar una gasolinera favorita con comentario fuera de 240 caracteres
         // Hacemos clic en la primera gasolinera de la lista en el boton de modificar
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listFavGasolineras)).atPosition(0).
                 onChildView(withId(R.id.buttonModifica)).perform(click());
@@ -131,13 +131,13 @@ public class ModificaGasolineraFavoritaUITest {
 
         Espresso.pressBack();
 
-        // ID3: Guardamos al modificar una gasolinera favorita con comentario vacio
+        // UT.c: Guardamos al modificar una gasolinera favorita con comentario vacio
         // Hacemos clic en la primera gasolinera de la lista en el boton de modificar
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listFavGasolineras)).atPosition(0).
                 onChildView(withId(R.id.buttonModifica)).perform(click());
         // Comprobamos que en la caja de texto aparece el comentario antiguo
         onView(withId(R.id.textBox_modificaComentario)).check(matches(withText("Comentario de texto")));
-        // Escribimos un comentario
+        // Escribimos un comentario vacio
         onView(withId(R.id.textBox_modificaComentario)).perform(clearText(), closeSoftKeyboard());
         // Pulsamos guardar
         onView(withId(android.R.id.button1)).perform(click());
@@ -148,7 +148,7 @@ public class ModificaGasolineraFavoritaUITest {
 
         Espresso.pressBack();
 
-        // ID4: Guardamos al modificar una gasolinera favorita con comentario menor de 240 caracteres
+        // UT.b: Guardamos al modificar una gasolinera favorita con comentario menor de 240 caracteres
         // Hacemos clic en la primera gasolinera de la lista en el boton de modificar
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listFavGasolineras)).atPosition(1).
                 onChildView(withId(R.id.buttonModifica)).perform(click());
