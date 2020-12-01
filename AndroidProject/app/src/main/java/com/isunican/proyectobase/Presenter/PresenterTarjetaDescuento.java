@@ -6,7 +6,6 @@ import com.isunican.proyectobase.Model.TarjetaDescuentoPorLitro;
 import com.isunican.proyectobase.Model.TarjetaDescuentoPorcentaje;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 /**
  * -----------------------------------------------------
