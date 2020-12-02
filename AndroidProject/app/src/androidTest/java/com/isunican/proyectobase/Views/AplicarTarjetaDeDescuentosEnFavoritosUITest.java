@@ -82,6 +82,8 @@ public class AplicarTarjetaDeDescuentosEnFavoritosUITest {
 
     @Test
     public void compruebaPrecios() {
+        //UT404006-1.a
+        
         // Hacemos clic en la primera gasolinera de la lista
         onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listViewGasolineras)).atPosition(0).perform(click());
         // Hacemos clic en el botón de añadir favorito
