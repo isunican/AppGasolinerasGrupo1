@@ -548,10 +548,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //No se implementa porque en este caso no se necesita.
             }
 
-
             @Override
             public void afterTextChanged(Editable s) {dataAdapter.getFilter().filter(s);
-                     }
+            }
         });
         marcaListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
@@ -648,7 +647,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void updateListWithNewDiscountCard(){
         //Esto tiene que cambiar cuando se haga la historia de ver tarjetas de descuento porque tenemos que usar solo una tarjeta de desucento al tiempo
-        listaGasolinerasActual = presenterTarjetaDescuento.actualizarListaDePrecios((ArrayList<Gasolinera>)listaGasolinerasActual);
+        listaGasolinerasActual = presenterTarjetaDescuento.actualizarListaDePrecios(listaGasolinerasActual);
         adapter.notifyDataSetChanged();
     }
 
