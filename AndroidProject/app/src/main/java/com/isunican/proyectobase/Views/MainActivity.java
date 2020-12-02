@@ -14,7 +14,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -141,14 +140,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new CargaDatosGasolinerasTask(MainActivity.this).execute();
+                CargaDatosGasolinerasTask hilo = new CargaDatosGasolinerasTask(MainActivity.this);
+                Thread t = new Thread(hilo);
+                t.start();
+                hilo.onPostExecute(true);
             }
         });
 
         // Al terminar de inicializar todas las variables
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
-        new CargaDatosGasolinerasTask(this).execute();
+        CargaDatosGasolinerasTask hilo = new CargaDatosGasolinerasTask(MainActivity.this);
+        Thread t = new Thread(hilo);
+        t.start();
+        try {
+            t.join();
+            hilo.onPostExecute(true);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
 
     }
 
@@ -185,7 +195,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         if(item.getItemId()==R.id.itemActualizar){
             mSwipeRefreshLayout.setRefreshing(true);
-            new CargaDatosGasolinerasTask(this).execute();
+            CargaDatosGasolinerasTask hilo = new CargaDatosGasolinerasTask(MainActivity.this);
+            Thread t = new Thread(hilo);
+            t.start();
+            hilo.onPostExecute(true);
         }else if(item.getItemId() == R.id.itemInfo) {
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
             MainActivity.this.startActivity(myIntent);
@@ -654,12 +667,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * <p>
      * http://www.sgoliver.net/blog/tareas-en-segundo-plano-en-android-i-thread-y-asynctask/
      */
-    private class CargaDatosGasolinerasTask extends AsyncTask<Void, Void, Boolean> {
+    private class CargaDatosGasolinerasTask implements Runnable {
 
         Activity activity;
 
         /**
-         * Constructor de la tarea asincrona
+         * Constructor del hilo
          *
          * @param activity
          */
@@ -668,36 +681,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         /**
-         * onPreExecute
-         * <p>
-         * Metodo ejecutado de forma previa a la ejecucion de la tarea definida en el metodo doInBackground()
-         * Muestra un diálogo de progreso
-         */
-        @Deprecated
-        @Override
-        protected void onPreExecute() {
-            // Nada que hacer
-        }
-
-        /**
-         * doInBackground
+         * run
          * <p>
          * Tarea ejecutada en segundo plano
          * Llama al presenter para que lance el método de carga de los datos de las gasolineras
-         *
-         * @param params
-         * @return boolean
-         */
-        @Deprecated
+         * */
         @Override
-        protected Boolean doInBackground(Void... params) {
-            return presenterGasolineras.cargaDatosGasolineras();
+        public void run() {
+            presenterGasolineras.cargaDatosGasolineras();
         }
 
         /**
          * onPostExecute
          * <p>
-         * Se ejecuta al finalizar doInBackground
+         * Se ejecuta al finalizar run
          * Oculta el diálogo de progreso.
          * Muestra en una lista los datos de las gasolineras cargadas,
          * creando un adapter y pasándoselo a la lista.
@@ -707,24 +704,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          *
          * @param res
          */
-        @Override
         protected void onPostExecute(Boolean res) {
             listaGasolinerasActual=presenterGasolineras.getGasolineras();
             currentList = presenterGasolineras.getGasolineras();
 
-            listaGasolinerasDAO=AppDatabase.getInstance(getApplicationContext()).gasolineraDAO().getAll();
+            listaGasolinerasDAO = AppDatabase.getInstance(getApplicationContext()).gasolineraDAO().getAll();
             Toast toast;
 
             mSwipeRefreshLayout.setRefreshing(false);
 
             // Si se ha obtenido resultado en la tarea en segundo plano
-            if ( Boolean.TRUE.equals(res)) {
+            if (Boolean.TRUE.equals(res)) {
                 // Definimos el array adapter
-                adapter = new GasolineraArrayAdapter(activity, 0, presenterGasolineras.getGasolineras() );
+                adapter = new GasolineraArrayAdapter(activity, 0, presenterGasolineras.getGasolineras());
                 //Jaime ha estado aquí, actualizar  las gasolineras si ha cambiado el precio
                 for (Gasolinera gDao : listaGasolinerasDAO) {
-                    for(Gasolinera g : listaGasolinerasActual){
-                        if(gDao.equals(g) && gDao.getGasolina95()!=g.getGasolina95() && gDao.getGasoleoA()!=g.getGasoleoA()){
+                    for (Gasolinera g : listaGasolinerasActual) {
+                        if (gDao.equals(g) && gDao.getGasolina95() != g.getGasolina95() && gDao.getGasoleoA() != g.getGasoleoA()) {
                             gDao.setGasoleoA(g.getGasoleoA());
                             gDao.setGasolina95(g.getGasolina95());
                             AppDatabase.getInstance(getApplicationContext()).gasolineraDAO().update(gDao);
@@ -778,7 +774,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     MainActivity.this.startActivity(myIntent);
                 }
             });
-
         }
     }
 
