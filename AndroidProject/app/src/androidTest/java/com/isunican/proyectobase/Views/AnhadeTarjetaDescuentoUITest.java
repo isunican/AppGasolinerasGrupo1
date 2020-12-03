@@ -26,6 +26,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.RootMatchers.isPlatformPopup;
@@ -85,15 +86,16 @@ public class AnhadeTarjetaDescuentoUITest {
         // UIT.1.b: Campo de descuento vacio para descuento porcentual
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
         onView(withText("Añadir tarjeta descuento")).perform(click());
-        onView(withId(R.id.nombreTarjeta)).perform(typeText("Tarjeta de prueba porcentual vacía"), closeSoftKeyboard());
+        onView(withId(R.id.nombreTarjeta)).perform(replaceText("Tarjeta de prueba porcentual vacía"), closeSoftKeyboard());
         onView(withId(R.id.spnMarcas)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("CEPSA"))).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.spnTipoDescuento)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Porcentual"))).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.descuento)).perform(typeText(""),closeSoftKeyboard());
-        onView(withId(R.id.descuento)).check(matches(hasErrorText("El campo Descuento es obligatorio")));
         onView(withId(R.id.comentarios)).perform(typeText(""),closeSoftKeyboard());
         onView(withText("GUARDAR")).perform(click());
+        onView(withId(R.id.descuento)).check(matches(hasErrorText("El campo Descuento es obligatorio")));
+        onView(withText("CANCELAR")).perform(click());
         //TODO: comprobar que la tarjeta  no se ha añadido
 
 
@@ -104,7 +106,7 @@ public class AnhadeTarjetaDescuentoUITest {
         onView(withId(R.id.spnMarcas)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("CAMPSA"))).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.spnTipoDescuento)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("cts/L"))).inRoot(isPlatformPopup()).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("cts/Litro"))).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.descuento)).perform(typeText("7"),closeSoftKeyboard());
         onView(withId(R.id.comentarios)).perform(typeText(""),closeSoftKeyboard());
         onView(withText("GUARDAR")).perform(click());
@@ -114,15 +116,17 @@ public class AnhadeTarjetaDescuentoUITest {
         // UIT.2.b: Campo de descuento vacio para descuento de centimos/litro
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
         onView(withText("Añadir tarjeta descuento")).perform(click());
-        onView(withId(R.id.nombreTarjeta)).perform(typeText("Tarjeta de prueba por litro vacía"), closeSoftKeyboard());
+        onView(withId(R.id.nombreTarjeta)).perform(replaceText("Tarjeta de prueba por litro vacía"), closeSoftKeyboard());
         onView(withId(R.id.spnMarcas)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("CAMPSA"))).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.spnTipoDescuento)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("cts/L"))).inRoot(isPlatformPopup()).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("cts/Litro"))).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.descuento)).perform(typeText(""),closeSoftKeyboard());
-        onView(withId(R.id.descuento)).check(matches(hasErrorText("El campo Descuento es obligatorio")));
+
         onView(withId(R.id.comentarios)).perform(typeText(""),closeSoftKeyboard());
         onView(withText("GUARDAR")).perform(click());
+        onView(withId(R.id.descuento)).check(matches(hasErrorText("El campo Descuento es obligatorio")));
+        onView(withText("CANCELAR")).perform(click());
         //TODO: comprobar que la tarjeta  no se ha añadido
         //TODO: comprobar que aparece el mensaje de error
     }
