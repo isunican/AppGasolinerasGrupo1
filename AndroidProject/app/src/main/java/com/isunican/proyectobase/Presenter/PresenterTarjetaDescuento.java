@@ -6,8 +6,8 @@ import com.isunican.proyectobase.Model.TarjetaDescuentoPorLitro;
 import com.isunican.proyectobase.Model.TarjetaDescuentoPorcentaje;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
 /**
  * -----------------------------------------------------
  * Presenter utilizado para la gestion de tarjetas de
@@ -19,14 +19,27 @@ import java.util.List;
  */
 public class PresenterTarjetaDescuento {
 
+    private static PresenterTarjetaDescuento instance = null;
     private List<TarjetaDescuento> listaTarjetasDescuento;
 
     /**
      * Constructor que inicializa la tarjeta de descuentos
      * para que pueda se utilizada
      */
-    public PresenterTarjetaDescuento(){
+    private PresenterTarjetaDescuento(){
         this.listaTarjetasDescuento = new ArrayList<>();
+    }
+    // creador sincronizado para protegerse de posibles problemas  multi-hilo
+    // otra prueba para evitar instanciación múltiple
+    private static synchronized void createInstance() {
+        if (instance == null) {
+            instance = new PresenterTarjetaDescuento();
+        }
+    }
+
+    public static PresenterTarjetaDescuento getInstance() {
+        if (instance == null) createInstance();
+        return instance;
     }
 
     /**
@@ -84,12 +97,12 @@ public class PresenterTarjetaDescuento {
     public List<Gasolinera> actualizarListaDePrecios(List<Gasolinera> gasolineras){
         if (gasolineras == null)
         {
-            return Collections.emptyList();
+            return new ArrayList<>();
         }
         for (Gasolinera g: gasolineras) {
             cambioPrecios(g);
         }
-        return new ArrayList<>(gasolineras);
+        return gasolineras;
     }
 
     /**

@@ -1,16 +1,25 @@
 package com.isunican.proyectobase.Views;
 
+import android.widget.ListView;
+
+import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.intent.rule.IntentsTestRule;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.isunican.proyectobase.Model.Gasolinera;
+import com.isunican.proyectobase.Presenter.PresenterTarjetaDescuento;
 import com.isunican.proyectobase.R;
-import com.isunican.proyectobase.Views.MainActivity;
 
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
@@ -24,6 +33,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.hasErrorText;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 
@@ -33,6 +43,9 @@ public class AnhadeTarjetaDescuentoUITest {
     @Rule
     public IntentsTestRule<MainActivity> activityRule =
             new IntentsTestRule<>(MainActivity.class);
+
+    PresenterTarjetaDescuento presenterTarjetaDescuento = PresenterTarjetaDescuento.getInstance();
+
 
     @Test
     public void anahdeTarjetaDescuentoTest() {
@@ -52,7 +65,7 @@ public class AnhadeTarjetaDescuentoUITest {
         onView(withText("Añadir tarjeta descuento")).perform(click());
         onView(withId(R.id.nombreTarjeta)).perform(typeText("Tarjeta de prueba porcentual"), closeSoftKeyboard());
         onView(withId(R.id.spnMarcas)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("CAMPSA"))).inRoot(isPlatformPopup()).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("CEPSA"))).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.spnTipoDescuento)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Porcentual"))).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.descuento)).perform(typeText("25"),closeSoftKeyboard());
@@ -60,12 +73,21 @@ public class AnhadeTarjetaDescuentoUITest {
         onView(withText("GUARDAR")).perform(click());
         //TODO: comprobar que la tarjeta se ha añadido correctamente
 
+        // Vuelve a la Main Activity para comprobar los precios actualizados
+        List<Gasolinera> lista = new ArrayList<>();
+        ListView listView = activityRule.getActivity().findViewById(R.id.listViewGasolineras);
+        lista.add((Gasolinera) listView.getAdapter().getItem(0));
+        lista = presenterTarjetaDescuento.actualizarListaDePrecios(lista);
+        onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listViewGasolineras)).atPosition(0).onChildView(ViewMatchers.withId(R.id.textViewGasoleoA)).check(matches(withText(" "+lista.get(0).getGasoleoA()+"€")));
+        onData(anything()).inAdapterView(ViewMatchers.withId(R.id.listViewGasolineras)).atPosition(0).onChildView(ViewMatchers.withId(R.id.textViewGasolina95)).check(matches(withText(" "+lista.get(0).getGasolina95()+"€")));
+
+
         // UIT.1.b: Campo de descuento vacio para descuento porcentual
         openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getContext());
         onView(withText("Añadir tarjeta descuento")).perform(click());
         onView(withId(R.id.nombreTarjeta)).perform(typeText("Tarjeta de prueba porcentual vacía"), closeSoftKeyboard());
         onView(withId(R.id.spnMarcas)).perform(click());
-        onData(allOf(is(instanceOf(String.class)), is("CAMPSA"))).inRoot(isPlatformPopup()).perform(click());
+        onData(allOf(is(instanceOf(String.class)), is("CEPSA"))).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.spnTipoDescuento)).perform(click());
         onData(allOf(is(instanceOf(String.class)), is("Porcentual"))).inRoot(isPlatformPopup()).perform(click());
         onView(withId(R.id.descuento)).perform(typeText(""),closeSoftKeyboard());
