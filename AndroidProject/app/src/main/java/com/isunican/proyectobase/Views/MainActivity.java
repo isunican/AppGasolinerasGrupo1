@@ -120,6 +120,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         this.presenterGasolineras = new PresenterGasolineras();
         this.presenterTarjetaDescuento = PresenterTarjetaDescuento.getInstance();
+        //Esto impide que no se carge ese método para los tests(Hay otras soluciones, pero esta es la mas rapida)
+        List<TarjetaDescuento> tarjetas = presenterTarjetaDescuento.getListaDeTarjetasDelUsuario();
 
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
