@@ -32,6 +32,7 @@ import com.isunican.proyectobase.Model.Gasolinera;
 import com.isunican.proyectobase.Model.GasolineraFavorita;
 import com.isunican.proyectobase.Presenter.PresenterGasolineras;
 import com.isunican.proyectobase.Presenter.PresenterGasolinerasFavoritas;
+import com.isunican.proyectobase.Presenter.PresenterTarjetaDescuento;
 import com.isunican.proyectobase.R;
 import com.isunican.proyectobase.Utilities.ExtractorLocalidadUtil;
 import com.isunican.proyectobase.Utilities.ExtractorMarcasUtil;
@@ -58,7 +59,7 @@ import java.util.List;
 public class FiltroFavoritosActivity extends AppCompatActivity  {
 
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
-
+    PresenterTarjetaDescuento presenterTarjetaDescuento = PresenterTarjetaDescuento.getInstance();
     //Contexto de la aplicación
     Context contexto;
     //Presenter que gestiona las gasolineras
@@ -66,7 +67,7 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
     //Presenter que gestiona las gasolineras favoritas
     PresenterGasolinerasFavoritas presenterGasolinerasFavoritas;
     //Lista de las gasolineras favoritas actuales
-    ArrayList<Gasolinera> listaActual;
+    List<Gasolinera> listaActual;
 
     // Elemento de la activity. ListView que contendra las gasolineras favoritas
     ListView listViewFav;
@@ -123,15 +124,14 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.drawable.por_defecto_mod);
 
-
-        listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.getGasolinerasFavoritas();
+        listaActual = presenterGasolinerasFavoritas.getGasolinerasFavoritas();
+        listaActual = aplicarTarjetasDeDescuento(listaActual);
         //Adapter al que se le pasa la lista de gasolineras favoritas
         adapterFavoritas = new GasolineraArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, listaActual);
 
         //Inserta lista de gasolineras favoritas en la listView
         listViewFav = findViewById(R.id.listFavGasolineras);
         listViewFav.setAdapter(adapterFavoritas);
-
 
         listViewFav.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
@@ -145,10 +145,12 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
                 FiltroFavoritosActivity.this.startActivity(myIntent);
             }
         });
-
-
-
     }
+
+    public List<Gasolinera> aplicarTarjetasDeDescuento(List<Gasolinera> gasolineras){
+        return presenterTarjetaDescuento.actualizarListaDePrecios(gasolineras);
+    }
+
     /**
      * Clase privada que implementa la clase TextWatcher
      */
@@ -267,7 +269,6 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         textLocalidadFavDialog = view.findViewById(R.id.textLocalidadFavDialog);
         textMarcaFavDialog = view.findViewById(R.id.textMarcaFavDialog);
 
-
         //Adapters al que se les pasa la lista de marcas y localidades
         final ArrayList<String> marcasFavoritas = (ArrayList<String>) presenterGasolinerasFavoritas.getMarcasFavoritas();
         final ArrayList<String> localidadesFavoritas = (ArrayList<String>) presenterGasolinerasFavoritas.getLocalidadesFavoritas();
@@ -299,14 +300,14 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
                         }
                         else {
                             if (textMarcaFavDialog.getText().toString().equals("") && textLocalidadFavDialog.getText().toString().equals("")) {
-                                listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.getGasolinerasFavoritas();
+                                listaActual = presenterGasolinerasFavoritas.getGasolinerasFavoritas();
 
                             } else if (textMarcaFavDialog.getText().toString().equals("")) {
-                                listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtrarGasolinerasFavLocal(textLocalidadFavDialog.getText().toString());
+                                listaActual =  presenterGasolinerasFavoritas.filtrarGasolinerasFavLocal(textLocalidadFavDialog.getText().toString());
                             } else if (textLocalidadFavDialog.getText().toString().equals("")) {
-                                listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtrarGasolinerasFavMarca(textMarcaFavDialog.getText().toString());
+                                listaActual = presenterGasolinerasFavoritas.filtrarGasolinerasFavMarca(textMarcaFavDialog.getText().toString());
                             } else {
-                                listaActual = (ArrayList<Gasolinera>) presenterGasolinerasFavoritas.filtraGasolinerasFavAmbos(textMarcaFavDialog.getText().toString(), textLocalidadFavDialog.getText().toString());
+                                listaActual = presenterGasolinerasFavoritas.filtraGasolinerasFavAmbos(textMarcaFavDialog.getText().toString(), textLocalidadFavDialog.getText().toString());
                             }
 
                             adapterFavoritas = new GasolineraArrayAdapter(FiltroFavoritosActivity.this, 0, listaActual);
@@ -399,7 +400,8 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
                 b.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        if(comentarioEditText.getText().length()>240)
+                        if(comentarioEditText.getText().length()>
+                                DialogoComentarioGasolineraFavorita.getNumCaracteresMaximoComentario())
                             comentarioEditText.setError("El comentario debe ser menor de 240 carácteres");
                         else {
                             gasolineraAModificar = gDAO;
@@ -415,6 +417,10 @@ public class FiltroFavoritosActivity extends AppCompatActivity  {
         });
         alertDialogBuilder.setView(view);
         alertDialogBuilder.show();
+
+        // Caracteres totales escritos
+        DialogoComentarioGasolineraFavorita.cambiaNumeroCaracteresActual(view, comentarioEditText);
+
     }
     public class ThreadModificaGasolineras implements Runnable{
         public ThreadModificaGasolineras(){

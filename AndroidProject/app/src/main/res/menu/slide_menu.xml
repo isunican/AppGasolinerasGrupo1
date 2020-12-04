@@ -11,6 +11,9 @@
         <item  android:id="@+id/itemNuevaTarjetaDescuento"
             android:icon="@drawable/por_defecto"
             android:title="@string/slider_menu_text_nueva_tarjeta_descuento" />
+        <item android:id="@+id/filtarPrecioMaximo"
+            android:icon="@drawable/por_defecto"
+            android:title="@string/filtrar_precioMaximo"/>
         <item android:id="@+id/filtarGasolinerasFavoritas"
             android:icon="@drawable/por_defecto"
             android:title="@string/filtrar_favoritos"/>

@@ -3,12 +3,14 @@ package com.isunican.proyectobase.Presenter;
 import android.content.Context;
 
 import com.isunican.proyectobase.Model.Gasolinera;
+import com.isunican.proyectobase.Model.TarjetaDescuento;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -40,8 +42,8 @@ public class PresenterTarjetaDescuentoTest {
     @Test
     public void anahdirNuevaTarjetaTest() {
 
-        sut = new PresenterTarjetaDescuento();
-
+        sut = PresenterTarjetaDescuento.getInstance();
+        sut.setListaDeTarjetasDelUsuario(new ArrayList<TarjetaDescuento>());
         //Caso 1: "TestPorcOK", "Test", "Cepsa", "Porcentual", "33.3"
         Assert.assertTrue(sut.anhadirNuevaTarjeta("TestPorcOK", "test", "Cepsa", "Porcentual", "33.3"));
         //Caso 2: "TestPorcFail", "Test", "Cepsa", "Porcentual", "465"
@@ -60,8 +62,8 @@ public class PresenterTarjetaDescuentoTest {
 
     @Test
     public void actualizarListaPreciosTest(){
-        sut = new PresenterTarjetaDescuento();
-
+        sut = PresenterTarjetaDescuento.getInstance();
+        sut.setListaDeTarjetasDelUsuario(new ArrayList<TarjetaDescuento>());
         //Caso 1: Gasolineras=lista de gasolineras mixta  descuento=0 (no hay tarjetas)
         ArrayList<Gasolinera> testGasolineras = (ArrayList<Gasolinera>) sut.actualizarListaDePrecios(gasolineras);
         Assert.assertArrayEquals(testGasolineras.toArray(),gasolineras.toArray());

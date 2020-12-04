@@ -28,4 +28,7 @@
     <item
         android:id="@+id/button_test_anhadeTarjetaDescuento"
         android:title="@string/slider_menu_text_nueva_tarjeta_descuento" />
+    <item
+        android:id="@+id/button_test_filtroPrecioMaximo"
+        android:title="@string/filtrar_precioMaximo" />
 </menu>

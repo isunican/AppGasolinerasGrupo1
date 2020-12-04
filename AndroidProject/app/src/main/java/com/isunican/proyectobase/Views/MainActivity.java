@@ -14,7 +14,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -29,6 +28,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,6 +38,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -70,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     List<Gasolinera>listaGasolinerasActual;
     List<Gasolinera>listaGasolinerasDAO;
     //Lista con el filtro aplicado
-    ArrayList<Gasolinera> currentList;
+    List<Gasolinera> currentList;
 
     // Vista de lista y adaptador para cargar datos en ella
     ListView listViewGasolineras;
@@ -92,6 +93,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     //Adapter para la listView
     ArrayAdapter<String> dataAdapter;
 
+    EditText editTextPrecioMax;
+    Spinner spinnerPrecioMax;
     //Filtro
     String tipoGasolina;
 
@@ -116,7 +119,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         currentList = new ArrayList<>();
 
         this.presenterGasolineras = new PresenterGasolineras();
-        this.presenterTarjetaDescuento = new PresenterTarjetaDescuento();
+        this.presenterTarjetaDescuento = PresenterTarjetaDescuento.getInstance();
+        //Esto impide que no se carge ese método para los tests(Hay otras soluciones, pero esta es la mas rapida)
+        List<TarjetaDescuento> tarjetas = presenterTarjetaDescuento.getListaDeTarjetasDelUsuario();
 
 
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -137,18 +142,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                new CargaDatosGasolinerasTask(MainActivity.this).execute();
+                CargaDatosGasolinerasTask hilo = new CargaDatosGasolinerasTask(MainActivity.this);
+                Thread t = new Thread(hilo);
+                t.start();
+                hilo.onPostExecute(true);
             }
         });
 
         // Al terminar de inicializar todas las variables
         // se lanza una tarea para cargar los datos de las gasolineras
         // Esto se ha de hacer en segundo plano definiendo una tarea asíncrona
-        new CargaDatosGasolinerasTask(this).execute();
-
-
-
-
+        CargaDatosGasolinerasTask hilo = new CargaDatosGasolinerasTask(MainActivity.this);
+        Thread t = new Thread(hilo);
+        t.start();
+        try {
+            t.join();
+            hilo.onPostExecute(true);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
 
     }
 
@@ -185,7 +197,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         if(item.getItemId()==R.id.itemActualizar){
             mSwipeRefreshLayout.setRefreshing(true);
-            new CargaDatosGasolinerasTask(this).execute();
+            CargaDatosGasolinerasTask hilo = new CargaDatosGasolinerasTask(MainActivity.this);
+            Thread t = new Thread(hilo);
+            t.start();
+            hilo.onPostExecute(true);
         }else if(item.getItemId() == R.id.itemInfo) {
             Intent myIntent = new Intent(MainActivity.this, InfoActivity.class);
             MainActivity.this.startActivity(myIntent);
@@ -197,6 +212,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             creaVentanaFiltroTipoGasolina();
         }else if(item.getItemId()==R.id.button_test_anhadeTarjetaDescuento){
             creaVentanaAnhadirTarjetaDescuento();
+        }else if(item.getItemId() == R.id.button_test_filtroPrecioMaximo){
+            creaVentanaFiltroPrecio();
         }
         return true;
     }
@@ -213,15 +230,167 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.itemNuevaTarjetaDescuento:
                 creaVentanaAnhadirTarjetaDescuento();
                 break;
+            case R.id.filtarPrecioMaximo:
+                creaVentanaFiltroPrecio();
+                break;
             case R.id.filtarGasolinerasFavoritas:
-                Intent favIntent = new Intent(MainActivity.this, FiltroFavoritosActivity.class);
-                startActivity(favIntent);
+                if(AppDatabase.getInstance(this).gasolineraFavoritaDAO().getAll().isEmpty())
+                {
+                    creaVentanaFavoritosVacios();
+                } else {
+                    Intent favIntent = new Intent(MainActivity.this, FiltroFavoritosActivity.class);
+                    startActivity(favIntent);
+                }
                 break;
             default:
                 Log.d("MIGUEL", "Default en switch");
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return false;
+    }
+
+    /**
+     * Ventana emergente que filtra las gasolineras por el precio maximo
+     * @Autor Carolay Corales
+     */
+
+    public void creaVentanaFiltroPrecio(){
+
+        // Definidos Inflater y View
+        LayoutInflater inflater = this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.activity_filtro_preciomax, null);
+
+        //Definidos los elementos
+        spinnerPrecioMax = view.findViewById(R.id.spinnerFiltroPrecio);
+        editTextPrecioMax = view.findViewById(R.id.textNumberPrecioMax);
+
+
+        //Adapter para el spinner
+        final ArrayAdapter<CharSequence> adpSpinner = ArrayAdapter.createFromResource(this,
+                R.array.tipos_gasolinas, android.R.layout.simple_spinner_item);
+
+        adpSpinner.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerPrecioMax.setAdapter(adpSpinner);
+
+        // Creacion alertDialog
+        final AlertDialog alertDialogFiltroPrecio = new AlertDialog.Builder(this)
+                .setPositiveButton(getResources().getString(R.string.aceptar),null)
+                .setNegativeButton(getResources().getString(R.string.cancelar), null)
+                .setCancelable(false) //Impide que el dialogo se cierre si pulsas fuera del dialogo
+                .create();
+
+
+
+        // Definicion positive button
+        alertDialogFiltroPrecio.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                Button bpm = alertDialogFiltroPrecio.getButton(BTN_POSITIVO);
+                bpm.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //Error si se hay mas de un punto, coma o un punto y coma a la vez
+                        if (!caracterValidos(editTextPrecioMax.getText().toString().replace(",",".")) || (editTextPrecioMax.getText().toString().length() == 1 && editTextPrecioMax.getText().toString().replace(",",".").equals("."))) {
+                            editTextPrecioMax.setError(getResources().getString(R.string.mensaje_error_pmaxCarcaterNovalido));
+
+                        //Error si el campo precio esta vacio o es 0
+                        }else if(editTextPrecioMax.getText().toString().isEmpty()){
+                            editTextPrecioMax.setError(getResources().getString(R.string.mensaje_error_pmaxVacio));
+                        } else if(Double.parseDouble(editTextPrecioMax.getText().toString().replace(",",".")) <= 0 ){
+                            editTextPrecioMax.setError(getResources().getString(R.string.mensaje_error_pmaxCero));
+
+                        }else{
+                            double precio=Double.parseDouble(editTextPrecioMax.getText().toString().replace(",","."));
+                            String tipo =spinnerPrecioMax.getSelectedItem().toString();
+                            try{
+                                currentList = presenterGasolineras.filtrarGasolineraPorPrecioMaximo(tipo, listaGasolinerasActual,precio);
+                                if(currentList.size() == 0){
+                                    //Opcion de cerrar el teclado cuando sale el dialogo de informacion
+                                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(editTextPrecioMax.getWindowToken(), 0);
+
+                                    //Ventana emergente informativa
+                                    creaVentanaInformativa();
+                                }else{
+                                    adapter = new GasolineraArrayAdapter(MainActivity.this, 0, currentList);
+                                    listViewGasolineras = findViewById(R.id.listViewGasolineras);
+                                    listViewGasolineras.setAdapter(adapter);
+                                    alertDialogFiltroPrecio.dismiss();
+
+                                    //Mensaje de datos filtrados
+                                    Toast toast = Toast.makeText(getApplicationContext(), getResources().getString(R.string.toast_filtro_aplicado), Toast.LENGTH_LONG);
+                                    toast.show();
+                                }
+                            }catch(NullPointerException e) {
+                                Toast.makeText(getApplicationContext(), "Error al al leer gasolineras", Toast.LENGTH_LONG);
+                            }
+                        }
+
+
+
+                    }
+                });
+            }
+        });
+
+        //Insertar elementos en el dialogo
+        alertDialogFiltroPrecio.setView(view);
+        alertDialogFiltroPrecio.show();
+    }
+
+    /**
+     * Metodo que comprueba si el caracter introducido  en el campo delprecio de filtro por
+     * precio maximo es valido
+     * @autor Carolay Corales
+     * @param textoPrecio
+     * @return true si el caracter no contiene mas de un punto, coma o que no contenga un punto y coma
+     * en el mismo string
+     */
+    public boolean caracterValidos(String textoPrecio){
+        //Numero de puntos en el string
+        int numPuntos = contarCaracteres(textoPrecio, '.');
+        //Numero de comas en el string
+        int numComas =  contarCaracteres(textoPrecio, ',');
+        //Si hay un punto y coma en el mismo string
+        int numPuntoComa = numPuntos + numComas;
+
+        if (numPuntos > 1 || numComas > 1 || numPuntoComa >=2) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Metodo que cuenta el numero de veces que aparece un caracter en un string
+     * @Autor Carolay Corales
+     * @param precio
+     * @param caracter
+     * @return
+     */
+    public int contarCaracteres(String precio, char caracter) {
+        int posicion, contador = 0;
+        posicion = precio.indexOf(caracter);
+        while (posicion != -1) {
+            contador++;
+            posicion = precio.indexOf(caracter, posicion + 1);
+        }
+        return contador;
+    }
+
+
+    /**
+     * Ventana que muestra un mensaje informativo
+     * @Autor: Carolay Corales
+     */
+    public void creaVentanaInformativa(){
+        //Crea el alertDialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.mensaje_info_pmax);
+        builder.setPositiveButton(R.string.ok, null);
+        //No permite cerrar la ventana si pulsas fuera del dialogo
+        builder.setCancelable(false);
+        builder.create();
+        builder.show();
     }
 
     /*
@@ -356,7 +525,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                         }
                         else{
                             //Actualiza la lista actual para solo contener las gasolineras con la marca seleccionada
-                            currentList= (ArrayList<Gasolinera>) presenterFiltroMarcas.filtraGasolineras(marcaTxt.getText().toString());
+                            currentList= presenterFiltroMarcas.filtraGasolineras(marcaTxt.getText().toString());
                             adapter = new GasolineraArrayAdapter(MainActivity.this, 0, currentList);
                             listViewGasolineras = findViewById(R.id.listViewGasolineras);
                             listViewGasolineras.setAdapter(adapter);
@@ -381,10 +550,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 //No se implementa porque en este caso no se necesita.
             }
 
-
             @Override
             public void afterTextChanged(Editable s) {dataAdapter.getFilter().filter(s);
-                     }
+            }
         });
         marcaListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             public void onItemClick(AdapterView<?> a, View v, int position, long id) {
@@ -460,6 +628,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         alertDialogBuilder.show();
     }
 
+    /**
+     *Crea la ventana emergente que avisa al usuario de que la lista de favoritos esta
+     *vacia, se puede cerrar pulsando en aceptar o fuera de la propia ventana
+     */
+    public void creaVentanaFavoritosVacios(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.fav_vacios);
+        builder.setPositiveButton(getResources().getString(R.string.aceptar), null);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+    }
+
     private void refreshAdapter(List<Gasolinera> gasolinerasNuevas){
         adapter.clear();
         adapter.addAll(gasolinerasNuevas);
@@ -467,10 +649,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void updateListWithNewDiscountCard(){
         //Esto tiene que cambiar cuando se haga la historia de ver tarjetas de descuento porque tenemos que usar solo una tarjeta de desucento al tiempo
-        List<Gasolinera> gasolinerasActualesActualizadas = presenterTarjetaDescuento.actualizarListaDePrecios(presenterGasolineras.getGasolineras());
-        adapter.clear();
-        listaGasolinerasActual = gasolinerasActualesActualizadas;
-        adapter.addAll(listaGasolinerasActual);
+        listaGasolinerasActual = presenterTarjetaDescuento.actualizarListaDePrecios(listaGasolinerasActual);
         adapter.notifyDataSetChanged();
     }
 
@@ -489,12 +668,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * <p>
      * http://www.sgoliver.net/blog/tareas-en-segundo-plano-en-android-i-thread-y-asynctask/
      */
-    private class CargaDatosGasolinerasTask extends AsyncTask<Void, Void, Boolean> {
+    private class CargaDatosGasolinerasTask implements Runnable {
 
         Activity activity;
 
         /**
-         * Constructor de la tarea asincrona
+         * Constructor del hilo
          *
          * @param activity
          */
@@ -503,34 +682,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         /**
-         * onPreExecute
-         * <p>
-         * Metodo ejecutado de forma previa a la ejecucion de la tarea definida en el metodo doInBackground()
-         * Muestra un diálogo de progreso
-         */
-        @Override
-        protected void onPreExecute() {
-            // Nada que hacer
-        }
-
-        /**
-         * doInBackground
+         * run
          * <p>
          * Tarea ejecutada en segundo plano
          * Llama al presenter para que lance el método de carga de los datos de las gasolineras
-         *
-         * @param params
-         * @return boolean
-         */
+         * */
         @Override
-        protected Boolean doInBackground(Void... params) {
-            return presenterGasolineras.cargaDatosGasolineras();
+        public void run() {
+            presenterGasolineras.cargaDatosGasolineras();
         }
 
         /**
          * onPostExecute
          * <p>
-         * Se ejecuta al finalizar doInBackground
+         * Se ejecuta al finalizar run
          * Oculta el diálogo de progreso.
          * Muestra en una lista los datos de las gasolineras cargadas,
          * creando un adapter y pasándoselo a la lista.
@@ -540,24 +705,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
          *
          * @param res
          */
-        @Override
         protected void onPostExecute(Boolean res) {
             listaGasolinerasActual=presenterGasolineras.getGasolineras();
-            currentList = (ArrayList<Gasolinera>) presenterGasolineras.getGasolineras();
+            currentList = presenterGasolineras.getGasolineras();
 
-            listaGasolinerasDAO=AppDatabase.getInstance(getApplicationContext()).gasolineraDAO().getAll();
+            listaGasolinerasDAO = AppDatabase.getInstance(getApplicationContext()).gasolineraDAO().getAll();
             Toast toast;
 
             mSwipeRefreshLayout.setRefreshing(false);
 
             // Si se ha obtenido resultado en la tarea en segundo plano
-            if ( Boolean.TRUE.equals(res)) {
+            if (Boolean.TRUE.equals(res)) {
                 // Definimos el array adapter
-                adapter = new GasolineraArrayAdapter(activity, 0, presenterGasolineras.getGasolineras() );
+                adapter = new GasolineraArrayAdapter(activity, 0, presenterGasolineras.getGasolineras());
                 //Jaime ha estado aquí, actualizar  las gasolineras si ha cambiado el precio
                 for (Gasolinera gDao : listaGasolinerasDAO) {
-                    for(Gasolinera g : listaGasolinerasActual){
-                        if(gDao.equals(g) && gDao.getGasolina95()!=g.getGasolina95() && gDao.getGasoleoA()!=g.getGasoleoA()){
+                    for (Gasolinera g : listaGasolinerasActual) {
+                        if (gDao.equals(g) && gDao.getGasolina95() != g.getGasolina95() && gDao.getGasoleoA() != g.getGasoleoA()) {
                             gDao.setGasoleoA(g.getGasoleoA());
                             gDao.setGasolina95(g.getGasolina95());
                             AppDatabase.getInstance(getApplicationContext()).gasolineraDAO().update(gDao);
@@ -611,7 +775,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     MainActivity.this.startActivity(myIntent);
                 }
             });
-
         }
     }
 

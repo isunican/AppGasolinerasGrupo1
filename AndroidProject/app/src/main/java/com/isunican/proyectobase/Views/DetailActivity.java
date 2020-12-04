@@ -12,7 +12,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.text.TextUtils;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -38,11 +40,12 @@ public class DetailActivity extends AppCompatActivity {
     TextView comentario;
     TextView comentarioEditText;
     TextView nombreGasolinera;
+    TextView txtComentario;
+
     boolean gasolineraEsFavorita = false;
     PresenterGasolinerasFavoritas gasolinerasFavoritas;
     PresenterGasolineras presenterGasolineras = new PresenterGasolineras();
     Gasolinera g;
-
 
     private static final int BTN_POSITIVO = DialogInterface.BUTTON_POSITIVE;
 
@@ -72,7 +75,9 @@ public class DetailActivity extends AppCompatActivity {
         TextView precioGasoleoA = findViewById(R.id.precioGasoleoAText);
         TextView precioGasoleo95 = findViewById(R.id.precioGasoleo95Text);
         ImageView logo = findViewById(R.id.gasolineraIcon);
+        txtComentario = findViewById(R.id.txtComentario);
         comentario = findViewById(R.id.comentarioText);
+
         g = getIntent().getExtras().getParcelable(getResources().getString(R.string.pasoDatosGasolinera));
 
         favButton = findViewById(R.id.favButton);
@@ -87,7 +92,11 @@ public class DetailActivity extends AppCompatActivity {
             favButton.setImageResource(R.drawable.favorito_activado); // icono favorito activado
             favButton.setTag(R.drawable.favorito_activado);
             gasolineraEsFavorita = true;
-            comentario.setText("Comentario:\n" + gFavorita.getComentario());
+            txtComentario.setVisibility(View.VISIBLE);
+            comentario.setText(gFavorita.getComentario());
+            comentario.setMovementMethod(new ScrollingMovementMethod());
+            comentario.setVerticalScrollBarEnabled(true);
+            comentario.setScrollbarFadingEnabled(false);
         } else {
             // no existe la gasolinera favorita
             favButton.setImageResource(R.drawable.favorito_desactivado); // icono favorito activado
@@ -181,8 +190,12 @@ public class DetailActivity extends AppCompatActivity {
                                     toastComentarioReducido += "...";
                                 }
                                 Toast.makeText(getApplicationContext(), "Gasolinera favorita añadida con comentario: " +
-                                        toastComentarioReducido, Toast.LENGTH_LONG).show();
-                                comentario.setText("Comentario:\n" + comentarioEditText.getText());
+                                        toastComentarioReducido.replaceAll("[\n]+","\n"), Toast.LENGTH_LONG).show();
+                                txtComentario.setVisibility(View.VISIBLE);
+                                comentario.setText(comentarioEditText.getText());
+                                comentario.setMovementMethod(new ScrollingMovementMethod());
+                                comentario.setVerticalScrollBarEnabled(true);
+                                comentario.setScrollbarFadingEnabled(false);
                                 favButton.setImageResource(R.drawable.favorito_activado);
                                 favButton.setTag(R.drawable.favorito_activado);
                                 gasolineraEsFavorita = true;
@@ -190,12 +203,16 @@ public class DetailActivity extends AppCompatActivity {
                                 new Thread(thread).start();
                                 alertDialogBuilder.dismiss();
                             }
-                        }
-                    });
-                }
-            });
-            alertDialogBuilder.setView(view);
-            alertDialogBuilder.show();
+                        
+                    }
+                });
+            }
+        });
+        alertDialogBuilder.setView(view);
+        alertDialogBuilder.show();
+
+        // Caracteres totales escritos
+        DialogoComentarioGasolineraFavorita.cambiaNumeroCaracteresActual(view, comentarioEditText);
 
         }
 
@@ -232,6 +249,7 @@ public class DetailActivity extends AppCompatActivity {
                         favButton.setTag(R.drawable.favorito_desactivado);
                         gasolineraEsFavorita = false;
                         Toast.makeText(getApplicationContext(), "gasolinera eliminada", Toast.LENGTH_LONG).show();
+                        txtComentario.setVisibility(View.INVISIBLE);
                         comentario.setText("");
                         //Cerramos la ventana de dialogo
                         alertDialogConfirmacion.dismiss();
